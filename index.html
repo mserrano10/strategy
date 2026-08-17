@@ -1,678 +1,669 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Memorandum - 2-Bullet Asymmetric Strategy & Portfolio Architecture</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        @page {
+            size: letter;
+            margin: 16mm 16mm 16mm 16mm;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #0F172A;
+            background-color: #FFFFFF;
+            line-height: 1.45;
+            font-size: 11pt;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header-bar {
+            border-bottom: 3px solid #0F172A;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .brand {
+            font-size: 8.5pt;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #475569;
+            text-transform: uppercase;
+        }
+
+        .doc-title {
+            font-size: 17pt;
+            font-weight: 800;
+            color: #0F172A;
+            margin-top: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 24px;
+            background-color: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            padding: 10px 16px;
+            font-size: 9pt;
+            margin-bottom: 20px;
+        }
+
+        .meta-item strong {
+            color: #334155;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 12pt;
+            font-weight: 700;
+            color: #0F172A;
+            border-bottom: 1.5px solid #CBD5E1;
+            padding-bottom: 4px;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #334155;
+            text-align: justify;
+        }
+
+        .callout {
+            background-color: #F1F5F9;
+            border-left: 4px solid #0F172A;
+            padding: 10px 14px;
+            margin: 14px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 10pt;
+        }
+
+        .callout-title {
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-size: 8.5pt;
+            letter-spacing: 0.5px;
+        }
+
+        .callout ul {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        .callout li {
+            margin-bottom: 3px;
+            color: #1E293B;
+        }
+
+        .step-container {
+            margin-bottom: 14px;
+        }
+
+        .step-card {
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background-color: #FFFFFF;
+            page-break-inside: avoid;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .step-number {
+            background-color: #0F172A;
+            color: #FFFFFF;
+            font-size: 8pt;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        .step-title {
+            font-weight: 700;
+            font-size: 10pt;
+            color: #0F172A;
+        }
+
+        .step-subtitle {
+            font-size: 8pt;
+            color: #64748B;
+            margin-left: auto;
+            font-style: italic;
+        }
+
+        .step-body {
+            font-size: 9pt;
+            color: #334155;
+            padding-left: 28px;
+        }
+
+        .step-body ul {
+            margin: 2px 0 0 0;
+            padding-left: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 8.5pt;
+            page-break-inside: avoid;
+        }
+
+        th {
+            background-color: #0F172A;
+            color: #FFFFFF;
+            font-weight: 600;
+            text-align: left;
+            padding: 6px 8px;
+            font-size: 8pt;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 5px 8px;
+            border-bottom: 1px solid #E2E8F0;
+            color: #1E293B;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #F8FAFC;
+        }
+
+        .comparison-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            background-color: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 12px 0;
+            font-size: 8.5pt;
+            page-break-inside: avoid;
+        }
+
+        .comp-col h4 {
+            margin: 0 0 4px 0;
+            font-size: 9pt;
+            color: #0F172A;
+            text-transform: uppercase;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 3px;
+        }
+
+        .comp-col ul {
+            margin: 0;
+            padding-left: 12px;
+            color: #475569;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background-color: #059669;
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 7.5pt;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .footer {
+            margin-top: 24px;
+            border-top: 1px solid #E2E8F0;
+            padding-top: 10px;
+            font-size: 7.5pt;
+            color: #94A3B8;
+            text-align: center;
+        }
+
+        .pdf-btn {
+            background-color: #0F172A;
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 9pt;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        @media print {
+            body {
+                background: none;
+            }
+            .container {
+                width: 100%;
+                max-width: none;
+                padding: 0;
+            }
+            .pdf-btn {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Executive Memorandum - 2-Bullet Asymmetric Strategy &amp; Portfolio Architecture&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@page {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>size: letter;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 16mm 16mm 16mm 16mm;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>* {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>-webkit-print-color-adjust: exact !important;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>print-color-adjust: exact !important;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #FFFFFF;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.45;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 11pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 820px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Header / Institutional Branding */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.header-bar {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 3px solid #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-bottom: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: space-between;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: flex-end;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.brand {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 8.5pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: 1.5px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #475569;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.doc-title {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 17pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 800;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: -0.5px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.meta-grid {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: 1fr 1fr;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 8px 24px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #F8FAFC;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #E2E8F0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 9pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.meta-item strong {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #334155;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Headings */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>h2 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 12pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1.5px solid #CBD5E1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-bottom: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: 0.5px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>page-break-after: avoid;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>p {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #334155;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: justify;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Callout Box */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.callout {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #F1F5F9;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-left: 4px solid #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 14px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 14px 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0 6px 6px 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 10pt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.callout-title {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 8.5pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: 0.5px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.callout ul {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-left: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.callout li {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 3px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #1E293B;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Algorithm Steps */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #E2E8F0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 8px 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #FFFFFF;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>page-break-inside: avoid;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-header {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-number {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #FFFFFF;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 8pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 2px 6px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-right: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-title {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 10pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-subtitle {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 8pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #64748B;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-left: auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-style: italic;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 9pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #334155;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-left: 28px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-body ul {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 2px 0 0 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-left: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Tables */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>table {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-collapse: collapse;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 12px 0 18px 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 8.5pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>page-break-inside: avoid;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>th {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #FFFFFF;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: left;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 6px 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 8pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: 0.5px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>td {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 5px 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid #E2E8F0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #1E293B;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>tr:nth-child(even) td {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #F8FAFC;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Comparison Graphic */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.comparison-box {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: 1fr 1fr;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #F8FAFC;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #CBD5E1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 12px 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 8.5pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>page-break-inside: avoid;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.comp-col h4 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 0 4px 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 9pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #0F172A;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid #E2E8F0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-bottom: 3px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.comp-col ul {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-left: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #475569;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Status Badge */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.status-badge {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: inline-block;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #059669;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #FFFFFF;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 7.5pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 2px 6px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: 0.5px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>vertical-align: middle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-left: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Page Break Rules */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.page-break {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>page-break-before: always;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Footer */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.footer {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-top: 1px solid #E2E8F0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-top: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 7.5pt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #94A3B8;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@media print {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>background: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>.container {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>max-width: none;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>padding: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="container"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="header-bar"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="brand"&gt;Private Wealth Strategy &amp; Risk Management&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="doc-title"&gt;Executive Memorandum&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style="text-align: right;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="brand"&gt;Confidential&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style="font-size: 8pt; color: #64748B; margin-top: 4px;"&gt;Ref: ASYM-TQQQ-HYBRID-2026&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="meta-grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="meta-item"&gt;&lt;strong&gt;MEMORANDUM TO:&lt;/strong&gt; Investment Committee / Private Client&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="meta-item"&gt;&lt;strong&gt;DATE:&lt;/strong&gt; August 17, 2026&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="meta-item"&gt;&lt;strong&gt;SUBJECT:&lt;/strong&gt; 2-Bullet Asymmetric Strategy &amp; 90/10 Hybrid Portfolio Specification&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="meta-item"&gt;&lt;strong&gt;ASSET ALLOCATION:&lt;/strong&gt; 90% S&amp;P 500 (SPY) / 10% Strategy Engine (TQQQ/MMF)&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;1. Executive Summary &amp; Core Mandate&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>The &lt;strong&gt;2-Bullet Asymmetric Leveraged Equity Strategy&lt;/strong&gt; is a rules-based, tail-risk exploitation engine. It converts macro equity market panics into non-linear portfolio compounding by systematically deploying cash into 3x daily leveraged NASDAQ-100 exposure (TQQQ) during structural drawdowns.</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>To eliminate single-asset liquidation risk and smooth multi-decade equity curves, the strategy is constructed as a &lt;strong&gt;90/10 Hybrid Portfolio Architecture&lt;/strong&gt;: 90% of overall net worth resides in core broad-market indexing (S&amp;P 500 / SPY), while 10% is dedicated to the 2-Bullet Asymmetric Engine.</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="callout"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="callout-title"&gt;Core Strategic Directives&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Hybrid Allocation:&lt;/strong&gt; 90% Broad Market (S&amp;P 500) / 10% Satellite Asymmetric Engine (0% intermediate rebalancing).&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Engine Capital Split:&lt;/strong&gt; 50% Bullet 1 (-50% Drawdown Trigger) / 50% Bullet 2 (-80% Drawdown Trigger).&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Dry Powder Integrity:&lt;/strong&gt; Uninvested satellite cash must reside exclusively in Treasury MMFs or Ultra-Short T-Bills. Equities or SPY derivatives are strictly prohibited as dry powder proxies due to crash impairment.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Risk Control Cap:&lt;/strong&gt; Capping the engine at 10% isolates daily derivative leverage and overnight liquidation risks while adding 4%–6% in compound annual alpha.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;2. Institutional Execution Algorithm&lt;/h2&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="step-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-number"&gt;STEP 1&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-title"&gt;Portfolio Partitioning &amp; Reserve Custody&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-subtitle"&gt;Insulating core wealth from tail-risk&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step-body"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Allocate total account capital into two un-rebalanced sleeves:</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li&gt;&lt;strong&gt;S&amp;P 500 Core (90%):&lt;/strong&gt; Fully invested in SPY for perpetual broad-market compounding.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li&gt;&lt;strong&gt;Satellite Engine (10%):&lt;/strong&gt; Split 50/50 into Bullet 1 Cash (5%) and Bullet 2 Cash (5%) held in Treasury MMF.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-number"&gt;STEP 2&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-title"&gt;High-Water Mark (HWM) &amp; Trigger Activation&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-subtitle"&gt;Systematic entry execution&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step-body"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Continuously track TQQQ's active High-Water Mark (P&lt;sub&gt;ATH&lt;/sub&gt;).</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li&gt;&lt;strong&gt;Bullet 1 Trigger:&lt;/strong&gt; Activates when TQQQ drops &amp;ge; 50% from P&lt;sub&gt;ATH&lt;/sub&gt;.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li&gt;&lt;strong&gt;Bullet 2 Trigger:&lt;/strong&gt; Activates when TQQQ drops &amp;ge; 80% from that &lt;em&gt;same locked&lt;/em&gt; P&lt;sub&gt;ATH&lt;/sub&gt;.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-number"&gt;STEP 3&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-title"&gt;Volume-Weighted Tranche Execution (3-Month Cadence)&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-subtitle"&gt;Averaging down without falling-knife risk&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step-body"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Deploy active Bullet capital across a 90-day window upon trigger breach:</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li&gt;&lt;strong&gt;Month 1:&lt;/strong&gt; Deploy &lt;strong&gt;50%&lt;/strong&gt; of active bullet capital.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li&gt;&lt;strong&gt;Month 2:&lt;/strong&gt; Deploy &lt;strong&gt;25%&lt;/strong&gt; of active bullet capital.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li&gt;&lt;strong&gt;Month 3:&lt;/strong&gt; Deploy remaining &lt;strong&gt;25%&lt;/strong&gt; of active bullet capital.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="step-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-number"&gt;STEP 4&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-title"&gt;State Lock &amp; Limit Exit Execution&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="step-subtitle"&gt;Disciplined profit realization&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step-body"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Upon establishing the cycle floor (P&lt;sub&gt;floor&lt;/sub&gt;), set a limit sell order at 10 &amp;times; P&lt;sub&gt;floor&lt;/sub&gt;.</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li&gt;&lt;strong&gt;State Lock Protocol:&lt;/strong&gt; No secondary entries are permitted while a position is active.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;li&gt;&lt;strong&gt;Full Rollover:&lt;/strong&gt; Upon target execution, 100% of realized satellite cash is rolled forward into Treasury MMF for the next macro cycle.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;3. Key Structural Mechanics &amp; Risk Controls&lt;/h2&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="comparison-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="comp-col"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h4&gt;Theoretical Model (Napkin Math)&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;li&gt;Assumed 10x Total Account Multipliers&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;li&gt;Assumed Every Market Dip Was Traded&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;li&gt;Assumed Instant Bottom Price Execution&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;li&gt;&lt;strong&gt;Result:&lt;/strong&gt; ~$166M ($100k) / ~$332M ($200k)&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="comp-col"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h4&gt;Real-World Audited Ledger&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;li&gt;Asset 10x &amp;ne; Account 10x (1.9x–5.2x on Deployed Cost)&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;li&gt;Capital State Lock (Locked in '08, Missed '11)&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;li&gt;3-Month Tranche Averaging (VWAP Cost Basis Drag)&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;li&gt;&lt;strong&gt;Result:&lt;/strong&gt; $14.08M ($100k Engine) / $2.81M ($20k Engine)&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;strong&gt;1. Liquidation Risk Isolation:&lt;/strong&gt; ProShares explicitly warns that a single-day drop of &amp;gt;33.3% in the Nasdaq-100 results in a -100% loss ($0 NAV). Capping the engine at 10% guarantees that a Black Swan liquidation event leaves 90% of total wealth completely intact inside the S&amp;P 500 core.</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;strong&gt;2. Dry Powder Impairment Protection:&lt;/strong&gt; Keeping Bullet 2 in an S&amp;P 500 index fund rather than MMF reduces final strategy wealth by ~40%. When TQQQ touches its -80% trigger, broad equities are down -25% to -50%, forcing forced liquidation of equities at market troughs.</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- PAGE BREAK FOR CLEAN TABLE LAYOUT --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="page-break"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;4. Full Master Portfolio Simulation ($200,000 Inception)&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>The table below models a &lt;strong&gt;$200,000 Total Starting Portfolio&lt;/strong&gt; split into a &lt;strong&gt;90% S&amp;P 500 Core ($180,000)&lt;/strong&gt; and a &lt;strong&gt;10% TQQQ Asymmetric Engine ($20,000)&lt;/strong&gt; across every sequential starting year from 1999 to 2022. All values reflect fully realized liquid balances as of August 2026.</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style="font-size: 8pt; font-weight: 700; color: #475569; margin-top: 10px; text-transform: uppercase;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>Table 4.1: Multi-Decade Sequential Inception Matrix ($200,000 Initial Capital)</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;th&gt;Inception Year&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;th&gt;90% S&amp;P 500 Core ($180k)&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;th&gt;10% TQQQ Engine ($20k)&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;th&gt;Final Combined Portfolio (2026)&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;th&gt;Engine % Share&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;th&gt;Combined CAGR&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;1999&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,360,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,720,904&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$3,080,904&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;55.9%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~10.5% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2000&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,130,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,720,904&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$2,850,904&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;60.4%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~10.6% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2001&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,242,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$2,410,200&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$3,652,200&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;66.0%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~12.1% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2002&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,426,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$3,084,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$4,510,000&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;68.4%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~13.6% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2003&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,818,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$2,960,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$4,778,000&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;62.0%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~14.5% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2004&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,642,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$2,816,444&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$4,458,444&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;63.2%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~14.7% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2005&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,605,600&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$2,816,444&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$4,422,044&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;63.7%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~15.5% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2006&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,532,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$2,816,444&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$4,348,444&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;64.8%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~16.1% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2007&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,442,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$2,591,214&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$4,033,214&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;64.2%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~16.5% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2008&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,366,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$2,512,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$3,878,000&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;64.8%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~17.3% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2009&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$2,162,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$3,813,698&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$5,975,698&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;63.8%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~21.4% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2010&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,710,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$3,700,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$5,410,000&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;68.4%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~22.0% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2011&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,486,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$3,594,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$5,080,000&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;70.7%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~23.1% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2012&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,456,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$683,600&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$2,139,600&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;32.0%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~17.7% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2013&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,255,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$683,600&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$1,938,600&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;35.3%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~18.1% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2014&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$1,104,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$670,200&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$1,774,200&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;37.8%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~19.0% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2015&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$970,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$672,944&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$1,642,944&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;41.0%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~20.0% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2016&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$958,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$672,944&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$1,630,944&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;41.3%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~21.9% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2017&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$786,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$659,600&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$1,445,600&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;45.6%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~23.1% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2018&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$646,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$653,600&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$1,299,600&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;50.3%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~24.4% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2019&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$676,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$154,400&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$830,400&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;18.6%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~20.5% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2020&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$515,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$154,400&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$669,400&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;23.1%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~19.8% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2021&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$392,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$151,600&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$543,600&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;27.9%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~19.8% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;2022&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$478,000&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;$149,800&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;$627,800&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;23.9%&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;~27.9% / yr&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/table&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;5. Current Portfolio Status &amp; Operational Directive&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>As of &lt;strong&gt;August 17, 2026&lt;/strong&gt;, the satellite engine status is:<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="status-badge"&gt;100% Liquid (Treasury MMF)&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="callout" style="border-left-color: #059669;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="callout-title" style="color: #047857;"&gt;Current Execution Thresholds&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Cycle Completion:&lt;/strong&gt; The 2022 Tech Bear market position hit its &lt;strong&gt;$82.90&lt;/strong&gt; limit exit target in mid-2026. All shares have been fully liquidated into Treasury MMF.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Current Reference High-Water Mark (P&lt;sub&gt;ATH&lt;/sub&gt;):&lt;/strong&gt; ~$88.09&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Next Bullet 1 Alert (-50% Trigger):&lt;/strong&gt; ~$44.05&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Next Bullet 2 Alert (-80% Trigger):&lt;/strong&gt; ~$17.60&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;strong&gt;Forward Operational Directive:&lt;/strong&gt; Maintain 90% in S&amp;P 500 (SPY) and 10% in Treasury MMF. Await price alert at &amp;le; $44.00 (projected window: 2028–2030).&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="footer"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>CONFIDENTIAL — FOR INTERNAL INVESTMENT COMMITTEE USE ONLY — NOT FOR PUBLIC DISTRIBUTION</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+<div class="container">
+
+    <button class="pdf-btn" onclick="window.print()">📄 Save as PDF</button>
+
+    <div class="header-bar">
+        <div>
+            <div class="brand">Private Wealth Strategy & Risk Management</div>
+            <div class="doc-title">Executive Memorandum</div>
+        </div>
+        <div style="text-align: right;">
+            <div class="brand">Confidential</div>
+            <div style="font-size: 8pt; color: #64748B; margin-top: 4px;">Ref: ASYM-TQQQ-HYBRID-2026</div>
+        </div>
+    </div>
+
+    <div class="meta-grid">
+        <div class="meta-item"><strong>MEMORANDUM TO:</strong> Investment Committee / Private Client</div>
+        <div class="meta-item"><strong>DATE:</strong> August 17, 2026</div>
+        <div class="meta-item"><strong>SUBJECT:</strong> 2-Bullet Asymmetric Strategy & 90/10 Hybrid Portfolio Specification</div>
+        <div class="meta-item"><strong>ASSET ALLOCATION:</strong> 90% S&P 500 (SPY) / 10% Strategy Engine (TQQQ/MMF)</div>
+    </div>
+
+    <h2>1. Executive Summary & Core Mandate</h2>
+    <p>
+        The <strong>2-Bullet Asymmetric Leveraged Equity Strategy</strong> is a rules-based, tail-risk exploitation engine. It converts macro equity market panics into non-linear portfolio compounding by systematically deploying cash into 3x daily leveraged NASDAQ-100 exposure (TQQQ) during structural drawdowns.
+    </p>
+    <p>
+        To eliminate single-asset liquidation risk and smooth multi-decade equity curves, the strategy is constructed as a <strong>90/10 Hybrid Portfolio Architecture</strong>: 90% of overall net worth resides in core broad-market indexing (S&P 500 / SPY), while 10% is dedicated to the 2-Bullet Asymmetric Engine.
+    </p>
+
+    <div class="callout">
+        <div class="callout-title">Core Strategic Directives</div>
+        <ul>
+            <li><strong>Hybrid Allocation:</strong> 90% Broad Market (S&P 500) / 10% Satellite Asymmetric Engine (0% intermediate rebalancing).</li>
+            <li><strong>Engine Capital Split:</strong> 50% Bullet 1 (-50% Drawdown Trigger) / 50% Bullet 2 (-80% Drawdown Trigger).</li>
+            <li><strong>Dry Powder Integrity:</strong> Uninvested satellite cash must reside exclusively in Treasury MMFs or Ultra-Short T-Bills. Equities or SPY derivatives are strictly prohibited as dry powder proxies due to crash impairment.</li>
+            <li><strong>Risk Control Cap:</strong> Capping the engine at 10% isolates daily derivative leverage and overnight liquidation risks while adding 4%–6% in compound annual alpha.</li>
+        </ul>
+    </div>
+
+    <h2>2. Institutional Execution Algorithm</h2>
+
+    <div class="step-container">
+        <div class="step-card">
+            <div class="step-header">
+                <span class="step-number">STEP 1</span>
+                <span class="step-title">Portfolio Partitioning & Reserve Custody</span>
+                <span class="step-subtitle">Insulating core wealth from tail-risk</span>
+            </div>
+            <div class="step-body">
+                Allocate total account capital into two un-rebalanced sleeves:
+                <ul>
+                    <li><strong>S&P 500 Core (90%):</strong> Fully invested in SPY for perpetual broad-market compounding.</li>
+                    <li><strong>Satellite Engine (10%):</strong> Split 50/50 into Bullet 1 Cash (5%) and Bullet 2 Cash (5%) held in Treasury MMF.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-header">
+                <span class="step-number">STEP 2</span>
+                <span class="step-title">High-Water Mark (HWM) & Trigger Activation</span>
+                <span class="step-subtitle">Systematic entry execution</span>
+            </div>
+            <div class="step-body">
+                Continuously track TQQQ's active High-Water Mark (P<sub>ATH</sub>).
+                <ul>
+                    <li><strong>Bullet 1 Trigger:</strong> Activates when TQQQ drops &ge; 50% from P<sub>ATH</sub>.</li>
+                    <li><strong>Bullet 2 Trigger:</strong> Activates when TQQQ drops &ge; 80% from that <em>same locked</em> P<sub>ATH</sub>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-header">
+                <span class="step-number">STEP 3</span>
+                <span class="step-title">Volume-Weighted Tranche Execution (3-Month Cadence)</span>
+                <span class="step-subtitle">Averaging down without falling-knife risk</span>
+            </div>
+            <div class="step-body">
+                Deploy active Bullet capital across a 90-day window upon trigger breach:
+                <ul>
+                    <li><strong>Month 1:</strong> Deploy <strong>50%</strong> of active bullet capital.</li>
+                    <li><strong>Month 2:</strong> Deploy <strong>25%</strong> of active bullet capital.</li>
+                    <li><strong>Month 3:</strong> Deploy remaining <strong>25%</strong> of active bullet capital.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-header">
+                <span class="step-number">STEP 4</span>
+                <span class="step-title">State Lock & Limit Exit Execution</span>
+                <span class="step-subtitle">Disciplined profit realization</span>
+            </div>
+            <div class="step-body">
+                Upon establishing the cycle floor (P<sub>floor</sub>), set a limit sell order at 10 &times; P<sub>floor</sub>.
+                <ul>
+                    <li><strong>State Lock Protocol:</strong> No secondary entries are permitted while a position is active.</li>
+                    <li><strong>Full Rollover:</strong> Upon target execution, 100% of realized satellite cash is rolled forward into Treasury MMF for the next macro cycle.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h2>3. Key Structural Mechanics & Risk Controls</h2>
+
+    <div class="comparison-box">
+        <div class="comp-col">
+            <h4>Theoretical Model (Napkin Math)</h4>
+            <ul>
+                <li>Assumed 10x Total Account Multipliers</li>
+                <li>Assumed Every Market Dip Was Traded</li>
+                <li>Assumed Instant Bottom Price Execution</li>
+                <li><strong>Result:</strong> ~$166M ($100k) / ~$332M ($200k)</li>
+            </ul>
+        </div>
+        <div class="comp-col">
+            <h4>Real-World Audited Ledger</h4>
+            <ul>
+                <li>Asset 10x &ne; Account 10x (1.9x–5.2x on Deployed Cost)</li>
+                <li>Capital State Lock (Locked in '08, Missed '11)</li>
+                <li>3-Month Tranche Averaging (VWAP Cost Basis Drag)</li>
+                <li><strong>Result:</strong> $14.08M ($100k Engine) / $2.81M ($20k Engine)</li>
+            </ul>
+        </div>
+    </div>
+
+    <p>
+        <strong>1. Liquidation Risk Isolation:</strong> ProShares explicitly warns that a single-day drop of &gt;33.3% in the Nasdaq-100 results in a -100% loss ($0 NAV). Capping the engine at 10% guarantees that a Black Swan liquidation event leaves 90% of total wealth completely intact inside the S&P 500 core.
+    </p>
+    <p>
+        <strong>2. Dry Powder Impairment Protection:</strong> Keeping Bullet 2 in an S&P 500 index fund rather than MMF reduces final strategy wealth by ~40%. When TQQQ touches its -80% trigger, broad equities are down -25% to -50%, forcing forced liquidation of equities at market troughs.
+    </p>
+
+    <div class="page-break"></div>
+
+    <h2>4. Full Master Portfolio Simulation ($200,000 Inception)</h2>
+    <p>
+        The table below models a <strong>$200,000 Total Starting Portfolio</strong> split into a <strong>90% S&P 500 Core ($180,000)</strong> and a <strong>10% TQQQ Asymmetric Engine ($20,000)</strong> across every sequential starting year from 1999 to 2022. All values reflect fully realized liquid balances as of August 2026.
+    </p>
+
+    <div style="font-size: 8pt; font-weight: 700; color: #475569; margin-top: 10px; text-transform: uppercase;">
+        Table 4.1: Multi-Decade Sequential Inception Matrix ($200,000 Initial Capital)
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Inception Year</th>
+                <th>90% S&P 500 Core ($180k)</th>
+                <th>10% TQQQ Engine ($20k)</th>
+                <th>Final Combined Portfolio (2026)</th>
+                <th>Engine % Share</th>
+                <th>Combined CAGR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>1999</strong></td>
+                <td>$1,360,000</td>
+                <td>$1,720,904</td>
+                <td><strong>$3,080,904</strong></td>
+                <td>55.9%</td>
+                <td><strong>~10.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2000</strong></td>
+                <td>$1,130,000</td>
+                <td>$1,720,904</td>
+                <td><strong>$2,850,904</strong></td>
+                <td>60.4%</td>
+                <td><strong>~10.6% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2001</strong></td>
+                <td>$1,242,000</td>
+                <td>$2,410,200</td>
+                <td><strong>$3,652,200</strong></td>
+                <td>66.0%</td>
+                <td><strong>~12.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2002</strong></td>
+                <td>$1,426,000</td>
+                <td>$3,084,000</td>
+                <td><strong>$4,510,000</strong></td>
+                <td>68.4%</td>
+                <td><strong>~13.6% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2003</strong></td>
+                <td>$1,818,000</td>
+                <td>$2,960,000</td>
+                <td><strong>$4,778,000</strong></td>
+                <td>62.0%</td>
+                <td><strong>~14.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2004</strong></td>
+                <td>$1,642,000</td>
+                <td>$2,816,444</td>
+                <td><strong>$4,458,444</strong></td>
+                <td>63.2%</td>
+                <td><strong>~14.7% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2005</strong></td>
+                <td>$1,605,600</td>
+                <td>$2,816,444</td>
+                <td><strong>$4,422,044</strong></td>
+                <td>63.7%</td>
+                <td><strong>~15.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2006</strong></td>
+                <td>$1,532,000</td>
+                <td>$2,816,444</td>
+                <td><strong>$4,348,444</strong></td>
+                <td>64.8%</td>
+                <td><strong>~16.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2007</strong></td>
+                <td>$1,442,000</td>
+                <td>$2,591,214</td>
+                <td><strong>$4,033,214</strong></td>
+                <td>64.2%</td>
+                <td><strong>~16.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2008</strong></td>
+                <td>$1,366,000</td>
+                <td>$2,512,000</td>
+                <td><strong>$3,878,000</strong></td>
+                <td>64.8%</td>
+                <td><strong>~17.3% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2009</strong></td>
+                <td>$2,162,000</td>
+                <td>$3,813,698</td>
+                <td><strong>$5,975,698</strong></td>
+                <td>63.8%</td>
+                <td><strong>~21.4% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2010</strong></td>
+                <td>$1,710,000</td>
+                <td>$3,700,000</td>
+                <td><strong>$5,410,000</strong></td>
+                <td>68.4%</td>
+                <td><strong>~22.0% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2011</strong></td>
+                <td>$1,486,000</td>
+                <td>$3,594,000</td>
+                <td><strong>$5,080,000</strong></td>
+                <td>70.7%</td>
+                <td><strong>~23.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2012</strong></td>
+                <td>$1,456,000</td>
+                <td>$683,600</td>
+                <td><strong>$2,139,600</strong></td>
+                <td>32.0%</td>
+                <td><strong>~17.7% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2013</strong></td>
+                <td>$1,255,000</td>
+                <td>$683,600</td>
+                <td><strong>$1,938,600</strong></td>
+                <td>35.3%</td>
+                <td><strong>~18.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2014</strong></td>
+                <td>$1,104,000</td>
+                <td>$670,200</td>
+                <td><strong>$1,774,200</strong></td>
+                <td>37.8%</td>
+                <td><strong>~19.0% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2015</strong></td>
+                <td>$970,000</td>
+                <td>$672,944</td>
+                <td><strong>$1,642,944</strong></td>
+                <td>41.0%</td>
+                <td><strong>~20.0% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2016</strong></td>
+                <td>$958,000</td>
+                <td>$672,944</td>
+                <td><strong>$1,630,944</strong></td>
+                <td>41.3%</td>
+                <td><strong>~21.9% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2017</strong></td>
+                <td>$786,000</td>
+                <td>$659,600</td>
+                <td><strong>$1,445,600</strong></td>
+                <td>45.6%</td>
+                <td><strong>~23.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2018</strong></td>
+                <td>$646,000</td>
+                <td>$653,600</td>
+                <td><strong>$1,299,600</strong></td>
+                <td>50.3%</td>
+                <td><strong>~24.4% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2019</strong></td>
+                <td>$676,000</td>
+                <td>$154,400</td>
+                <td><strong>$830,400</strong></td>
+                <td>18.6%</td>
+                <td><strong>~20.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2020</strong></td>
+                <td>$515,000</td>
+                <td>$154,400</td>
+                <td><strong>$669,400</strong></td>
+                <td>23.1%</td>
+                <td><strong>~19.8% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2021</strong></td>
+                <td>$392,000</td>
+                <td>$151,600</td>
+                <td><strong>$543,600</strong></td>
+                <td>27.9%</td>
+                <td><strong>~19.8% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2022</strong></td>
+                <td>$478,000</td>
+                <td>$149,800</td>
+                <td><strong>$627,800</strong></td>
+                <td>23.9%</td>
+                <td><strong>~27.9% / yr</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5. Current Portfolio Status & Operational Directive</h2>
+    <p>
+        As of <strong>August 17, 2026</strong>, the satellite engine status is: 
+        <span class="status-badge">100% Liquid (Treasury MMF)</span>
+    </p>
+    
+    <div class="callout" style="border-left-color: #059669;">
+        <div class="callout-title" style="color: #047857;">Current Execution Thresholds</div>
+        <ul>
+            <li><strong>Cycle Completion:</strong> The 2022 Tech Bear market position hit its <strong>$82.90</strong> limit exit target in mid-2026. All shares have been fully liquidated into Treasury MMF.</li>
+            <li><strong>Current Reference High-Water Mark (P<sub>ATH</sub>):</strong> ~$88.09</li>
+            <li><strong>Next Bullet 1 Alert (-50% Trigger):</strong> ~$44.05</li>
+            <li><strong>Next Bullet 2 Alert (-80% Trigger):</strong> ~$17.60</li>
+            <li><strong>Forward Operational Directive:</strong> Maintain 90% in S&P 500 (SPY) and 10% in Treasury MMF. Await price alert at &le; $44.00 (projected window: 2028–2030).</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        CONFIDENTIAL — FOR INTERNAL INVESTMENT COMMITTEE USE ONLY — NOT FOR PUBLIC DISTRIBUTION
+    </div>
+
+</div>
+
 </body>
 </html>
