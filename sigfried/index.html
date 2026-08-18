@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Thesis - Private Wealth & Research</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background-color: #0F172A; 
+            color: #F8FAFC; 
+            padding: 40px 20px; 
+            margin: 0; 
+            line-height: 1.6;
+        }
+        .container { 
+            max-width: 860px; 
+            margin: 0 auto; 
+        }
+        .nav-header {
+            margin-bottom: 24px;
+        }
+        .back-link {
+            color: #38BDF8;
+            text-decoration: none;
+            font-size: 9.5pt;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+        
+        .header {
+            border-bottom: 2px solid #334155;
+            padding-bottom: 20px;
+            margin-bottom: 28px;
+        }
+        h1 { 
+            font-size: 22pt; 
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: #F8FAFC;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            background: #1E293B;
+            border: 1px solid #334155;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 8.5pt;
+            color: #94A3B8;
+            margin-bottom: 32px;
+        }
+        .meta-item strong { color: #F8FAFC; font-weight: 600; }
+        
+        h2 {
+            font-size: 14pt;
+            color: #38BDF8;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 8px;
+            margin-top: 36px;
+            margin-bottom: 16px;
+        }
+
+        .principle-card {
+            background: #1E293B;
+            border-left: 4px solid #38BDF8;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            border-radius: 0 8px 8px 0;
+        }
+        .principle-title {
+            font-weight: 700;
+            color: #F8FAFC;
+            font-size: 11pt;
+            margin-bottom: 4px;
+        }
+        .principle-desc {
+            font-size: 9.5pt;
+            color: #CBD5E1;
+            margin: 0;
+        }
+
+        .edge-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 32px 0;
+        }
+        .edge-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 10px;
+            font-size: 10pt;
+            color: #CBD5E1;
+        }
+        .edge-list li::before {
+            content: "■";
+            position: absolute;
+            left: 0;
+            color: #38BDF8;
+            font-size: 8pt;
+            top: 2px;
+        }
+
+        .chart-container {
+            background: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0 32px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+            margin-bottom: 12px;
+        }
+        th, td {
+            padding: 10px 12px;
+            text-align: right;
+            border-bottom: 1px solid #334155;
+        }
+        th {
+            background: #1E293B;
+            color: #94A3B8;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 8pt;
+            letter-spacing: 0.5px;
+        }
+        th:first-child, td:first-child { text-align: left; }
+        tr:hover { background: #1E293B; }
+        
+        .pos { color: #4ADE80; font-weight: 600; }
+        .neg { color: #F87171; font-weight: 600; }
+
+        blockquote {
+            margin: 32px 0 24px 0;
+            padding: 16px 20px;
+            background: #1E293B;
+            border-left: 4px solid #F59E0B;
+            font-style: italic;
+            color: #F8FAFC;
+            font-size: 11pt;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .note {
+            font-size: 8pt;
+            color: #64748B;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-header">
+        <a href="/" class="back-link">← Back to Document Repository</a>
+    </div>
+
+    <div class="header">
+        <h1>Investment Thesis</h1>
+    </div>
+
+    <div class="meta-grid">
+        <div class="meta-item">Author: <strong>Mateo Serrano</strong></div>
+        <div class="meta-item">Category: <strong>Strategy</strong></div>
+        <div class="meta-item">Created: <strong>June 20, 2025</strong></div>
+        <div class="meta-item">Last Updated: <strong>October 2, 2025</strong></div>
+    </div>
+
+    <h2>Core Investment Pillars</h2>
+    
+    <div class="principle-card">
+        <div class="principle-title">1. Elite Return on Capital</div>
+        <p class="principle-desc">Truly great businesses generate high returns on invested capital with little incremental investment needed to grow.</p>
+    </div>
+
+    <div class="principle-card">
+        <div class="principle-title">2. Fair Price</div>
+        <p class="principle-desc">Within a reasonable range, the price paid represents what we consider a fair intrinsic value of the business. Not bargains, but definitely avoiding overpaying.</p>
+    </div>
+
+    <div class="principle-card">
+        <div class="principle-title">3. Able Management</div>
+        <p class="principle-desc">Led by people with the shareholder in mind, candor, and transparency. Unconcerned about anything else; not bonuses, stock performance, or vanity metrics.</p>
+    </div>
+
+    <div class="principle-card">
+        <div class="principle-title">4. Strict Quantitative Filtering</div>
+        <p class="principle-desc">Filtering for size, liquidity, ignoring strange financials, and completely avoiding structural sectors like banking.</p>
+    </div>
+
+    <h2>Sources of Structural Edge</h2>
+    <ul class="edge-list">
+        <li><strong>Volatility Tolerance:</strong> Unconcerned with short-term volatility. It is simply the price of admission.</li>
+        <li><strong>Unconstrained Time Horizon:</strong> Fully comfortable sitting on hands for extended periods and looking foolish when required. No quarterly earnings pressure or analyst metrics.</li>
+        <li><strong>Performance Alignment:</strong> Zero management fees means performance is everything.</li>
+        <li><strong>Skin in the Game:</strong> We invest our own capital alongside our thesis.</li>
+    </ul>
+
+    <h2>Performance Backtest Visualized</h2>
+    <div class="chart-container">
+        <canvas id="backtestChart" height="120"></canvas>
+    </div>
+
+    <h2>Performance Backtest Data</h2>
+    <p class="principle-desc" style="margin-bottom: 16px;">Starting at the end of 2009, each row represents a separate portfolio initiated at that year-end comparing CAGR (ex. dividends) vs S&P 500 benchmarks.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>@ EoY</th>
+                <th>CAGR (ex. Div)</th>
+                <th>S&P 500 (ex. Div)</th>
+                <th>S&P 500 Total Return</th>
+                <th>Over / Under</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>2009</td><td>20.66%</td><td>11.05%</td><td>13.01%</td><td class="pos">+9.61%</td></tr>
+            <tr><td>2010</td><td>21.27%</td><td>10.94%</td><td>12.87%</td><td class="pos">+10.33%</td></tr>
+            <tr><td>2011</td><td>19.89%</td><td>11.78%</td><td>13.68%</td><td class="pos">+8.12%</td></tr>
+            <tr><td>2012</td><td>19.60%</td><td>11.70%</td><td>13.50%</td><td class="pos">+7.90%</td></tr>
+            <tr><td>2013</td><td>17.05%</td><td>10.26%</td><td>12.06%</td><td class="pos">+6.79%</td></tr>
+            <tr><td>2014</td><td>16.95%</td><td>10.16%</td><td>11.91%</td><td class="pos">+6.79%</td></tr>
+            <tr><td>2015</td><td>17.77%</td><td>11.33%</td><td>13.02%</td><td class="pos">+6.44%</td></tr>
+            <tr><td>2016</td><td>15.15%</td><td>11.52%</td><td>13.14%</td><td class="pos">+3.63%</td></tr>
+            <tr><td>2017</td><td>11.30%</td><td>10.57%</td><td>12.10%</td><td class="pos">+0.73%</td></tr>
+            <tr><td>2018</td><td>13.58%</td><td>13.22%</td><td>14.67%</td><td class="pos">+0.35%</td></tr>
+            <tr><td>2019</td><td>20.47%</td><td>10.82%</td><td>12.09%</td><td class="pos">+9.65%</td></tr>
+            <tr><td>2020</td><td>10.09%</td><td>9.78%</td><td>10.87%</td><td class="pos">+0.31%</td></tr>
+            <tr><td>2021</td><td>5.43%</td><td>5.85%</td><td>6.81%</td><td class="neg">-0.41%</td></tr>
+            <tr><td>2022</td><td>11.78%</td><td>15.95%</td><td>16.70%</td><td class="neg">-4.17%</td></tr>
+            <tr><td>2023</td><td>11.52%</td><td>11.99%</td><td>12.18%</td><td class="neg">-0.48%</td></tr>
+            <tr><td>2024</td><td>6.87%</td><td>1.72%</td><td>0.66%</td><td class="pos">+5.15%</td></tr>
+        </tbody>
+    </table>
+    <div class="note">* Analysis ending June 2025. 2024 represents actual data portfolio performance (non-backtested).</div>
+
+    <blockquote>“Time is the friend of the wonderful business.”</blockquote>
+
+    <h2>5-Year Rolling Avg. Over-Performance</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Start Years</th>
+                <th>2021-2025</th>
+                <th>2020-2024</th>
+                <th>2019-2023</th>
+                <th>2018-2022</th>
+                <th>2017-2021</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Rolling Spread</strong></td>
+                <td class="pos">+0.08%</td>
+                <td class="pos">+1.28%</td>
+                <td class="pos">+1.08%</td>
+                <td class="pos">+2.13%</td>
+                <td class="pos">+2.93%</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const ctx = document.getElementById('backtestChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+            datasets: [
+                {
+                    label: 'Portfolio CAGR (ex. Div)',
+                    data: [20.66, 21.27, 19.89, 19.60, 17.05, 16.95, 17.77, 15.15, 11.30, 13.58, 20.47, 10.09, 5.43, 11.78, 11.52, 6.87],
+                    borderColor: '#38BDF8',
+                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.2
+                },
+                {
+                    label: 'S&P 500 Total Return',
+                    data: [13.01, 12.87, 13.68, 13.50, 12.06, 11.91, 13.02, 13.14, 12.10, 14.67, 12.09, 10.87, 6.81, 16.70, 12.18, 0.66],
+                    borderColor: '#94A3B8',
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: '#F8FAFC', font: { family: 'Inter' } } }
+            },
+            scales: {
+                x: { grid: { color: '#334155' }, ticks: { color: '#94A3B8' } },
+                y: { grid: { color: '#334155' }, ticks: { color: '#94A3B8', callback: v => v + '%' } }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
