@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investment Thesis - Private Wealth & Research</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
@@ -105,14 +104,6 @@
             top: 2px;
         }
 
-        .chart-container {
-            background: #1E293B;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 24px 0 32px 0;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -204,11 +195,6 @@
         <li><strong>Skin in the Game:</strong> We invest our own capital alongside our thesis.</li>
     </ul>
 
-    <h2>Performance Backtest Visualized</h2>
-    <div class="chart-container">
-        <canvas id="backtestChart" height="120"></canvas>
-    </div>
-
     <h2>Performance Backtest Data</h2>
     <p class="principle-desc" style="margin-bottom: 16px;">Starting at the end of 2009, each row represents a separate portfolio initiated at that year-end comparing CAGR (ex. dividends) vs S&P 500 benchmarks.</p>
 
@@ -269,46 +255,6 @@
         </tbody>
     </table>
 </div>
-
-<script>
-    const ctx = document.getElementById('backtestChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
-            datasets: [
-                {
-                    label: 'Portfolio CAGR (ex. Div)',
-                    data: [20.66, 21.27, 19.89, 19.60, 17.05, 16.95, 17.77, 15.15, 11.30, 13.58, 20.47, 10.09, 5.43, 11.78, 11.52, 6.87],
-                    borderColor: '#38BDF8',
-                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.2
-                },
-                {
-                    label: 'S&P 500 Total Return',
-                    data: [13.01, 12.87, 13.68, 13.50, 12.06, 11.91, 13.02, 13.14, 12.10, 14.67, 12.09, 10.87, 6.81, 16.70, 12.18, 0.66],
-                    borderColor: '#94A3B8',
-                    borderDash: [5, 5],
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.2
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { labels: { color: '#F8FAFC', font: { family: 'Inter' } } }
-            },
-            scales: {
-                x: { grid: { color: '#334155' }, ticks: { color: '#94A3B8' } },
-                y: { grid: { color: '#334155' }, ticks: { color: '#94A3B8', callback: v => v + '%' } }
-            }
-        }
-    });
-</script>
 
 </body>
 </html>
