@@ -231,30 +231,87 @@
 
     <blockquote>“Time is the friend of the wonderful business.”</blockquote>
 
-    <h2>5-Year Rolling Avg. Over-Performance</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Start Years</th>
-                <th>2021-2025</th>
-                <th>2020-2024</th>
-                <th>2019-2023</th>
-                <th>2018-2022</th>
-                <th>2017-2021</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Rolling Spread</strong></td>
-                <td class="pos">+0.08%</td>
-                <td class="pos">+1.28%</td>
-                <td class="pos">+1.08%</td>
-                <td class="pos">+2.13%</td>
-                <td class="pos">+2.93%</td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Include Chart.js in the head if not already present -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <h2>5-Year Rolling Avg. of Portfolio Over-performance to index</h2>
+    
+    <div style="background: #1E293B; border: 1px solid #334155; border-radius: 8px; padding: 24px; margin: 24px 0;">
+        <div style="position: relative; height: 320px; width: 100%;">
+            <canvas id="rollingAvgChart"></canvas>
+        </div>
+        <div style="text-align: center; font-size: 8.5pt; color: #94A3B8; margin-top: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+            Start Year of 5-Year Lookback Period
+        </div>
+    </div>
+
+    <p style="font-size: 8.5pt; color: #94A3B8; line-height: 1.6; font-style: italic; text-align: center; margin-top: 12px;">
+        **This graph shows the 5-year rolling average CAGR of portfolios started annually from 2010 to 2025, with each portfolio's CAGR calculated from its start year to the last update date from the table above. Each point reflects the average CAGR of portfolios in a 5-year window (e.g., 2010–2014 would be bar 2014). The trend indicates higher average CAGRs for windows with earlier start years, showing improved returns for older portfolios**
+    </p>
+
 </div>
+
+<script>
+    const ctxRolling = document.getElementById('rollingAvgChart').getContext('2d');
+    new Chart(ctxRolling, {
+        type: 'bar',
+        data: {
+            labels: ['2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013'],
+            datasets: [{
+                label: 'Over-Performance Spreads',
+                data: [0.08, 0.98, 1.15, 2.13, 2.93, 4.16, 3.59, 4.88, 6.31, 7.21, 7.99, 8.55],
+                backgroundColor: [
+                    '#CBD5E1', '#CBD5E1', '#CBD5E1', '#93C5FD', '#93C5FD', 
+                    '#60A5FA', '#60A5FA', '#3B82F6', '#3B82F6', '#2563EB', '#2563EB', '#1D4ED8'
+                ],
+                borderRadius: 4,
+                borderSkipped: false
+            }]
+        },
+        plugins: [{
+            id: 'alwaysShowDataLabels',
+            afterDraw(chart) {
+                const { ctx } = chart;
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+                    meta.data.forEach((bar, index) => {
+                        const val = dataset.data[index].toFixed(2) + '%';
+                        ctx.save();
+                        ctx.fillStyle = '#F8FAFC';
+                        ctx.font = '600 11px Inter, sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(val, bar.x, bar.y - 8);
+                        ctx.restore();
+                    });
+                });
+            }
+        }],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#94A3B8', font: { family: 'Inter', size: 11 } }
+                },
+                y: {
+                    grid: { color: '#334155' },
+                    ticks: { 
+                        color: '#94A3B8', 
+                        font: { family: 'Inter' },
+                        callback: v => v.toFixed(2) + '%'
+                    },
+                    max: 10.00,
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 
 </body>
 </html>
