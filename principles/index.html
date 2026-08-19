@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Principles of Investing - Private Wealth & Research</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background-color: #F1F5F9; 
+            color: #334155; 
+            padding: 40px 20px; 
+            margin: 0; 
+            line-height: 1.6;
+            font-size: 10.5pt;
+        }
+        .container { 
+            max-width: 860px; 
+            margin: 0 auto; 
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 40px 48px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .back-link {
+            color: #059669;
+            text-decoration: none;
+            font-size: 9.5pt;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .pdf-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #F8FAFC;
+            color: #0F172A;
+            border: 1px solid #CBD5E1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 8.5pt;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .pdf-btn:hover {
+            background-color: #F1F5F9;
+            border-color: #059669;
+            color: #059669;
+        }
+        
+        .header {
+            border-bottom: 3px solid #0F172A;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+        h1.doc-title { 
+            font-size: 22pt; 
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            color: #0F172A;
+            letter-spacing: -0.5px;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            padding: 16px;
+            border-radius: 6px;
+            font-size: 8.5pt;
+            color: #64748B;
+            margin-bottom: 32px;
+        }
+        .meta-item strong { color: #0F172A; font-weight: 600; }
+        
+        h2 {
+            font-size: 12pt;
+            font-weight: 700;
+            color: #0F172A;
+            border-bottom: 1.5px solid #CBD5E1;
+            padding-bottom: 4px;
+            margin-top: 36px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h3 {
+            font-size: 10.5pt;
+            font-weight: 700;
+            color: #059669;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #334155;
+            text-align: justify;
+        }
+
+        blockquote {
+            margin: 20px 0;
+            padding: 14px 18px;
+            background: #F8FAFC;
+            border-left: 4px solid #0F172A;
+            font-style: italic;
+            color: #0F172A;
+            font-size: 10pt;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .callout-box {
+            background: #ECFDF5;
+            border-left: 4px solid #059669;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .callout-title {
+            font-weight: 700;
+            color: #064E3B;
+            font-size: 9.5pt;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin: 0 0 16px 0;
+        }
+        li {
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        .bullet-list-custom {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+        .bullet-list-custom li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        .bullet-list-custom li::before {
+            content: "■";
+            position: absolute;
+            left: 0;
+            color: #059669;
+            font-size: 7.5pt;
+            top: 2px;
+        }
+
+        .equation-box {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            padding: 16px;
+            border-radius: 6px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 11pt;
+        }
+
+        @media print {
+            body { background: #FFFFFF; padding: 0; }
+            .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+            .nav-header { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-header">
+        <a href="/" class="back-link">← Back to Document Repository</a>
+        <button onclick="window.print()" class="pdf-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download PDF
+        </button>
+    </div>
+
+    <div class="header">
+        <h1 class="doc-title">Principles of Investing</h1>
+    </div>
+
+    <div class="meta-grid">
+        <div class="meta-item">Author: <strong>Mateo Serrano</strong></div>
+        <div class="meta-item">Category: <strong>Strategy</strong></div>
+        <div class="meta-item">Created: <strong>June 17, 2025</strong></div>
+        <div class="meta-item">Last Updated: <strong>October 2, 2025</strong></div>
+    </div>
+
+    <h2>1. What is (Good) Investing?</h2>
+    
+    Quote[cite: 2]:
+    > “Investing is often described as the process of laying out money now in the expectation of receiving more money in the future[cite: 2]. At Berkshire we take a more demanding approach, defining investing as the transfer to others of purchasing power now with the reasoned expectation of receiving more purchasing power – after taxes have been paid on nominal gains – in the future[cite: 2]. More succinctly, investing is forgoing consumption now in order to have the ability to consume more at a later date.”[cite: 2]
+    > <br>— Warren E. Buffett[cite: 2]
+
+    <p>Stealing also from the chairman of Berkshire Hathaway, a simple example illustrates how investment should be evaluated[cite: 2]:</p>
+    
+    <ul class="bullet-list-custom">
+        <li>If you forgo <strong>today</strong> 10 hamburgers to purchase an investment[cite: 2];</li>
+        <li><strong>Then</strong> receive dividends which, after tax, buy you 2 hamburgers[cite: 2]; and</li>
+        <li><strong>After that</strong> receive, upon sale of your holdings, after-tax proceeds that will buy you eight more hamburgers[cite: 2];</li>
+        <li><strong>Then</strong> you have had <em>no real income</em> from your investment, no matter how much it appreciated in dollars[cite: 2]. You may feel richer, but you won't be richer[cite: 2].</li>
+    </ul>
+
+    <p>In financial terms, what matters is your <strong>after-tax, inflation-adjusted returns</strong>[cite: 2]. This return is best measured by the Compounded Annual Growth Rate (CAGR)—not the average annual return nor deceitful "risk-adjusted returns."[cite: 2]</p>
+
+    <h2>2. How Purchasing Power is Built</h2>
+    <p>When you can acquire a (1) quality business at a (2) favorable price, led by (3) able management, you position yourself to reap substantial returns[cite: 2].</p>
+
+    <h3>Three Asset Categories</h3>
+    <ol>
+        <li><strong>Currency-Based Investments:</strong> Money-market funds, bonds, mortgages, CDs[cite: 2]. Often mistakenly deemed safe, their purchasing power deteriorates due to continuous monetary expansion[cite: 2].</li>
+        <li><strong>Unproductive Assets:</strong> Gold, silver, and precious metals[cite: 2]. These rely entirely on speculative demand rather than cash generation[cite: 2].</li>
+        <li><strong>Productive Assets:</strong> Businesses, farms, or select real estate[cite: 2]. These maintain output purchasing power through economic cycles requiring minimal incremental capital[cite: 2].</li>
+    </ol>
+
+    <div class="callout-box">
+        <div class="callout-title">Core Insight</div>
+        <p style="margin:0;">A low-cost index fund of the S&P 500 will outperform most strategies over time[cite: 2]. Owning exceptional individual businesses can outperform the whole when executed within a strict, value-driven framework[cite: 2].</p>
+    </div>
+
+    <h2>3. Price & Intrinsic Value</h2>
+    
+    Quote[cite: 2]:
+    > “It's far better to buy a wonderful company at a fair price than a fair company at a wonderful price.”[cite: 2]
+    > <br>— Charlie Munger[cite: 2]
+
+    <p>Opportunity cost dictates what you should pay today for future cash flow[cite: 2]. Consider Apple in 2023[cite: 2]: generating $99.6B in Free Cash Flow against a $2.99T market cap[cite: 2]:</p>
+
+    <div class="equation-box">
+        $$\text{FCF Yield} = \frac{\$99.6\text{B}}{\$2.99\text{T}} \approx 3.33\%$$[cite: 2]
+    </div>
+
+    <p>If 1-year U.S. Treasuries yield 5%, holding Apple required believing its long-term growth would offset the immediate 1.67% yield deficit[cite: 2].</p>
+
+    <div class="callout-box">
+        <div class="callout-title">Valuation Heuristics</div>
+        <ul style="margin:0; padding-left: 16px;">
+            <li>Welcome lower prices in owned businesses to acquire more at better yields[cite: 2].</li>
+            <li>Ignore short-term price forecasts; focus strictly on business operations[cite: 2].</li>
+            <li>Market prices and intrinsic values diverge frequently but eventually converge[cite: 2].</li>
+        </ul>
+    </div>
+
+    <h2>4. Time Horizon & Risk</h2>
+    
+    Quote[cite: 2]:
+    > “In the stock market, the most important organ is the stomach. Not the brain.”[cite: 2]
+    > <br>— Peter Lynch[cite: 2]
+
+    <ul class="bullet-list-custom">
+        <li>Evaluate business performance over 5 to 10-year test windows rather than single-year quarters[cite: 2].</li>
+        <li>Volatility is not synonymous with risk[cite: 2]. Real risk is the permanent loss of purchasing power[cite: 2].</li>
+        <li>Widespread market fear provides bargain entry points; personal emotional fear is the primary hazard[cite: 2].</li>
+    </ul>
+
+    <h2>5. Guiding Axioms</h2>
+    <ul class="bullet-list-custom">
+        <li>Monetary intervention distorts interest rates and artificially prices time[cite: 2].</li>
+        <li>Portfolios must endure periodic net-worth drawdowns of ~50% during structural bust cycles[cite: 2].</li>
+        <li>Long-term historical market returns (~7%–11% CAGR) benefit those who avoid forced liquidations during economic panics[cite: 2].</li>
+    </ul>
+
+    <blockquote>“Time in the market beats timing the market.”[cite: 2]</blockquote>
+
+</div>
+
+</body>
+</html>
