@@ -26,26 +26,52 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
         .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E2E8F0;
         }
         .back-link {
-            color: #0284C7;
+            color: #059669;
             text-decoration: none;
             font-size: 9.5pt;
             font-weight: 600;
         }
         .back-link:hover { text-decoration: underline; }
+
+        .pdf-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #F8FAFC;
+            color: #0F172A;
+            border: 1px solid #CBD5E1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 8.5pt;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .pdf-btn:hover {
+            background-color: #F1F5F9;
+            border-color: #059669;
+            color: #059669;
+        }
         
         .header {
-            border-bottom: 2px solid #E2E8F0;
-            padding-bottom: 20px;
-            margin-bottom: 28px;
+            border-bottom: 3px solid #0F172A;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
         }
         h1 { 
             font-size: 22pt; 
-            font-weight: 700;
-            margin: 0 0 12px 0;
+            font-weight: 800;
+            margin: 0 0 8px 0;
             color: #0F172A;
+            letter-spacing: -0.5px;
         }
         .meta-grid {
             display: grid;
@@ -54,7 +80,7 @@
             background: #F8FAFC;
             border: 1px solid #E2E8F0;
             padding: 16px;
-            border-radius: 8px;
+            border-radius: 6px;
             font-size: 8.5pt;
             color: #64748B;
             margin-bottom: 32px;
@@ -62,30 +88,35 @@
         .meta-item strong { color: #0F172A; font-weight: 600; }
         
         h2 {
-            font-size: 14pt;
-            color: #0284C7;
-            border-bottom: 1px solid #E2E8F0;
-            padding-bottom: 8px;
-            margin-top: 36px;
-            margin-bottom: 16px;
+            font-size: 12pt;
+            font-weight: 700;
+            color: #0F172A;
+            border-bottom: 1.5px solid #CBD5E1;
+            padding-bottom: 4px;
+            margin-top: 32px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .principle-card {
-            background: #F0F9FF;
-            border-left: 4px solid #0284C7;
+            background: #ECFDF5;
+            border-left: 4px solid #059669;
             padding: 16px 20px;
             margin-bottom: 14px;
-            border-radius: 0 8px 8px 0;
+            border-radius: 0 6px 6px 0;
         }
         .principle-title {
             font-weight: 700;
-            color: #0F172A;
-            font-size: 11pt;
+            color: #064E3B;
+            font-size: 10.5pt;
             margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .principle-desc {
             font-size: 9.5pt;
-            color: #334155;
+            color: #1E293B;
             margin: 0;
         }
 
@@ -105,7 +136,7 @@
             content: "■";
             position: absolute;
             left: 0;
-            color: #0284C7;
+            color: #059669;
             font-size: 8pt;
             top: 2px;
         }
@@ -113,43 +144,49 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 9pt;
+            font-size: 8.5pt;
             margin-bottom: 12px;
         }
         th, td {
-            padding: 10px 12px;
+            padding: 8px 10px;
             text-align: right;
             border-bottom: 1px solid #E2E8F0;
         }
         th {
-            background: #F8FAFC;
-            color: #64748B;
+            background: #0F172A;
+            color: #FFFFFF;
             font-weight: 600;
             text-transform: uppercase;
             font-size: 8pt;
             letter-spacing: 0.5px;
         }
         th:first-child, td:first-child { text-align: left; }
-        tr:hover { background: #F8FAFC; }
+        tr:nth-child(even) td { background-color: #F8FAFC; }
         
-        .pos { color: #16A34A; font-weight: 600; }
-        .neg { color: #DC2626; font-weight: 600; }
+        .pos { color: #059669; font-weight: 700; }
+        .neg { color: #DC2626; font-weight: 700; }
 
         blockquote {
             margin: 32px 0 24px 0;
             padding: 16px 20px;
-            background: #FFFBEB;
-            border-left: 4px solid #F59E0B;
+            background: #F8FAFC;
+            border-left: 4px solid #0F172A;
             font-style: italic;
-            color: #78350F;
+            color: #0F172A;
             font-size: 11pt;
-            border-radius: 0 8px 8px 0;
+            border-radius: 0 6px 6px 0;
         }
 
         .note {
             font-size: 8pt;
             color: #64748B;
             margin-top: 8px;
+        }
+
+        @media print {
+            body { background: #FFFFFF; padding: 0; }
+            .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+            .nav-header { display: none; }
         }
     </style>
 </head>
@@ -158,6 +195,14 @@
 <div class="container">
     <div class="nav-header">
         <a href="/" class="back-link">← Back to Document Repository</a>
+        <button onclick="window.print()" class="pdf-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download PDF
+        </button>
     </div>
 
     <div class="header">
@@ -166,7 +211,7 @@
 
     <div class="meta-grid">
         <div class="meta-item">Author: <strong>Mateo Serrano</strong></div>
-        <div class="meta-item">Category: <strong>Strategy</strong></div>
+        <div class="meta-item">Category: <strong>Strategy Specification</strong></div>
         <div class="meta-item">Created: <strong>June 20, 2025</strong></div>
         <div class="meta-item">Last Updated: <strong>October 2, 2025</strong></div>
     </div>
@@ -239,16 +284,16 @@
 
     <h2>5-Year Rolling Avg. of Portfolio Over-performance to index</h2>
     
-    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 24px; margin: 24px 0;">
-        <div style="position: relative; height: 320px; width: 100%;">
+    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 24px; margin: 20px 0;">
+        <div style="position: relative; height: 300px; width: 100%;">
             <canvas id="rollingAvgChart"></canvas>
         </div>
-        <div style="text-align: center; font-size: 8.5pt; color: #64748B; margin-top: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+        <div style="text-align: center; font-size: 8pt; color: #64748B; margin-top: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
             Start Year of 5-Year Lookback Period
         </div>
     </div>
 
-    <p style="font-size: 8.5pt; color: #64748B; line-height: 1.6; font-style: italic; text-align: center; margin-top: 12px;">
+    <p style="font-size: 8pt; color: #64748B; line-height: 1.5; font-style: italic; text-align: center; margin-top: 12px;">
         **This graph shows the 5-year rolling average CAGR of portfolios started annually from 2010 to 2025, with each portfolio's CAGR calculated from its start year to the last update date from the table above. Each point reflects the average CAGR of portfolios in a 5-year window (e.g., 2010–2014 would be bar 2014). The trend indicates higher average CAGRs for windows with earlier start years, showing improved returns for older portfolios**
     </p>
 
@@ -264,8 +309,8 @@
                 label: 'Over-Performance Spreads',
                 data: [0.08, 0.98, 1.15, 2.13, 2.93, 4.16, 3.59, 4.88, 6.31, 7.21, 7.99, 8.55],
                 backgroundColor: [
-                    '#CBD5E1', '#94A3B8', '#64748B', '#38BDF8', '#0284C7', 
-                    '#0284C7', '#0369A1', '#0369A1', '#075985', '#075985', '#0C4A6E', '#0F172A'
+                    '#A7F3D0', '#6EE7B7', '#34D399', '#10B981', '#059669', 
+                    '#059669', '#047857', '#047857', '#065F46', '#065F46', '#064E3B', '#0F172A'
                 ],
                 borderRadius: 4,
                 borderSkipped: false
@@ -281,7 +326,7 @@
                         const val = dataset.data[index].toFixed(2) + '%';
                         ctx.save();
                         ctx.fillStyle = '#0F172A';
-                        ctx.font = '600 11px Inter, sans-serif';
+                        ctx.font = '700 11px Inter, sans-serif';
                         ctx.textAlign = 'center';
                         ctx.fillText(val, bar.x, bar.y - 8);
                         ctx.restore();
