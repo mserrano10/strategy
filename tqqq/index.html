@@ -106,13 +106,61 @@
             margin-bottom: 4px;
         }
 
-        ul {
-            padding-left: 20px;
-            margin-bottom: 24px;
+        .edge-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 24px 0;
         }
-        li {
-            margin-bottom: 8px;
+        .edge-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 10px;
             font-size: 10pt;
+            color: #334155;
+        }
+        .edge-list li::before {
+            content: "■";
+            position: absolute;
+            left: 0;
+            color: #0284C7;
+            font-size: 8pt;
+            top: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+            margin-bottom: 16px;
+        }
+        th, td {
+            padding: 10px 12px;
+            text-align: right;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        th {
+            background: #F8FAFC;
+            color: #64748B;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 8pt;
+            letter-spacing: 0.5px;
+        }
+        th:first-child, td:first-child { text-align: left; }
+        tr:hover { background: #F8FAFC; }
+
+        .pos { color: #16A34A; font-weight: 600; }
+        .neg { color: #DC2626; font-weight: 600; }
+
+        blockquote {
+            margin: 32px 0 24px 0;
+            padding: 16px 20px;
+            background: #FFFBEB;
+            border-left: 4px solid #F59E0B;
+            font-style: italic;
+            color: #78350F;
+            font-size: 11pt;
+            border-radius: 0 8px 8px 0;
         }
 
         @media print {
@@ -138,7 +186,7 @@
     </div>
 
     <div class="header">
-        <h1>2-Bullet Asymmetric Strategy & 90/10 Hybrid Specification</h1>
+        <h1>TQQQ Asymmetric Strategy & 90/10 Hybrid Specification</h1>
     </div>
 
     <div class="meta-grid">
@@ -154,12 +202,61 @@
     </div>
 
     <h2>Core Pillars & Execution Framework</h2>
-    <ul>
+    <ul class="edge-list">
         <li><strong>Tail-Risk Exploitation:</strong> Capital deployment timed exclusively to deep market pullbacks to capture asymmetric recovery cycles.</li>
         <li><strong>3x Daily Leverage Mechanics:</strong> Utilizing TQQQ to compound intraday momentum during structural trend reversals.</li>
         <li><strong>Liquid Reserve Management:</strong> Maintaining strict cash/T-bill allocations to fund 2-bullet entry executions during market dislocations.</li>
         <li><strong>Disciplined Exit Multiples:</strong> Monetizing positions at defined profit targets to insulate capital from volatility decay.</li>
     </ul>
+
+    <h2>1. The 2-Bullet Deployment Rules</h2>
+    <p>To eliminate emotional execution during severe dislocations, capital reserves are deployed in two distinct tranches anchored to high-water mark drawdowns in the underlying Nasdaq-100 (QQQ):</p>
+
+    <ul class="edge-list">
+        <li><strong>Bullet 1 (50% Reserve Allocation):</strong> Executed when QQQ pulls back <strong>-10%</strong> from its peak high-water mark.</li>
+        <li><strong>Bullet 2 (50% Reserve Allocation):</strong> Executed if the drawdown deepens to <strong>-15%</strong> from the peak high-water mark.</li>
+    </ul>
+
+    <h2>2. Dynamic Exit Strategy & Monetization</h2>
+    <p>Leveraged instruments suffer from geometric volatility drag during choppy sideway regimes. To protect compounded gains, positions are systematically exited under two strict parameters:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Target Multiple</th>
+                <th>Execution Action</th>
+                <th>Capital Destination</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>10x Return Target</strong></td>
+                <td>Liquidate 100% of TQQQ Position</td>
+                <td>Re-allocated to Safe Cash / Treasury Reserves</td>
+            </tr>
+            <tr>
+                <td><strong>New QQQ All-Time High</strong></td>
+                <td>Liquidate Position / Reset Strategy</td>
+                <td>Lock in compounding gains; wait for next -10% trigger</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>3. The 90/10 Hybrid Capital Allocation</h2>
+    <p>For perpetual portfolio operations, total fund equity is segregated to balance structural safety with explosive tail upside:</p>
+
+    <div class="highlight-card">
+        <div class="highlight-title">90% Liquid Safe Core</div>
+        <p style="margin: 0; font-size: 9.5pt;">Held in ultra-short T-bills or cash yield vehicles to guarantee capital preservation and provide continuous liquidity.</p>
+    </div>
+
+    <div class="highlight-card" style="border-left-color: #F59E0B; background-color: #FFFBEB;">
+        <div class="highlight-title" style="color: #78350F;">10% Asymmetric Leverage Engine</div>
+        <p style="margin: 0; font-size: 9.5pt; color: #78350F;">Reserved specifically for executing the 2-bullet TQQQ deployments during -10% and -15% market pullbacks.</p>
+    </div>
+
+    <blockquote>“Leverage is an exceptional tool for harvesting volatility spikes, provided entry price discipline insulates the fund from catastrophic decay.”</blockquote>
+
 </div>
 
 </body>
