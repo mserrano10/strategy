@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investment Thesis - Private Wealth & Research</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
         body { 
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-            background-color: #0F172A; 
-            color: #F8FAFC; 
+            background-color: #F1F5F9; 
+            color: #334155; 
             padding: 40px 20px; 
             margin: 0; 
             line-height: 1.6;
@@ -18,12 +19,17 @@
         .container { 
             max-width: 860px; 
             margin: 0 auto; 
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 40px 48px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
         .nav-header {
             margin-bottom: 24px;
         }
         .back-link {
-            color: #38BDF8;
+            color: #0284C7;
             text-decoration: none;
             font-size: 9.5pt;
             font-weight: 600;
@@ -31,7 +37,7 @@
         .back-link:hover { text-decoration: underline; }
         
         .header {
-            border-bottom: 2px solid #334155;
+            border-bottom: 2px solid #E2E8F0;
             padding-bottom: 20px;
             margin-bottom: 28px;
         }
@@ -39,47 +45,47 @@
             font-size: 22pt; 
             font-weight: 700;
             margin: 0 0 12px 0;
-            color: #F8FAFC;
+            color: #0F172A;
         }
         .meta-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 12px;
-            background: #1E293B;
-            border: 1px solid #334155;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
             padding: 16px;
             border-radius: 8px;
             font-size: 8.5pt;
-            color: #94A3B8;
+            color: #64748B;
             margin-bottom: 32px;
         }
-        .meta-item strong { color: #F8FAFC; font-weight: 600; }
+        .meta-item strong { color: #0F172A; font-weight: 600; }
         
         h2 {
             font-size: 14pt;
-            color: #38BDF8;
-            border-bottom: 1px solid #334155;
+            color: #0284C7;
+            border-bottom: 1px solid #E2E8F0;
             padding-bottom: 8px;
             margin-top: 36px;
             margin-bottom: 16px;
         }
 
         .principle-card {
-            background: #1E293B;
-            border-left: 4px solid #38BDF8;
+            background: #F0F9FF;
+            border-left: 4px solid #0284C7;
             padding: 16px 20px;
             margin-bottom: 14px;
             border-radius: 0 8px 8px 0;
         }
         .principle-title {
             font-weight: 700;
-            color: #F8FAFC;
+            color: #0F172A;
             font-size: 11pt;
             margin-bottom: 4px;
         }
         .principle-desc {
             font-size: 9.5pt;
-            color: #CBD5E1;
+            color: #334155;
             margin: 0;
         }
 
@@ -93,13 +99,13 @@
             padding-left: 24px;
             margin-bottom: 10px;
             font-size: 10pt;
-            color: #CBD5E1;
+            color: #334155;
         }
         .edge-list li::before {
             content: "■";
             position: absolute;
             left: 0;
-            color: #38BDF8;
+            color: #0284C7;
             font-size: 8pt;
             top: 2px;
         }
@@ -113,29 +119,29 @@
         th, td {
             padding: 10px 12px;
             text-align: right;
-            border-bottom: 1px solid #334155;
+            border-bottom: 1px solid #E2E8F0;
         }
         th {
-            background: #1E293B;
-            color: #94A3B8;
+            background: #F8FAFC;
+            color: #64748B;
             font-weight: 600;
             text-transform: uppercase;
             font-size: 8pt;
             letter-spacing: 0.5px;
         }
         th:first-child, td:first-child { text-align: left; }
-        tr:hover { background: #1E293B; }
+        tr:hover { background: #F8FAFC; }
         
-        .pos { color: #4ADE80; font-weight: 600; }
-        .neg { color: #F87171; font-weight: 600; }
+        .pos { color: #16A34A; font-weight: 600; }
+        .neg { color: #DC2626; font-weight: 600; }
 
         blockquote {
             margin: 32px 0 24px 0;
             padding: 16px 20px;
-            background: #1E293B;
+            background: #FFFBEB;
             border-left: 4px solid #F59E0B;
             font-style: italic;
-            color: #F8FAFC;
+            color: #78350F;
             font-size: 11pt;
             border-radius: 0 8px 8px 0;
         }
@@ -231,21 +237,18 @@
 
     <blockquote>“Time is the friend of the wonderful business.”</blockquote>
 
-    <!-- Include Chart.js in the head if not already present -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <h2>5-Year Rolling Avg. of Portfolio Over-performance to index</h2>
     
-    <div style="background: #1E293B; border: 1px solid #334155; border-radius: 8px; padding: 24px; margin: 24px 0;">
+    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 24px; margin: 24px 0;">
         <div style="position: relative; height: 320px; width: 100%;">
             <canvas id="rollingAvgChart"></canvas>
         </div>
-        <div style="text-align: center; font-size: 8.5pt; color: #94A3B8; margin-top: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+        <div style="text-align: center; font-size: 8.5pt; color: #64748B; margin-top: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
             Start Year of 5-Year Lookback Period
         </div>
     </div>
 
-    <p style="font-size: 8.5pt; color: #94A3B8; line-height: 1.6; font-style: italic; text-align: center; margin-top: 12px;">
+    <p style="font-size: 8.5pt; color: #64748B; line-height: 1.6; font-style: italic; text-align: center; margin-top: 12px;">
         **This graph shows the 5-year rolling average CAGR of portfolios started annually from 2010 to 2025, with each portfolio's CAGR calculated from its start year to the last update date from the table above. Each point reflects the average CAGR of portfolios in a 5-year window (e.g., 2010–2014 would be bar 2014). The trend indicates higher average CAGRs for windows with earlier start years, showing improved returns for older portfolios**
     </p>
 
@@ -261,8 +264,8 @@
                 label: 'Over-Performance Spreads',
                 data: [0.08, 0.98, 1.15, 2.13, 2.93, 4.16, 3.59, 4.88, 6.31, 7.21, 7.99, 8.55],
                 backgroundColor: [
-                    '#CBD5E1', '#CBD5E1', '#CBD5E1', '#93C5FD', '#93C5FD', 
-                    '#60A5FA', '#60A5FA', '#3B82F6', '#3B82F6', '#2563EB', '#2563EB', '#1D4ED8'
+                    '#CBD5E1', '#94A3B8', '#64748B', '#38BDF8', '#0284C7', 
+                    '#0284C7', '#0369A1', '#0369A1', '#075985', '#075985', '#0C4A6E', '#0F172A'
                 ],
                 borderRadius: 4,
                 borderSkipped: false
@@ -277,7 +280,7 @@
                     meta.data.forEach((bar, index) => {
                         const val = dataset.data[index].toFixed(2) + '%';
                         ctx.save();
-                        ctx.fillStyle = '#F8FAFC';
+                        ctx.fillStyle = '#0F172A';
                         ctx.font = '600 11px Inter, sans-serif';
                         ctx.textAlign = 'center';
                         ctx.fillText(val, bar.x, bar.y - 8);
@@ -296,12 +299,12 @@
             scales: {
                 x: {
                     grid: { display: false },
-                    ticks: { color: '#94A3B8', font: { family: 'Inter', size: 11 } }
+                    ticks: { color: '#64748B', font: { family: 'Inter', size: 11 } }
                 },
                 y: {
-                    grid: { color: '#334155' },
+                    grid: { color: '#E2E8F0' },
                     ticks: { 
-                        color: '#94A3B8', 
+                        color: '#64748B', 
                         font: { family: 'Inter' },
                         callback: v => v.toFixed(2) + '%'
                     },
