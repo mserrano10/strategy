@@ -3,666 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Memorandum - 2-Bullet Asymmetric Strategy & Portfolio Architecture</title>
+    <title>TQQQ Strategy Spec - Private Wealth & Research</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-        @page {
-            size: letter;
-            margin: 16mm 16mm 16mm 16mm;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background-color: #F1F5F9; 
+            color: #334155; 
+            padding: 40px 20px; 
+            margin: 0; 
+            line-height: 1.6;
         }
-
-        * {
-            box-sizing: border-box;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+        .container { 
+            max-width: 860px; 
+            margin: 0 auto; 
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 40px 48px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            color: #0F172A;
-            background-color: #FFFFFF;
-            line-height: 1.45;
-            font-size: 11pt;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 820px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header-bar {
-            border-bottom: 3px solid #0F172A;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+        .nav-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        .brand {
-            font-size: 8.5pt;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: #475569;
-            text-transform: uppercase;
-        }
-
-        .doc-title {
-            font-size: 17pt;
-            font-weight: 800;
-            color: #0F172A;
-            margin-top: 4px;
-            letter-spacing: -0.5px;
-        }
-
-        .meta-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px 24px;
-            background-color: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            border-radius: 6px;
-            padding: 10px 16px;
-            font-size: 9pt;
-            margin-bottom: 20px;
-        }
-
-        .meta-item strong {
-            color: #334155;
-            font-weight: 600;
-        }
-
-        h2 {
-            font-size: 12pt;
-            font-weight: 700;
-            color: #0F172A;
-            border-bottom: 1.5px solid #CBD5E1;
-            padding-bottom: 4px;
-            margin-top: 24px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            page-break-after: avoid;
-        }
-
-        p {
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: #334155;
-            text-align: justify;
-        }
-
-        .callout {
-            background-color: #F1F5F9;
-            border-left: 4px solid #0F172A;
-            padding: 10px 14px;
-            margin: 14px 0;
-            border-radius: 0 6px 6px 0;
-            font-size: 10pt;
-        }
-
-        .callout-title {
-            font-weight: 700;
-            color: #0F172A;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            font-size: 8.5pt;
-            letter-spacing: 0.5px;
-        }
-
-        .callout ul {
-            margin: 0;
-            padding-left: 16px;
-        }
-
-        .callout li {
-            margin-bottom: 3px;
-            color: #1E293B;
-        }
-
-        .step-container {
-            margin-bottom: 14px;
-        }
-
-        .step-card {
-            border: 1px solid #E2E8F0;
-            border-radius: 6px;
-            padding: 8px 12px;
-            margin-bottom: 8px;
-            background-color: #FFFFFF;
-            page-break-inside: avoid;
-        }
-
-        .step-header {
-            display: flex;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: 24px;
         }
-
-        .step-number {
-            background-color: #0F172A;
-            color: #FFFFFF;
-            font-size: 8pt;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-right: 8px;
-        }
-
-        .step-title {
-            font-weight: 700;
-            font-size: 10pt;
-            color: #0F172A;
-        }
-
-        .step-subtitle {
-            font-size: 8pt;
-            color: #64748B;
-            margin-left: auto;
-            font-style: italic;
-        }
-
-        .step-body {
-            font-size: 9pt;
-            color: #334155;
-            padding-left: 28px;
-        }
-
-        .step-body ul {
-            margin: 2px 0 0 0;
-            padding-left: 14px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 12px 0 18px 0;
-            font-size: 8.5pt;
-            page-break-inside: avoid;
-        }
-
-        th {
-            background-color: #0F172A;
-            color: #FFFFFF;
+        .back-link {
+            color: #0284C7;
+            text-decoration: none;
+            font-size: 9.5pt;
             font-weight: 600;
-            text-align: left;
-            padding: 6px 8px;
-            font-size: 8pt;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
         }
-
-        td {
-            padding: 5px 8px;
-            border-bottom: 1px solid #E2E8F0;
-            color: #1E293B;
-        }
-
-        tr:nth-child(even) td {
-            background-color: #F8FAFC;
-        }
-
-        .comparison-box {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            background-color: #F8FAFC;
-            border: 1px solid #CBD5E1;
-            border-radius: 6px;
-            padding: 10px;
-            margin: 12px 0;
-            font-size: 8.5pt;
-            page-break-inside: avoid;
-        }
-
-        .comp-col h4 {
-            margin: 0 0 4px 0;
-            font-size: 9pt;
-            color: #0F172A;
-            text-transform: uppercase;
-            border-bottom: 1px solid #E2E8F0;
-            padding-bottom: 3px;
-        }
-
-        .comp-col ul {
-            margin: 0;
-            padding-left: 12px;
-            color: #475569;
-        }
-
-        .status-badge {
-            display: inline-block;
-            background-color: #059669;
-            color: #FFFFFF;
-            font-weight: 700;
-            font-size: 7.5pt;
-            padding: 2px 6px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            vertical-align: middle;
-            margin-left: 6px;
-        }
-
-        .page-break {
-            page-break-before: always;
-        }
-
-        .footer {
-            margin-top: 24px;
-            border-top: 1px solid #E2E8F0;
-            padding-top: 10px;
-            font-size: 7.5pt;
-            color: #94A3B8;
-            text-align: center;
-        }
+        .back-link:hover { text-decoration: underline; }
 
         .pdf-btn {
-            background-color: #0F172A;
-            color: #FFFFFF;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #F8FAFC;
+            color: #0F172A;
+            border: 1px solid #CBD5E1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 8.5pt;
             font-weight: 600;
-            font-size: 9pt;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .pdf-btn:hover {
+            background-color: #F1F5F9;
+            border-color: #0284C7;
+            color: #0284C7;
+        }
+        
+        .header {
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 20px;
+            margin-bottom: 28px;
+        }
+        h1 { 
+            font-size: 22pt; 
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: #0F172A;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 8.5pt;
+            color: #64748B;
+            margin-bottom: 32px;
+        }
+        .meta-item strong { color: #0F172A; font-weight: 600; }
+        
+        h2 {
+            font-size: 14pt;
+            color: #0284C7;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 8px;
+            margin-top: 36px;
             margin-bottom: 16px;
         }
 
+        .highlight-card {
+            background: #F0F9FF;
+            border-left: 4px solid #0284C7;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        .highlight-title {
+            font-weight: 700;
+            color: #0F172A;
+            font-size: 11pt;
+            margin-bottom: 4px;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 24px;
+        }
+        li {
+            margin-bottom: 8px;
+            font-size: 10pt;
+        }
+
         @media print {
-            body {
-                background: none;
-            }
-            .container {
-                width: 100%;
-                max-width: none;
-                padding: 0;
-            }
-            .pdf-btn {
-                display: none;
-            }
+            body { background: #FFFFFF; padding: 0; }
+            .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+            .nav-header { display: none; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div class="nav-header">
+        <a href="/" class="back-link">← Back to Document Repository</a>
+        <button onclick="window.print()" class="pdf-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download PDF
+        </button>
+    </div>
 
-    <button class="pdf-btn" onclick="window.print()">📄 Save as PDF</button>
-
-    <div class="header-bar">
-        <div>
-            <div class="brand">Private Wealth Strategy & Risk Management</div>
-            <div class="doc-title">Executive Memorandum</div>
-        </div>
-        <div style="text-align: right;">
-            <div class="brand">Confidential</div>
-            <div style="font-size: 8pt; color: #64748B; margin-top: 4px;">Ref: ASYM-TQQQ-HYBRID-2026</div>
-        </div>
+    <div class="header">
+        <h1>2-Bullet Asymmetric Strategy & 90/10 Hybrid Specification</h1>
     </div>
 
     <div class="meta-grid">
-        <div class="meta-item"><strong>MEMORANDUM TO:</strong> Investment Committee / Private Client</div>
-        <div class="meta-item"><strong>DATE:</strong> August 17, 2026</div>
-        <div class="meta-item"><strong>SUBJECT:</strong> 2-Bullet Asymmetric Strategy & 90/10 Hybrid Portfolio Specification</div>
-        <div class="meta-item"><strong>ASSET ALLOCATION:</strong> 90% S&P 500 (SPY) / 10% Strategy Engine (TQQQ/MMF)</div>
+        <div class="meta-item">Author: <strong>Mateo Serrano</strong></div>
+        <div class="meta-item">Category: <strong>Strategy Specification</strong></div>
+        <div class="meta-item">Target Asset: <strong>TQQQ / Cash Reserves</strong></div>
+        <div class="meta-item">Execution: <strong>Asymmetric Triggers</strong></div>
     </div>
 
-    <h2>1. Executive Summary & Core Mandate</h2>
-    <p>
-        The <strong>2-Bullet Asymmetric Leveraged Equity Strategy</strong> is a rules-based, tail-risk exploitation engine. It converts macro equity market panics into non-linear portfolio compounding by systematically deploying cash into 3x daily leveraged NASDAQ-100 exposure (TQQQ) during structural drawdowns.
-    </p>
-    <p>
-        To eliminate single-asset liquidation risk and smooth multi-decade equity curves, the strategy is constructed as a <strong>90/10 Hybrid Portfolio Architecture</strong>: 90% of overall net worth resides in core broad-market indexing (S&P 500 / SPY), while 10% is dedicated to the 2-Bullet Asymmetric Engine.
-    </p>
-
-    <div class="callout">
-        <div class="callout-title">Core Strategic Directives</div>
-        <ul>
-            <li><strong>Hybrid Allocation:</strong> 90% Broad Market (S&P 500) / 10% Satellite Asymmetric Engine (0% intermediate rebalancing).</li>
-            <li><strong>Engine Capital Split:</strong> 50% Bullet 1 (-50% Drawdown Trigger) / 50% Bullet 2 (-80% Drawdown Trigger).</li>
-            <li><strong>Dry Powder Integrity:</strong> Uninvested satellite cash must reside exclusively in Treasury MMFs or Ultra-Short T-Bills. Equities or SPY derivatives are strictly prohibited as dry powder proxies due to crash impairment.</li>
-            <li><strong>Risk Control Cap:</strong> Capping the engine at 10% isolates daily derivative leverage and overnight liquidation risks while adding 4%–6% in compound annual alpha.</li>
-        </ul>
+    <div class="highlight-card">
+        <div class="highlight-title">Executive Summary</div>
+        <p style="margin: 0; font-size: 9.5pt;">Institutional memorandum detailing tail-risk exploitation, 3x daily leverage mechanics, liquid reserve management, and multi-decade backtest simulations.</p>
     </div>
 
-    <h2>2. Institutional Execution Algorithm</h2>
-
-    <div class="step-container">
-        <div class="step-card">
-            <div class="step-header">
-                <span class="step-number">STEP 1</span>
-                <span class="step-title">Portfolio Partitioning & Reserve Custody</span>
-                <span class="step-subtitle">Insulating core wealth from tail-risk</span>
-            </div>
-            <div class="step-body">
-                Allocate total account capital into two un-rebalanced sleeves:
-                <ul>
-                    <li><strong>S&P 500 Core (90%):</strong> Fully invested in SPY for perpetual broad-market compounding.</li>
-                    <li><strong>Satellite Engine (10%):</strong> Split 50/50 into Bullet 1 Cash (5%) and Bullet 2 Cash (5%) held in Treasury MMF.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="step-card">
-            <div class="step-header">
-                <span class="step-number">STEP 2</span>
-                <span class="step-title">High-Water Mark (HWM) & Trigger Activation</span>
-                <span class="step-subtitle">Systematic entry execution</span>
-            </div>
-            <div class="step-body">
-                Continuously track TQQQ's active High-Water Mark (P<sub>ATH</sub>).
-                <ul>
-                    <li><strong>Bullet 1 Trigger:</strong> Activates when TQQQ drops &ge; 50% from P<sub>ATH</sub>.</li>
-                    <li><strong>Bullet 2 Trigger:</strong> Activates when TQQQ drops &ge; 80% from that <em>same locked</em> P<sub>ATH</sub>.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="step-card">
-            <div class="step-header">
-                <span class="step-number">STEP 3</span>
-                <span class="step-title">Volume-Weighted Tranche Execution (3-Month Cadence)</span>
-                <span class="step-subtitle">Averaging down without falling-knife risk</span>
-            </div>
-            <div class="step-body">
-                Deploy active Bullet capital across a 90-day window upon trigger breach:
-                <ul>
-                    <li><strong>Month 1:</strong> Deploy <strong>50%</strong> of active bullet capital.</li>
-                    <li><strong>Month 2:</strong> Deploy <strong>25%</strong> of active bullet capital.</li>
-                    <li><strong>Month 3:</strong> Deploy remaining <strong>25%</strong> of active bullet capital.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="step-card">
-            <div class="step-header">
-                <span class="step-number">STEP 4</span>
-                <span class="step-title">State Lock & Limit Exit Execution</span>
-                <span class="step-subtitle">Disciplined profit realization</span>
-            </div>
-            <div class="step-body">
-                Upon establishing the cycle floor (P<sub>floor</sub>), set a limit sell order at 10 &times; P<sub>floor</sub>.
-                <ul>
-                    <li><strong>State Lock Protocol:</strong> No secondary entries are permitted while a position is active.</li>
-                    <li><strong>Full Rollover:</strong> Upon target execution, 100% of realized satellite cash is rolled forward into Treasury MMF for the next macro cycle.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <h2>3. Key Structural Mechanics & Risk Controls</h2>
-
-    <div class="comparison-box">
-        <div class="comp-col">
-            <h4>Theoretical Model (Napkin Math)</h4>
-            <ul>
-                <li>Assumed 10x Total Account Multipliers</li>
-                <li>Assumed Every Market Dip Was Traded</li>
-                <li>Assumed Instant Bottom Price Execution</li>
-                <li><strong>Result:</strong> ~$166M ($100k) / ~$332M ($200k)</li>
-            </ul>
-        </div>
-        <div class="comp-col">
-            <h4>Real-World Audited Ledger</h4>
-            <ul>
-                <li>Asset 10x &ne; Account 10x (1.9x–5.2x on Deployed Cost)</li>
-                <li>Capital State Lock (Locked in '08, Missed '11)</li>
-                <li>3-Month Tranche Averaging (VWAP Cost Basis Drag)</li>
-                <li><strong>Result:</strong> $14.08M ($100k Engine) / $2.81M ($20k Engine)</li>
-            </ul>
-        </div>
-    </div>
-
-    <p>
-        <strong>1. Liquidation Risk Isolation:</strong> ProShares explicitly warns that a single-day drop of &gt;33.3% in the Nasdaq-100 results in a -100% loss ($0 NAV). Capping the engine at 10% guarantees that a Black Swan liquidation event leaves 90% of total wealth completely intact inside the S&P 500 core.
-    </p>
-    <p>
-        <strong>2. Dry Powder Impairment Protection:</strong> Keeping Bullet 2 in an S&P 500 index fund rather than MMF reduces final strategy wealth by ~40%. When TQQQ touches its -80% trigger, broad equities are down -25% to -50%, forcing forced liquidation of equities at market troughs.
-    </p>
-
-    <div class="page-break"></div>
-
-    <h2>4. Full Master Portfolio Simulation ($200,000 Inception)</h2>
-    <p>
-        The table below models a <strong>$200,000 Total Starting Portfolio</strong> split into a <strong>90% S&P 500 Core ($180,000)</strong> and a <strong>10% TQQQ Asymmetric Engine ($20,000)</strong> across every sequential starting year from 1999 to 2022. All values reflect fully realized liquid balances as of August 2026.
-    </p>
-
-    <div style="font-size: 8pt; font-weight: 700; color: #475569; margin-top: 10px; text-transform: uppercase;">
-        Table 4.1: Multi-Decade Sequential Inception Matrix ($200,000 Initial Capital)
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Inception Year</th>
-                <th>90% S&P 500 Core ($180k)</th>
-                <th>10% TQQQ Engine ($20k)</th>
-                <th>Final Combined Portfolio (2026)</th>
-                <th>Engine % Share</th>
-                <th>Combined CAGR</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>1999</strong></td>
-                <td>$1,360,000</td>
-                <td>$1,720,904</td>
-                <td><strong>$3,080,904</strong></td>
-                <td>55.9%</td>
-                <td><strong>~10.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2000</strong></td>
-                <td>$1,130,000</td>
-                <td>$1,720,904</td>
-                <td><strong>$2,850,904</strong></td>
-                <td>60.4%</td>
-                <td><strong>~10.6% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2001</strong></td>
-                <td>$1,242,000</td>
-                <td>$2,410,200</td>
-                <td><strong>$3,652,200</strong></td>
-                <td>66.0%</td>
-                <td><strong>~12.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2002</strong></td>
-                <td>$1,426,000</td>
-                <td>$3,084,000</td>
-                <td><strong>$4,510,000</strong></td>
-                <td>68.4%</td>
-                <td><strong>~13.6% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2003</strong></td>
-                <td>$1,818,000</td>
-                <td>$2,960,000</td>
-                <td><strong>$4,778,000</strong></td>
-                <td>62.0%</td>
-                <td><strong>~14.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2004</strong></td>
-                <td>$1,642,000</td>
-                <td>$2,816,444</td>
-                <td><strong>$4,458,444</strong></td>
-                <td>63.2%</td>
-                <td><strong>~14.7% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2005</strong></td>
-                <td>$1,605,600</td>
-                <td>$2,816,444</td>
-                <td><strong>$4,422,044</strong></td>
-                <td>63.7%</td>
-                <td><strong>~15.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2006</strong></td>
-                <td>$1,532,000</td>
-                <td>$2,816,444</td>
-                <td><strong>$4,348,444</strong></td>
-                <td>64.8%</td>
-                <td><strong>~16.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2007</strong></td>
-                <td>$1,442,000</td>
-                <td>$2,591,214</td>
-                <td><strong>$4,033,214</strong></td>
-                <td>64.2%</td>
-                <td><strong>~16.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2008</strong></td>
-                <td>$1,366,000</td>
-                <td>$2,512,000</td>
-                <td><strong>$3,878,000</strong></td>
-                <td>64.8%</td>
-                <td><strong>~17.3% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2009</strong></td>
-                <td>$2,162,000</td>
-                <td>$3,813,698</td>
-                <td><strong>$5,975,698</strong></td>
-                <td>63.8%</td>
-                <td><strong>~21.4% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2010</strong></td>
-                <td>$1,710,000</td>
-                <td>$3,700,000</td>
-                <td><strong>$5,410,000</strong></td>
-                <td>68.4%</td>
-                <td><strong>~22.0% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2011</strong></td>
-                <td>$1,486,000</td>
-                <td>$3,594,000</td>
-                <td><strong>$5,080,000</strong></td>
-                <td>70.7%</td>
-                <td><strong>~23.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2012</strong></td>
-                <td>$1,456,000</td>
-                <td>$683,600</td>
-                <td><strong>$2,139,600</strong></td>
-                <td>32.0%</td>
-                <td><strong>~17.7% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2013</strong></td>
-                <td>$1,255,000</td>
-                <td>$683,600</td>
-                <td><strong>$1,938,600</strong></td>
-                <td>35.3%</td>
-                <td><strong>~18.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2014</strong></td>
-                <td>$1,104,000</td>
-                <td>$670,200</td>
-                <td><strong>$1,774,200</strong></td>
-                <td>37.8%</td>
-                <td><strong>~19.0% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2015</strong></td>
-                <td>$970,000</td>
-                <td>$672,944</td>
-                <td><strong>$1,642,944</strong></td>
-                <td>41.0%</td>
-                <td><strong>~20.0% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2016</strong></td>
-                <td>$958,000</td>
-                <td>$672,944</td>
-                <td><strong>$1,630,944</strong></td>
-                <td>41.3%</td>
-                <td><strong>~21.9% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2017</strong></td>
-                <td>$786,000</td>
-                <td>$659,600</td>
-                <td><strong>$1,445,600</strong></td>
-                <td>45.6%</td>
-                <td><strong>~23.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2018</strong></td>
-                <td>$646,000</td>
-                <td>$653,600</td>
-                <td><strong>$1,299,600</strong></td>
-                <td>50.3%</td>
-                <td><strong>~24.4% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2019</strong></td>
-                <td>$676,000</td>
-                <td>$154,400</td>
-                <td><strong>$830,400</strong></td>
-                <td>18.6%</td>
-                <td><strong>~20.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2020</strong></td>
-                <td>$515,000</td>
-                <td>$154,400</td>
-                <td><strong>$669,400</strong></td>
-                <td>23.1%</td>
-                <td><strong>~19.8% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2021</strong></td>
-                <td>$392,000</td>
-                <td>$151,600</td>
-                <td><strong>$543,600</strong></td>
-                <td>27.9%</td>
-                <td><strong>~19.8% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2022</strong></td>
-                <td>$478,000</td>
-                <td>$149,800</td>
-                <td><strong>$627,800</strong></td>
-                <td>23.9%</td>
-                <td><strong>~27.9% / yr</strong></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h2>5. Current Portfolio Status & Operational Directive</h2>
-    <p>
-        As of <strong>August 17, 2026</strong>, the satellite engine status is: 
-        <span class="status-badge">100% Liquid (Treasury MMF)</span>
-    </p>
-    
-    <div class="callout" style="border-left-color: #059669;">
-        <div class="callout-title" style="color: #047857;">Current Execution Thresholds</div>
-        <ul>
-            <li><strong>Cycle Completion:</strong> The 2022 Tech Bear market position hit its <strong>$82.90</strong> limit exit target in mid-2026. All shares have been fully liquidated into Treasury MMF.</li>
-            <li><strong>Current Reference High-Water Mark (P<sub>ATH</sub>):</strong> ~$88.09</li>
-            <li><strong>Next Bullet 1 Alert (-50% Trigger):</strong> ~$44.05</li>
-            <li><strong>Next Bullet 2 Alert (-80% Trigger):</strong> ~$17.60</li>
-            <li><strong>Forward Operational Directive:</strong> Maintain 90% in S&P 500 (SPY) and 10% in Treasury MMF. Await price alert at &le; $44.00 (projected window: 2028–2030).</li>
-        </ul>
-    </div>
-
-    <div class="footer">
-        CONFIDENTIAL — FOR INTERNAL INVESTMENT COMMITTEE USE ONLY — NOT FOR PUBLIC DISTRIBUTION
-    </div>
-
+    <h2>Core Pillars & Execution Framework</h2>
+    <ul>
+        <li><strong>Tail-Risk Exploitation:</strong> Capital deployment timed exclusively to deep market pullbacks to capture asymmetric recovery cycles.</li>
+        <li><strong>3x Daily Leverage Mechanics:</strong> Utilizing TQQQ to compound intraday momentum during structural trend reversals.</li>
+        <li><strong>Liquid Reserve Management:</strong> Maintaining strict cash/T-bill allocations to fund 2-bullet entry executions during market dislocations.</li>
+        <li><strong>Disciplined Exit Multiples:</strong> Monetizing positions at defined profit targets to insulate capital from volatility decay.</li>
+    </ul>
 </div>
 
 </body>
