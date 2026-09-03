@@ -3,236 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlas — Private Wealth & Research</title>
+    <title>Atlas Capital — Strategy & Quantitative Portal</title>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%23059669'/></svg>">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #FAF9F6;
-            color: #1E293B;
+            color: #0F172A;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 60px 48px;
             line-height: 1.6;
-            padding: 60px 24px;
         }
 
-        .container {
-            max-width: 820px;
-            margin: 0 auto;
-        }
-
-        /* Institutional Header */
+        /* Top Nav */
         header {
-            border-bottom: 2px solid #0F172A;
-            padding-bottom: 28px;
-            margin-bottom: 40px;
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: center;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 24px;
         }
 
-        .brand-title {
-            font-size: 22pt;
-            font-weight: 800;
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
             color: #0F172A;
-            letter-spacing: -0.5px;
+        }
+
+        .brand-mark { width: 36px; height: 36px; }
+
+        .brand-name {
+            font-size: 14pt;
+            font-weight: 800;
+            letter-spacing: 3px;
             text-transform: uppercase;
         }
 
-        .brand-subtitle {
-            font-size: 9pt;
-            font-weight: 600;
-            color: #059669;
+        .portal-label {
+            font-size: 8.5pt;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 4px;
-        }
-
-        .header-meta {
-            text-align: right;
-            font-size: 8.5pt;
             color: #64748B;
         }
 
-        .header-meta strong {
+        /* Section Columns */
+        main {
+            margin: 48px 0;
+        }
+
+        .page-title {
+            font-size: 18pt;
+            font-weight: 800;
             color: #0F172A;
+            letter-spacing: -0.5px;
+            margin-bottom: 36px;
         }
 
-        /* Overview Section */
-        .intro-text {
-            font-size: 11pt;
-            color: #334155;
-            margin-bottom: 40px;
-            line-height: 1.7;
-            text-align: justify;
+        .dual-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
         }
 
-        /* Document Matrix */
-        .section-label {
+        .column-header {
             font-size: 9pt;
-            font-weight: 700;
-            color: #0F172A;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid #CBD5E1;
-            padding-bottom: 6px;
-            margin-bottom: 20px;
-        }
-
-        .doc-list {
+            letter-spacing: 1.5px;
+            color: #059669;
+            border-bottom: 2px solid #0F172A;
+            padding-bottom: 8px;
+            margin-bottom: 24px;
             display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 48px;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .doc-card {
+        .item-list { display: flex; flex-direction: column; gap: 20px; }
+
+        .card {
             display: block;
             text-decoration: none;
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             border-radius: 8px;
-            padding: 24px;
+            padding: 20px 24px;
             transition: all 0.2s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
-        .doc-card:hover {
+        .card:hover {
             border-color: #059669;
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.08);
-            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
         }
 
-        .doc-header {
+        .card-tag {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 7.5pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748B;
+            margin-bottom: 6px;
+        }
+
+        .card-tag.tool { color: #059669; }
+
+        .card-title {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
         }
 
-        .doc-title {
-            font-size: 13pt;
-            font-weight: 700;
-            color: #0F172A;
-        }
-
-        .doc-tag {
-            font-size: 7.5pt;
-            font-weight: 700;
-            color: #059669;
-            background-color: #ECFDF5;
-            border: 1px solid #A7F3D0;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .doc-desc {
-            font-size: 9.5pt;
+        .card-desc {
+            font-size: 9pt;
             color: #475569;
-            margin-bottom: 12px;
-        }
-
-        .doc-meta {
-            font-size: 8pt;
-            color: #94A3B8;
-            font-weight: 500;
+            line-height: 1.5;
         }
 
         /* Footer */
         footer {
             border-top: 1px solid #E2E8F0;
-            padding-top: 20px;
-            font-size: 8pt;
-            color: #94A3B8;
+            padding-top: 24px;
             display: flex;
             justify-content: space-between;
+            font-size: 8.5pt;
+            color: #94A3B8;
+        }
+
+        footer a { color: #0F172A; text-decoration: none; font-weight: 600; }
+        footer a:hover { color: #059669; }
+
+        @media (max-width: 768px) {
+            body { padding: 36px 24px; }
+            .dual-grid { grid-template-columns: 1fr; gap: 40px; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-
     <header>
-        <div>
-            <div class="brand-subtitle">Private Wealth & Capital Allocation</div>
-            <div class="brand-title">Atlas</div>
-        </div>
-        <div class="header-meta">
-            <div>Status: <strong>Active Policy & Research</strong></div>
-            <div>Classification: <strong>Private Repository</strong></div>
-        </div>
+        <a href="https://atlaswealth.cc" class="brand-logo">
+            <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="4" y1="32" x2="36" y2="32" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M20 6L32 32H8L20 6Z" stroke="#0F172A" stroke-width="2.5" stroke-linejoin="round"/>
+                <circle cx="20" cy="22" r="2.5" fill="#059669"/>
+            </svg>
+            <span class="brand-name">Atlas</span>
+        </a>
+        <div class="portal-label">Strategy & Research Portal</div>
     </header>
 
-    <div class="intro-text">
-        An institutional research repository and policy framework covering long-term capital allocation, business valuation heuristics, asymmetric derivative structures, and disciplined risk-control frameworks.
-    </div>
+    <main>
+        <div class="page-title">Quantitative Framework & Operational Desks</div>
 
-    <div class="section-label">Research & Policy Documents</div>
+        <div class="dual-grid">
+            
+            <div>
+                <div class="column-header">
+                    <span>01 · Policy & Backtests</span>
+                    <span>Library</span>
+                </div>
+                <div class="item-list">
+                    <a href="/thesis/" class="card">
+                        <div class="card-tag">Policy Document</div>
+                        <div class="card-title">Quantitative Strategy Thesis <span>→</span></div>
+                        <div class="card-desc">Multi-decade purchasing power expansion rules, asset selection criteria, and hedging mandates.</div>
+                    </a>
 
-    <div class="doc-list">
+                    <a href="/principles/" class="card">
+                        <div class="card-tag">Empirical Study</div>
+                        <div class="card-title">1,331-Week QQQ Volatility Study <span>→</span></div>
+                        <div class="card-desc">26.6-year settlement and touch analysis across 6,425 VXN data points.</div>
+                    </a>
+                </div>
+            </div>
 
-        <!-- Doc 1: Principles -->
-        <a href="/principles/" class="doc-card">
-            <div class="doc-header">
-                <span class="doc-title">Principles of Investing</span>
-                <span class="doc-tag">Strategy Memorandum</span>
+            <div>
+                <div class="column-header">
+                    <span>02 · Execution Desks</span>
+                    <span>Interactive Engines</span>
+                </div>
+                <div class="item-list">
+                    <a href="/ic-calculator/" class="card">
+                        <div class="card-tag tool">Interactive Pre-Trade Desk</div>
+                        <div class="card-title">QQQ Iron Condor Calculator <span>→</span></div>
+                        <div class="card-desc">Sigma-defined strike selection engine calibrated with Black-Scholes and live VXN regime gates.</div>
+                    </a>
+                </div>
             </div>
-            <div class="doc-desc">
-                Core philosophy on purchasing power preservation, asset classification (productive vs. unproductive), opportunity cost frameworks, and long-term time-preference.
-            </div>
-            <div class="doc-meta">Updated Oct 2025 • 8 min read</div>
-        </a>
 
-        <!-- Doc 2: Investment Thesis -->
-        <a href="/thesis/" class="doc-card">
-            <div class="doc-header">
-                <span class="doc-title">Investment Thesis & Performance Ledger</span>
-                <span class="doc-tag">Portfolio Architecture</span>
-            </div>
-            <div class="doc-desc">
-                Quantitative selection filters, competitive moat requirements, structural sources of edge, multi-decade S&P 500 backtest matrix, and 5-year rolling over-performance charts.
-            </div>
-            <div class="doc-meta">Updated Oct 2025 • 10 min read</div>
-        </a>
-
-        <!-- Doc 3: TQQQ Strategy -->
-        <a href="/tqqq/" class="doc-card">
-            <div class="doc-header">
-                <span class="doc-title">2-Bullet Asymmetric Strategy & 90/10 Hybrid Specification</span>
-                <span class="doc-tag">Systematic Derivative Specification</span>
-            </div>
-            <div class="doc-desc">
-                Rules-based tail-risk engine utilizing 3x daily leverage (TQQQ), Treasury money market fund reserve custody, volume-weighted tranche execution, and audited multi-decade simulations.
-            </div>
-            <div class="doc-meta">Updated Aug 2026 • 12 min read</div>
-        </a>
-<!-- Doc 4: Iron Condor Desk -->
-<a href="/ic-calculator/" class="doc-card">
-    <div class="doc-header">
-        <span class="doc-title">QQQ Weekly Iron Condor Pre-Trade Desk</span>
-        <span class="doc-tag">Quantitative Calculator</span>
-    </div>
-    <div class="doc-desc">
-        Interactive sigma-defined strike calculator, VXN volatility regime diagnostics, gating mechanics, and VaR sizing engine derived from the 26.6-year QQQ backtest study.
-    </div>
-    <div class="doc-meta">Updated Sep 2026 • Interactive Tool</div>
-</a>
-    </div>
+        </div>
+    </main>
 
     <footer>
-        <div>© Atlas Capital Research. Confidential Policy Repository.</div>
-        <div>All Rights Reserved</div>
+        <div>© Atlas Capital Research. Confidential Policy Portal.</div>
+        <div><a href="https://atlaswealth.cc">← Return to Main Gateway</a></div>
     </footer>
-
-</div>
 
 </body>
 </html>
