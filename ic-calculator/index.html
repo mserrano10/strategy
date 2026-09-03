@@ -1,264 +1,632 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QQQ Weekly Vertical — Pre-Trade Desk</title>
-<style>
-:root{
---bg:#0d1117;--panel:#151b23;--panel2:#1b2330;--line:#2a3441;--txt:#e6edf3;--dim:#8b949e;
---go:#3fb950;--no:#f85149;--warn:#d29922;--acc:#58a6ff;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-.wrap{max-width:1180px;margin:0 auto;padding:20px 18px 60px}
-header{border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px}
-h1{margin:0;font-size:19px;letter-spacing:.2px;font-weight:600}
-.sub{color:var(--dim);font-size:12px;margin-top:4px}
-h2{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--dim);margin:26px 0 10px;font-weight:600}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}
-.grid{display:grid;gap:12px}
-.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
-@media(max-width:860px){.g4,.g3,.g2{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.g4,.g3,.g2{grid-template-columns:1fr}}
-label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--dim);margin-bottom:5px}
-label span{text-transform:none;letter-spacing:0;color:#6e7781;font-size:11px}
-input{width:100%;background:#0b0f14;border:1px solid var(--line);color:var(--txt);padding:8px 10px;border-radius:6px;font-family:var(--mono);font-size:14px}
-input:focus{outline:none;border-color:var(--acc)}
-.verdict{border-radius:8px;padding:16px 18px;margin:20px 0;border:1px solid;display:flex;gap:16px;align-items:flex-start}
-.verdict .big{font-size:26px;font-weight:700;letter-spacing:-.4px;white-space:nowrap;font-family:var(--mono)}
-.v-go{background:rgba(63,185,80,.09);border-color:rgba(63,185,80,.45)}.v-go .big{color:var(--go)}
-.v-no{background:rgba(248,81,73,.09);border-color:rgba(248,81,73,.45)}.v-no .big{color:var(--no)}
-.v-wait{background:rgba(210,153,34,.09);border-color:rgba(210,153,34,.45)}.v-wait .big{color:var(--warn)}
-.gates{display:grid;gap:8px;margin-top:2px}
-.gate{display:grid;grid-template-columns:118px 74px 1fr;gap:12px;align-items:baseline;padding:9px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;font-size:13px}
-.gate b{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--dim)}
-.tag{font-family:var(--mono);font-weight:700;font-size:12px}
-.pass{color:var(--go)}.fail{color:var(--no)}.soft{color:var(--warn)}
-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
-th{text-align:right;padding:8px 9px;border-bottom:1px solid var(--line);color:var(--dim);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
-th:first-child,td:first-child{text-align:left}
-td{text-align:right;padding:7px 9px;border-bottom:1px solid #1e2631;white-space:nowrap}
-tr.hit{background:rgba(88,166,255,.10)}
-.num{font-family:var(--mono)}
-.kv{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid #1e2631;font-size:13px}
-.kv:last-child{border-bottom:0}
-.kv span:last-child{font-family:var(--mono);font-weight:600}
-.note{color:var(--dim);font-size:11.5px;line-height:1.6;margin-top:10px}
-.warnbox{background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.35);border-radius:6px;padding:11px 13px;font-size:12px;color:#e3b341;margin-top:12px}
-.nobox{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.35);border-radius:6px;padding:11px 13px;font-size:12px;color:#ff9492;margin-top:12px}
-.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);color:#6e7781;font-size:11px;line-height:1.7}
-.pill{display:inline-block;padding:1px 7px;border-radius:20px;font-size:10px;font-family:var(--mono);border:1px solid var(--line);color:var(--dim);margin-left:6px}
-</style></head><body><div class="wrap">
-<header>
-<h1>QQQ Weekly Short Vertical — Pre-Trade Desk</h1>
-<div class="sub">Sigma-defined strikes on the VXN scale. Every threshold traces to the 1,331-week study (26.6 years, 6,425 VXN readings, 93 statement-verified fills). Rules stated in sigma, never in delta.</div>
-</header>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QQQ Weekly Iron Condor Pre-Trade Calculator — Atlas</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * { box-sizing: border-box; }
 
-<h2>1 &middot; Inputs</h2>
-<div class="panel"><div class="grid g4">
-<div><label>QQQ spot <span>at/after open</span></label><input id="spot" type="number" step="0.01" value="715.17"></div>
-<div><label>VXN <span>live, ~15min in</span></label><input id="vxn" type="number" step="0.01" value="19.92"></div>
-<div><label>Header IV % <span>expiry header row</span></label><input id="hiv" type="number" step="0.01" value="19.45"></div>
-<div><label>Days to expiry <span>Mon&rarr;Fri</span></label><input id="dte" type="number" step="1" value="4"></div>
-<div><label>Spread width <span>points</span></label><input id="wid" type="number" step="1" value="10"></div>
-<div><label>Prior Friday close</label><input id="pfc" type="number" step="0.01" value="716.43"></div>
-<div><label>Prior week's Monday open</label><input id="pmo" type="number" step="0.01" value="709.66"></div>
-<div><label>Entry date <span>for earnings window</span></label><input id="dt" type="date" value="2026-08-31"></div>
-</div></div>
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background-color: #F1F5F9; 
+            color: #334155; 
+            padding: 40px 20px; 
+            margin: 0; 
+            line-height: 1.6;
+            font-size: 10.5pt;
+        }
 
-<div id="verdict"></div>
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 40px 48px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
 
-<h2>2 &middot; Regime</h2>
-<div class="grid g2">
-<div class="panel"><div id="regime"></div></div>
-<div class="panel"><div id="frontend"></div></div>
-</div>
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E2E8F0;
+        }
 
-<h2>3 &middot; Put side <span class="pill">core edge &middot; 17 of 17 fills cleared, median 3.7x</span></h2>
-<div class="panel"><div style="overflow-x:auto"><table id="puts"></table></div>
-<div class="note" id="putnote"></div></div>
+        .back-link {
+            color: #059669;
+            text-decoration: none;
+            font-size: 9.5pt;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
 
-<h2>4 &middot; Call side <span class="pill" style="border-color:rgba(248,81,73,.4);color:#ff9492">never observed sellable &middot; carry return at zero</span></h2>
-<div class="panel"><div style="overflow-x:auto"><table id="calls"></table></div>
-<div class="note" id="callnote"></div></div>
+        .pdf-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #F8FAFC;
+            color: #0F172A;
+            border: 1px solid #CBD5E1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 8.5pt;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .pdf-btn:hover {
+            background-color: #F1F5F9;
+            border-color: #059669;
+            color: #059669;
+        }
+        
+        .header {
+            border-bottom: 3px solid #0F172A;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
 
-<h2>5 &middot; Sizing</h2>
-<div class="panel">
-<div class="grid g4" style="margin-bottom:14px">
-<div><label>NAV</label><input id="nav" type="number" step="1000" value="200000"></div>
-<div><label>Base VaR % of NAV</label><input id="base" type="number" step="1" value="25"></div>
-<div><label>Edge multiple cap</label><input id="cap" type="number" step="0.5" value="3"></div>
-<div><label>Typical week's ratio <span>normaliser</span></label><input id="norm" type="number" step="0.1" value="3.2"></div>
-<div><label>Observed credit <span>fillable, $/share</span></label><input id="cred" type="number" step="0.01" value="0.02"></div>
-<div><label>At which sigma</label><input id="credz" type="number" step="0.05" value="2.90"></div>
-<div><label>Safety margin on break-even</label><input id="marg" type="number" step="0.5" value="2"></div>
-</div>
-<div class="grid g2"><div id="sizeout"></div><div id="stopout"></div></div>
-</div>
+        h1.doc-title { 
+            font-size: 20pt; 
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            color: #0F172A;
+            letter-spacing: -0.5px;
+        }
 
-<div class="foot" id="foot"></div>
+        .sub-desc {
+            color: #64748B;
+            font-size: 9pt;
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        h2 {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #0F172A;
+            border-bottom: 1.5px solid #CBD5E1;
+            padding-bottom: 4px;
+            margin-top: 32px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .panel {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .grid { display: grid; gap: 14px; }
+        .g4 { grid-template-columns: repeat(4, 1fr); }
+        .g3 { grid-template-columns: repeat(3, 1fr); }
+        .g2 { grid-template-columns: repeat(2, 1fr); }
+
+        @media(max-width: 860px) { .g4, .g3, .g2 { grid-template-columns: 1fr 1fr; } }
+        @media(max-width: 560px) { .g4, .g3, .g2 { grid-template-columns: 1fr; } }
+
+        label {
+            display: block;
+            font-size: 8.5pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #475569;
+            margin-bottom: 5px;
+        }
+
+        label span {
+            text-transform: none;
+            letter-spacing: 0;
+            color: #94A3B8;
+            font-size: 8pt;
+            font-weight: 400;
+        }
+
+        input {
+            width: 100%;
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            color: #0F172A;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 10pt;
+            font-weight: 600;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15);
+        }
+
+        .verdict {
+            border-radius: 8px;
+            padding: 18px 20px;
+            margin: 20px 0;
+            border: 1px solid;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .verdict .big {
+            font-size: 22pt;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        .v-go { background: #ECFDF5; border-color: #A7F3D0; } .v-go .big { color: #059669; }
+        .v-no { background: #FEF2F2; border-color: #FCA5A5; } .v-no .big { color: #DC2626; }
+        .v-wait { background: #FFFBEB; border-color: #FDE68A; } .v-wait .big { color: #D97706; }
+
+        .gates { display: grid; gap: 8px; margin-top: 10px; }
+        .gate {
+            display: grid;
+            grid-template-columns: 130px 80px 1fr;
+            gap: 12px;
+            align-items: center;
+            padding: 8px 12px;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            font-size: 9pt;
+        }
+
+        .gate b {
+            font-size: 8pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #475569;
+        }
+
+        .tag {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-weight: 700;
+            font-size: 8.5pt;
+            text-align: center;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .pass { color: #059669; background: #ECFDF5; border: 1px solid #A7F3D0; }
+        .fail { color: #DC2626; background: #FEF2F2; border: 1px solid #FCA5A5; }
+        .soft { color: #D97706; background: #FFFBEB; border: 1px solid #FDE68A; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 9pt;
+        }
+
+        th {
+            text-align: right;
+            padding: 8px 10px;
+            border-bottom: 2px solid #CBD5E1;
+            color: #64748B;
+            font-weight: 700;
+            font-size: 8pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        th:first-child, td:first-child { text-align: left; }
+        td { text-align: right; padding: 7px 10px; border-bottom: 1px solid #E2E8F0; white-space: nowrap; }
+        tr.hit { background: #ECFDF5; font-weight: 700; }
+
+        .kv {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 6px 0;
+            border-bottom: 1px solid #E2E8F0;
+            font-size: 9pt;
+        }
+
+        .kv:last-child { border-bottom: 0; }
+        .kv span:last-child { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 700; color: #0F172A; }
+
+        .note { color: #64748B; font-size: 8.5pt; line-height: 1.5; margin-top: 10px; }
+        .warnbox { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px; padding: 10px 12px; font-size: 8.5pt; color: #92400E; margin-top: 10px; }
+        .nobox { background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 6px; padding: 10px 12px; font-size: 8.5pt; color: #991B1B; margin-top: 10px; }
+        .foot { margin-top: 36px; padding-top: 16px; border-top: 1px solid #CBD5E1; color: #64748B; font-size: 8pt; line-height: 1.6; }
+        
+        .pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 7.5pt;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-weight: 700;
+            border: 1px solid #A7F3D0;
+            background: #ECFDF5;
+            color: #059669;
+            margin-left: 6px;
+            text-transform: uppercase;
+        }
+        
+        .pill-danger {
+            border-color: #FCA5A5;
+            background: #FEF2F2;
+            color: #DC2626;
+        }
+
+        @media print {
+            body { background: #FFFFFF; padding: 0; }
+            .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+            .nav-header { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-header">
+        <a href="/" class="back-link">← Back to Document Repository</a>
+        <button onclick="window.print()" class="pdf-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download PDF
+        </button>
+    </div>
+
+    <div class="header">
+        <h1 class="doc-title">QQQ Weekly Short Vertical & Iron Condor Calculator</h1>
+        <div class="sub-desc">
+            Sigma-defined strike selection engine calibrated to the VXN scale. Traces to the 1,331-week study (26.6 years, 6,425 VXN readings, 93 statement-verified fills). Rules stated in sigma, never in delta.
+        </div>
+    </div>
+
+    <h2>1 · Trade Inputs</h2>
+    <div class="panel">
+        <div class="grid g4">
+            <div><label>QQQ spot <span>at/after open</span></label><input id="spot" type="number" step="0.01" value="715.17"></div>
+            <div><label>VXN <span>live, ~15min in</span></label><input id="vxn" type="number" step="0.01" value="19.92"></div>
+            <div><label>Header IV % <span>expiry header row</span></label><input id="hiv" type="number" step="0.01" value="19.45"></div>
+            <div><label>Days to expiry <span>Mon→Fri</span></label><input id="dte" type="number" step="1" value="4"></div>
+            <div><label>Spread width <span>points</span></label><input id="wid" type="number" step="1" value="10"></div>
+            <div><label>Prior Friday close</label><input id="pfc" type="number" step="0.01" value="716.43"></div>
+            <div><label>Prior week's Mon open</label><input id="pmo" type="number" step="0.01" value="709.66"></div>
+            <div><label>Entry date <span>earnings window</span></label><input id="dt" type="date" value="2026-08-31"></div>
+        </div>
+    </div>
+
+    <div id="verdict"></div>
+
+    <h2>2 · Volatility & Regime Diagnostics</h2>
+    <div class="grid g2">
+        <div class="panel"><div id="regime"></div></div>
+        <div class="panel"><div id="frontend"></div></div>
+    </div>
+
+    <h2>3 · Put Side Parameters <span class="pill">Core Edge · 17 of 17 Fills Cleared</span></h2>
+    <div class="panel">
+        <div style="overflow-x:auto"><table id="puts"></table></div>
+        <div class="note" id="putnote"></div>
+    </div>
+
+    <h2>4 · Call Side Parameters <span class="pill pill-danger">Sellable Threshold Warning</span></h2>
+    <div class="panel">
+        <div style="overflow-x:auto"><table id="calls"></table></div>
+        <div class="note" id="callnote"></div>
+    </div>
+
+    <h2>5 · Position Sizing & Risk Controls</h2>
+    <div class="panel">
+        <div class="grid g4" style="margin-bottom:16px">
+            <div><label>Account NAV ($)</label><input id="nav" type="number" step="1000" value="200000"></div>
+            <div><label>Base VaR % of NAV</label><input id="base" type="number" step="1" value="25"></div>
+            <div><label>Edge multiple cap</label><input id="cap" type="number" step="0.5" value="3"></div>
+            <div><label>Typical week ratio</label><input id="norm" type="number" step="0.1" value="3.2"></div>
+            <div><label>Observed credit <span>$/share</span></label><input id="cred" type="number" step="0.01" value="0.02"></div>
+            <div><label>Target Sigma (z)</label><input id="credz" type="number" step="0.05" value="2.90"></div>
+            <div><label>Safety margin</label><input id="marg" type="number" step="0.5" value="2"></div>
+        </div>
+        <div class="grid g2"><div id="sizeout"></div><div id="stopout"></div></div>
+    </div>
+
+    <h2>6 · Black-Scholes Delta & Premium Target Matrix <span class="pill">Colab Model Engine</span></h2>
+    <div class="panel">
+        <div class="grid g3" style="margin-bottom:16px">
+            <div><label>Risk-Free Rate (r) %</label><input id="bs_r" type="number" step="0.5" value="4.0"></div>
+            <div><label>Target Call Premium ($)</label><input id="bs_prem" type="number" step="0.01" value="0.09"></div>
+            <div><label>Implied Vol (σ) <span>from VXN</span></label><input id="bs_sig_disp" type="text" readonly disabled style="background:#F1F5F9; color:#64748B;"></div>
+        </div>
+        <div style="overflow-x:auto"><table id="bs_table"></table></div>
+        <div class="note">
+            Calculates exact strikes for specific OTM Delta targets (0.030, 0.025, 0.020) and a target Call premium ($0.09) using the Black-Scholes pricing model with Brent's method root-finding.
+        </div>
+    </div>
+
+    <div class="foot" id="foot"></div>
 </div>
 
 <script>
-const K={
- volMult:1.03, feeRate:0.145801404063875,
- achInt:1.19339083909814, achSlope:0.0676448688446479, zFloor:2.90,
- putAll:{b:-1.7698954, a:-0.4248998, r2:0.99966},
- callAll:{b:-2.6552800, a: 0.5966900, r2:0.99185},
- bands:[
-  {hi:16.6, name:"BOTTOM 20%", range:"VXN < 16.6", b:-1.552, a:-1.0799, note:"Calmest weeks. Cheapest bar looks attractive but BOTH full-width losses in the entire 1,331-week record occurred here, and going further out did not avoid either of them - two at 2.36 sigma, still two at 2.90 sigma. Distance does not protect you when sigma is small in absolute terms."},
-  {hi:19.8, name:"20-40%", range:"16.6 - 19.8", b:-2.213, a: 0.0753, note:"The cheapest band to sell in, and the second-steepest slope, so extra distance genuinely works here. One settle breach in 283 weeks at 2.90 sigma."},
-  {hi:23.8, name:"40-60%", range:"19.8 - 23.8", b:-1.461, a:-0.4826, note:"MOST DANGEROUS BAND. Highest break-even of any quintile and the FLATTEST slope, meaning loss decays most slowly with distance - selling further out helps least here. Six settle breaches in 253 weeks. Two independent methods agree."},
-  {hi:30.7, name:"60-80%", range:"23.8 - 30.7", b:-1.464, a:-0.7660, note:"Three breaches in 265 weeks. Contains a large share of the weeks the distance rule permits."},
-  {hi:1e9, name:"TOP 20%", range:"30.7 +", b:-2.463, a: 0.3660, note:"Safest place to sell: zero settle breaches in 292 weeks at 2.90 sigma, and the steepest slope of any band. Note zero OBSERVED breaches is not zero cost - the fitted bar is 0.11% of width, not zero."}
- ],
- zL:[1.0,1.25,1.5,1.75,2.0,2.25,2.5,2.75,2.9,3.2,3.5],
- putTouch:[380,274,195,125,80,51,36,19,17,11,7], putSettle:[189,136,89,57,40,21,16,13,12,4,3],
- callTouch:[378,221,131,72,32,15,6,3,3,2,1], callSettle:[224,136,88,48,19,12,4,2,2,1,0],
- weeks:1331, wkPerYr:52,
- earnWin:[[1,20,2,10],[4,20,5,10],[7,20,8,10],[10,20,11,10]],
- gapBlock:-0.02, priorBlock:-0.03
+const K = {
+    volMult: 1.03, feeRate: 0.145801404063875,
+    achInt: 1.19339083909814, achSlope: 0.0676448688446479, zFloor: 2.90,
+    putAll: { b: -1.7698954, a: -0.4248998, r2: 0.99966 },
+    callAll: { b: -2.6552800, a: 0.5966900, r2: 0.99185 },
+    bands: [
+        { hi: 16.6, name: "BOTTOM 20%", range: "VXN < 16.6", b: -1.552, a: -1.0799, note: "Calmest weeks. Both full-width losses in the 1,331-week dataset occurred here; distance does not fully protect when absolute sigma is narrow." },
+        { hi: 19.8, name: "20-40%", range: "16.6 - 19.8", b: -2.213, a: 0.0753, note: "Cheapest band to sell in; steep slope means extra distance actively protects. 1 settle breach in 283 weeks at 2.90 sigma." },
+        { hi: 23.8, name: "40-60%", range: "19.8 - 23.8", b: -1.461, a: -0.4826, note: "HIGH RISK BAND. Flattest slope means loss decays slowly with distance. 6 settle breaches in 253 weeks." },
+        { hi: 30.7, name: "60-80%", range: "23.8 - 30.7", b: -1.464, a: -0.7660, note: "3 breaches in 265 weeks. Contains significant volume of trade-permitted weeks." },
+        { hi: 1e9, name: "TOP 20%", range: "30.7 +", b: -2.463, a: 0.3660, note: "Safest structural environment: zero settle breaches in 292 weeks at 2.90 sigma." }
+    ],
+    zL: [1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 2.9, 3.2, 3.5],
+    putTouch: [380, 274, 195, 125, 80, 51, 36, 19, 17, 11, 7],
+    putSettle: [189, 136, 89, 57, 40, 21, 16, 13, 12, 4, 3],
+    callTouch: [378, 221, 131, 72, 32, 15, 6, 3, 3, 2, 1],
+    callSettle: [224, 136, 88, 48, 19, 12, 4, 2, 2, 1, 0],
+    weeks: 1331, wkPerYr: 52,
+    earnWin: [[1,20,2,10],[4,20,5,10],[7,20,8,10],[10,20,11,10]],
+    gapBlock: -0.02, priorBlock: -0.03
 };
-const $=id=>document.getElementById(id);
-const V=id=>parseFloat($(id).value);
-const pct=(x,d)=>(x*100).toFixed(d===undefined?3:d)+"%";
-const be=(f,z)=>Math.exp(f.a+f.b*z);
-function bandFor(v){for(const b of K.bands) if(v<b.hi) return b; return K.bands[4];}
-function interp(xs,ys,x){
- if(x<=xs[0])return ys[0]; if(x>=xs[xs.length-1])return ys[ys.length-1];
- for(let i=0;i<xs.length-1;i++) if(x>=xs[i]&&x<=xs[i+1]){
-  const t=(x-xs[i])/(xs[i+1]-xs[i]); return ys[i]+t*(ys[i+1]-ys[i]);}
- return ys[ys.length-1];
-}
-function everyN(count){ const r=count/K.weeks; return r<=0? null : 1/(K.wkPerYr*r); }
-function fmtYears(y){ return y===null? "never observed" : (y<1? (y*12).toFixed(1)+" mo" : y.toFixed(1)+" yr"); }
-function inEarnWindow(d){
- if(!d)return false; const m=d.getMonth()+1, day=d.getDate();
- for(const w of K.earnWin){ if(m===w[0]&&day>=w[1])return true; if(m===w[2]&&day<=w[3])return true; }
- return false;
+
+const $ = id => document.getElementById(id);
+const V = id => parseFloat($(id).value);
+const pct = (x, d) => (x * 100).toFixed(d === undefined ? 3 : d) + "%";
+const be = (f, z) => Math.exp(f.a + f.b * z);
+
+// --- Black-Scholes Math Functions (ported from Python) ---
+function normCDF(x) {
+    const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
+    const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+    const sign = x < 0 ? -1 : 1;
+    const absX = Math.abs(x) / Math.sqrt(2.0);
+    const t = 1.0 / (1.0 + p * absX);
+    const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-absX * absX);
+    return 0.5 * (1.0 + sign * y);
 }
 
-function render(){
- const S=V("spot"), vxn=V("vxn"), hiv=V("hiv"), dte=V("dte"), W=V("wid");
- const sig=(vxn/100)*K.volMult*Math.sqrt(dte/365);
- const pts=S*sig;
- const band=bandFor(vxn);
- const ratio=hiv/vxn;
- const ach=K.achInt+K.achSlope*vxn;
- const thr=(K.zFloor-K.achInt)/K.achSlope;
- const marg=V("marg");
-
- const g1 = ratio>=0.95? "PASS" : ratio>=0.85? "SOFT" : "FAIL";
- const g2 = ach>=K.zFloor? "PASS":"FAIL";
- const gap = $("pfc").value? S/V("pfc")-1 : null;
- const pw  = ($("pfc").value&&$("pmo").value)? V("pfc")/V("pmo")-1 : null;
- const g7a = gap===null? "-" : (gap<=K.gapBlock? "FAIL":"PASS");
- const g7b = pw===null? "-" : (pw<=K.priorBlock? "FAIL":"PASS");
- const dObj = $("dt").value? new Date($("dt").value+"T12:00:00") : null;
- const earn = inEarnWindow(dObj);
-
- const zq=V("credz");
- const beA=be(K.putAll,zq), beB=be(band,zq);
- const bar=Math.max(beA,beB), req=bar*marg;
- const credFrac=V("cred")/W;
- const g3 = isFinite(credFrac)&&credFrac>0? (credFrac>=req? "PASS":"FAIL") : "-";
-
- let cls,big,msg;
- if(g2==="FAIL"){
-  cls="v-no"; big="NO TRADE";
-  msg="Distance rule fails. The strike reachable at 0.9% of width sits at <b>"+ach.toFixed(2)+" sigma</b>, inside the 2.90 sigma floor. VXN is <b>"+vxn.toFixed(2)+"</b> and needs to be <b>"+thr.toFixed(2)+"</b> or above. This is the rule that says no most weeks - roughly 18 Mondays a year clear it.";
- } else if(g1==="FAIL"){
-  cls="v-no"; big="STAND DOWN";
-  msg="Front end has collapsed at a ratio of <b>"+ratio.toFixed(3)+"</b>. The market is pricing a far calmer week than VXN implies, so the credit at distance will not be there. A 2.90 VXN-sigma strike is really "+(2.9/ratio).toFixed(2)+" sigma in the chain's own terms.";
- } else if(g7a==="FAIL"||g7b==="FAIL"){
-  cls="v-wait"; big="PUT ONLY";
-  msg="Distance and front end clear, so the put side is live. <b>Call side blocked</b> - "+(g7a==="FAIL"?("Monday gapped down "+pct(-gap,1)+" (bust rate 33% in these weeks, 12x base)"):"")+((g7a==="FAIL"&&g7b==="FAIL")?" and ":"")+(g7b==="FAIL"?("prior week fell "+pct(-pw,1)+" (bust rate 9.7%, 3.5x base)"):"")+". Do not walk the call strike nearer to find a bid.";
- } else if(g3==="FAIL"){
-  cls="v-no"; big="PRICE FAIL";
-  msg="Distance, front end and event gates all clear - but the credit does not pay. You are quoted <b>"+pct(credFrac,3)+"</b> of width at "+zq.toFixed(2)+" sigma against a requirement of <b>"+pct(req,3)+"</b> (bar "+pct(bar,3)+" x "+marg+"x margin). Raise the credit, move further out, or skip.";
- } else if(g3==="-"){
-  cls="v-wait"; big="AWAITING QUOTE";
-  msg="Distance, front end and event gates clear. Enter the <b>fillable</b> credit - sell the bid, pay the ask - to test the price gate. Requirement at "+zq.toFixed(2)+" sigma is <b>"+pct(req,3)+"</b> of width.";
- } else {
-  cls="v-go"; big="TRADE";
-  msg="All gates clear. Credit of <b>"+pct(credFrac,3)+"</b> of width beats the <b>"+pct(req,3)+"</b> requirement at "+zq.toFixed(2)+" sigma. Place once, set the stop, and do nothing else this week - no rolls, no repairs, no second entries.";
- }
- const tg=(v)=>v==="PASS"?"pass":v==="FAIL"?"fail":"soft";
- $("verdict").innerHTML='<div class="verdict '+cls+'"><div class="big">'+big+'</div><div style="flex:1">'
-  +'<div style="margin-bottom:12px">'+msg+'</div><div class="gates">'
-  +'<div class="gate"><b>Gate 1 &middot; front end</b><span class="tag '+tg(g1)+'">'+g1+'</span><span>Header IV / VXN = '+ratio.toFixed(3)+' &middot; &ge;0.95 normal, 0.85-0.95 soft, &lt;0.85 collapsed</span></div>'
-  +'<div class="gate"><b>Gate 2 &middot; distance</b><span class="tag '+tg(g2)+'">'+g2+'</span><span>Achievable '+ach.toFixed(2)+' sigma vs 2.90 floor &middot; equivalent to VXN &ge; '+thr.toFixed(2)+'</span></div>'
-  +'<div class="gate"><b>Gate 3 &middot; price</b><span class="tag '+tg(g3)+'">'+g3+'</span><span>Need '+pct(req,3)+' of width at '+zq.toFixed(2)+' sigma, at a fillable price</span></div>'
-  +'<div class="gate"><b>R7 &middot; Monday gap</b><span class="tag '+tg(g7a)+'">'+g7a+'</span><span>'+(gap===null?"enter prior Friday close":(pct(gap,2)+' vs -2.00% block'))+' &middot; call side only</span></div>'
-  +'<div class="gate"><b>R7 &middot; prior week</b><span class="tag '+tg(g7b)+'">'+g7b+'</span><span>'+(pw===null?"enter prior week's Monday open":(pct(pw,2)+' vs -3.00% block'))+' &middot; call side only</span></div>'
-  +'<div class="gate"><b>R8 &middot; earnings</b><span class="tag '+(earn?"soft":"pass")+'">'+(earn?"HALVE":"CLEAR")+'</span><span>'+(earn?"Inside a mega-cap reporting window - halve the CALL side. Bust rate 4.47% vs 2.09% outside.":"Outside the reporting windows - no call-side size reduction.")+'</span></div>'
-  +'</div></div></div>';
-
- $("regime").innerHTML='<div class="kv"><span>Sigma over '+dte+'d</span><span>'+pct(sig,3)+'</span></div>'
-  +'<div class="kv"><span>One sigma in points</span><span>'+pts.toFixed(2)+'</span></div>'
-  +'<div class="kv"><span>VXN quintile</span><span>'+band.name+' ('+band.range+')</span></div>'
-  +'<div class="kv"><span>Break-even @2.90 sigma - this band</span><span>'+pct(be(band,2.9),3)+'</span></div>'
-  +'<div class="kv"><span>Break-even @2.90 sigma - all weeks</span><span>'+pct(be(K.putAll,2.9),3)+'</span></div>'
-  +'<div class="note">'+band.note+'</div>';
-
- const fdesc = ratio>=0.95
-  ? "NORMAL - front end in line with VXN. Credit at distance should be available; all 17 winning fills beyond 2.90 sigma came from weeks like this."
-  : ratio>=0.85
-  ? "SOFT - front end below VXN. Expect thinner credit than the tables imply. 17 Aug 2026 read 0.876 and paid 0.25% of width where 0.90% was the target."
-  : "COLLAPSED - the market prices a much calmer week than VXN. A strike at 2.90 VXN-sigma is really "+(2.9/ratio).toFixed(2)+" sigma in the chain's own terms, so the credit will be small.";
- $("frontend").innerHTML='<div class="kv"><span>Header IV</span><span>'+hiv.toFixed(2)+'%</span></div>'
-  +'<div class="kv"><span>VXN</span><span>'+vxn.toFixed(2)+'</span></div>'
-  +'<div class="kv"><span>Ratio</span><span class="'+(ratio>=0.95?'pass':ratio>=0.85?'soft':'fail')+'">'+ratio.toFixed(3)+'</span></div>'
-  +'<div class="note"><b>'+fdesc+'</b></div>'
-  +'<div class="note">Use the percentage on the EXPIRATION HEADER ROW, not the ATM strike\u0027s own implied vol. Graded DIRECTIONAL - three observations. Do not treat 0.85 as a precise line.</div>';
-
- const zs=[2.25,2.50,2.75,2.90,3.20,3.50,4.00];
- let ph='<tr><th>z</th><th>Short K</th><th>Long K</th><th>% below spot</th><th>BE all-weeks</th><th>BE this band</th><th>Required x'+marg+'</th><th>Touch 1-in</th><th>Settle 1-in</th></tr>';
- for(const z of zs){
-  const Ks=S*Math.exp(0.5*sig*sig-z*sig), Kl=Ks-W;
-  const bA=be(K.putAll,z), bB=be(band,z), rq=Math.max(bA,bB)*marg;
-  ph+='<tr class="'+(Math.abs(z-2.90)<0.001?'hit':'')+'"><td>'+z.toFixed(2)+'</td><td>'+Math.round(Ks)+'</td><td>'+Math.round(Kl)+'</td>'
-   +'<td>'+pct(Ks/S-1,2)+'</td><td>'+pct(bA,3)+'</td><td>'+pct(bB,3)+'</td><td><b>'+pct(rq,3)+'</b></td>'
-   +'<td>'+fmtYears(everyN(interp(K.zL,K.putTouch,z)))+'</td><td>'+fmtYears(everyN(interp(K.zL,K.putSettle,z)))+'</td></tr>';
- }
- $("puts").innerHTML=ph;
- $("putnote").innerHTML='Strikes rounded to the nearest point. Both break-even columns come from the <i>fitted</i> curve so they are valid at any sigma; at 2.90 sigma the independent 12-event direct count reads 0.425% against the fitted 0.386%, a 10% gap that the '+marg+'x margin more than covers. <b>Required</b> = higher of the two curves x your '+marg+'x margin, and it must be beaten at a <b>fillable</b> price - sell the bid, pay the ask, not the mid. The bid-ask out at these distances is routinely wider than the entire edge: on 31 Aug 2026 the 2.90 sigma spread paid 0.450% of width at mid and 0.200% crossing the spread. Frequencies are interpolated from the measured 1,331-week ladder; <b>touch</b> means the weekly low reached the short strike, <b>settle</b> means Friday closed beyond it.';
-
- let ch='<tr><th>z</th><th>Short K</th><th>Long K</th><th>% above spot</th><th>BE all-weeks</th><th>Touch 1-in</th><th>Settle 1-in</th></tr>';
- for(const z of [2.25,2.50,2.75,2.90,3.20,3.50]){
-  const Ks=S*Math.exp(0.5*sig*sig+z*sig), Kl=Ks+W;
-  ch+='<tr class="'+((z>=2.5&&z<=3.0)?'hit':'')+'"><td>'+z.toFixed(2)+'</td><td>'+Math.round(Ks)+'</td><td>'+Math.round(Kl)+'</td>'
-   +'<td>'+pct(Ks/S-1,2)+'</td><td>'+pct(be(K.callAll,z),3)+'</td>'
-   +'<td>'+fmtYears(everyN(interp(K.zL,K.callTouch,z)))+'</td><td>'+fmtYears(everyN(interp(K.zL,K.callSettle,z)))+'</td></tr>';
- }
- $("calls").innerHTML=ch;
- $("callnote").innerHTML='<div class="nobox"><b>IF THERE IS NO BID AT 2.50 SIGMA, SELL NO CALL SIDE AT ALL.</b> Do not move the strike nearer until something fills. That is the single most important operational line in this system: the book contains 43 call fills at a median 1.80 sigma, they lost money in aggregate, and every breach in the account came from them - across 34 real condors the call legs lost $41,882 while the put legs made $78,838.</div>'
-  +'The 31 Aug 2026 chain was the first ever captured with this wing visible past 2.9 sigma: <b>bid 0.00, ask 0.02 at every strike from +2.88 sigma to +4.5 sigma.</b> Carry the call side\u0027s return contribution at <b>zero</b> until a high-VXN Monday shows a real bid. Call break-even fit R2 0.992 and validates less tightly than the put side (0.6x-1.5x on held-out points), so treat this column as indicative. Highlighted rows are the 2.50-3.00 sigma target range.';
-
- const nav=V("nav"), baseP=V("base")/100, cap=V("cap"), norm=V("norm");
- const rat = credFrac>0 && bar>0 ? credFrac/bar : 0;
- const mult = Math.min(cap, Math.max(0, rat/norm));
- const risk = nav*baseP*mult;
- const peak = baseP*cap;
- const perC = (W-V("cred"))*100;
- const cons = perC>0? Math.floor(risk/perC) : 0;
- $("sizeout").innerHTML='<div class="kv"><span>Credit / break-even</span><span>'+(rat? rat.toFixed(2)+"x":"-")+'</span></div>'
-  +'<div class="kv"><span>Edge multiple (ratio / '+norm+', cap '+cap+'x)</span><span>'+mult.toFixed(2)+'x</span></div>'
-  +'<div class="kv"><span>Risk capital to deploy</span><span>$'+Math.round(risk).toLocaleString()+'</span></div>'
-  +'<div class="kv"><span>As % of NAV</span><span>'+pct(risk/nav,1)+'</span></div>'
-  +'<div class="kv"><span>Contracts ($'+perC.toFixed(0)+' risk each)</span><span>'+cons+'</span></div>'
-  +'<div class="note">Base '+(baseP*100).toFixed(0)+'% x cap '+cap+'x = <b>'+pct(peak,0)+' of NAV at peak</b>. Growth-optimal on the only population containing losses is 25-30% as a <i>constant</i> fraction; the '+cap+'x figure is a peak on the best-paying weeks, with average deployment near the base. Do not compare the peak against the constant-fraction curve.</div>';
- const stopSh = 0.03*(W-V("cred")), stopD = risk*0.03;
- $("stopout").innerHTML='<div class="kv"><span>Stop - 3% of value at risk</span><span>$'+Math.round(stopD).toLocaleString()+'</span></div>'
-  +'<div class="kv"><span>Per share of spread value</span><span>$'+stopSh.toFixed(3)+'</span></div>'
-  +'<div class="kv"><span>Fires at roughly</span><span>QQQ -2.4%</span></div>'
-  +'<div class="warnbox"><b>The stop is not optional at a '+cap+'x week.</b> A full-width loss there costs about '+pct(peak,0)+' of the account. Set it when you place the trade and leave it. Expressed in VALUE AT RISK, not width - the two coincide only at 10-wide.</div>'
-  +'<div class="note">On the 480 weeks the rules permit there has never been a full-width loss, so on the record this stop has never saved anything and costs about 20% of the edge. It is insurance bought deliberately: given zero events in 480 weeks the 95% upper bound is one every 8.9 years.</div>';
-
- $("foot").innerHTML='<b>What is measured and what is not.</b> Every frequency here is a fact about PRICE - how often QQQ travelled a given number of VXN-sigmas from the Monday open - so a rule defined and placed in sigma carries its historical frequency exactly. What is <i>assumed</i> is that the credit will be there: that rests on three observed Mondays, and one of them paid a quarter of target. Three conclusions in the parent study rest on one or two observations: the call-side credit ratio, the 5-wide/10-wide width decision, and the front-end ratio distribution.<br><br>'
-  +'<b>Known weakness.</b> Gate 2 is a volatility threshold in disguise - the achievable-distance relationship is linear in VXN, so "2.90 sigma" <i>is</i> "VXN &ge; '+thr.toFixed(2)+'" - and that fit explains only 9% of the variance on 44 fills. What justifies it is separate and stronger: sigma is an elastic ruler, so the same z buys a 5.4% cushion at VXN 18 and a 9.0% cushion at VXN 30, while the moves that cause full-width losses are absolute. In 649 calm weeks there were two full-width losses at 2.36 sigma, still two at 2.73 and still two at 2.90. In 480 high-VXN weeks: one at 2.36 and zero at 2.73 and beyond.<br><br>'
-  +'<b>Then nothing else happens.</b> One entry per side per expiry. No rolls, no repairs, no ratchets. Both losing months in the real book began with a defensible trade and ended in revenge trades, and 30% of all fees paid went on repair activity - the only rule here with no statistical uncertainty attached to it.<br><br>'
-  +'<span style="color:#8b949e">Desk v1.0 &middot; 31 Aug 2026 &middot; put fit R2 0.99966 &middot; derived from the 1,331-week QQQ study. Not investment advice.</span>';
+function calculateCallDelta(S, K, T, r, sigma) {
+    const d1 = (Math.log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * Math.sqrt(T));
+    return normCDF(d1);
 }
-document.querySelectorAll("input").forEach(el=>el.addEventListener("input",render));
+
+function blackScholesCallPrice(S, K, T, r, sigma) {
+    const d1 = (Math.log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * Math.sqrt(T));
+    const d2 = d1 - sigma * Math.sqrt(T);
+    return S * normCDF(d1) - K * Math.exp(-r * T) * normCDF(d2);
+}
+
+// Bisection root finder (replaces brentq)
+function solveRoot(f, a, b, tol = 1e-5, maxIter = 100) {
+    let fa = f(a), fb = f(b);
+    if (fa * fb > 0) return NaN;
+    let mid = a, fmid = 0;
+    for (let i = 0; i < maxIter; i++) {
+        mid = (a + b) / 2;
+        fmid = f(mid);
+        if (Math.abs(fmid) < tol || (b - a) / 2 < tol) return mid;
+        if (fa * fmid < 0) { b = mid; fb = fmid; }
+        else { a = mid; fa = fmid; }
+    }
+    return mid;
+}
+
+function findPutStrikeBS(targetDeltaPut, S, T, r, sigma) {
+    const targetCallDelta = 1 - targetDeltaPut;
+    const f = K => calculateCallDelta(S, K, T, r, sigma) - targetCallDelta;
+    return solveRoot(f, S * 0.01, S);
+}
+
+function findCallStrikeBS(targetDeltaCall, S, T, r, sigma) {
+    const f = K => calculateCallDelta(S, K, T, r, sigma) - targetDeltaCall;
+    return solveRoot(f, S, S * 4.0);
+}
+
+function findCallStrikeFromPremiumBS(targetPremium, S, T, r, sigma) {
+    const f = K => blackScholesCallPrice(S, K, T, r, sigma) - targetPremium;
+    return solveRoot(f, S, S * 5.0);
+}
+
+function bandFor(v) {
+    for (const b of K.bands) if (v < b.hi) return b;
+    return K.bands[4];
+}
+
+function interp(xs, ys, x) {
+    if (x <= xs[0]) return ys[0];
+    if (x >= xs[xs.length - 1]) return ys[ys.length - 1];
+    for (let i = 0; i < xs.length - 1; i++) {
+        if (x >= xs[i] && x <= xs[i + 1]) {
+            const t = (x - xs[i]) / (xs[i + 1] - xs[i]);
+            return ys[i] + t * (ys[i + 1] - ys[i]);
+        }
+    }
+    return ys[ys.length - 1];
+}
+
+function everyN(count) {
+    const r = count / K.weeks;
+    return r <= 0 ? null : 1 / (K.wkPerYr * r);
+}
+
+function fmtYears(y) {
+    return y === null ? "never observed" : (y < 1 ? (y * 12).toFixed(1) + " mo" : y.toFixed(1) + " yr");
+}
+
+function inEarnWindow(d) {
+    if (!d) return false;
+    const m = d.getMonth() + 1, day = d.getDate();
+    for (const w of K.earnWin) {
+        if (m === w[0] && day >= w[1]) return true;
+        if (m === w[2] && day <= w[3]) return true;
+    }
+    return false;
+}
+
+function render() {
+    const S = V("spot"), vxn = V("vxn"), hiv = V("hiv"), dte = V("dte"), W = V("wid");
+    const sig = (vxn / 100) * K.volMult * Math.sqrt(dte / 365);
+    const pts = S * sig;
+    const band = bandFor(vxn);
+    const ratio = hiv / vxn;
+    const ach = K.achInt + K.achSlope * vxn;
+    const thr = (K.zFloor - K.achInt) / K.achSlope;
+    const marg = V("marg");
+
+    const g1 = ratio >= 0.95 ? "PASS" : ratio >= 0.85 ? "SOFT" : "FAIL";
+    const g2 = ach >= K.zFloor ? "PASS" : "FAIL";
+    const gap = $("pfc").value ? S / V("pfc") - 1 : null;
+    const pw = ($("pfc").value && $("pmo").value) ? V("pfc") / V("pmo") - 1 : null;
+    const g7a = gap === null ? "-" : (gap <= K.gapBlock ? "FAIL" : "PASS");
+    const g7b = pw === null ? "-" : (pw <= K.priorBlock ? "FAIL" : "PASS");
+    const dObj = $("dt").value ? new Date($("dt").value + "T12:00:00") : null;
+    const earn = inEarnWindow(dObj);
+
+    const zq = V("credz");
+    const beA = be(K.putAll, zq), beB = be(band, zq);
+    const bar = Math.max(beA, beB), req = bar * marg;
+    const credFrac = V("cred") / W;
+    const g3 = isFinite(credFrac) && credFrac > 0 ? (credFrac >= req ? "PASS" : "FAIL") : "-";
+
+    let cls, big, msg;
+    if (g2 === "FAIL") {
+        cls = "v-no"; big = "NO TRADE";
+        msg = "Distance rule fails. The strike reachable at 0.9% of width sits at <b>" + ach.toFixed(2) + " sigma</b>, inside the 2.90 sigma floor. VXN is <b>" + vxn.toFixed(2) + "</b> and needs to be <b>" + thr.toFixed(2) + "</b> or above.";
+    } else if (g1 === "FAIL") {
+        cls = "v-no"; big = "STAND DOWN";
+        msg = "Front end has collapsed at a ratio of <b>" + ratio.toFixed(3) + "</b>. Market pricing is calmer than VXN implies; credit at distance will be insufficient.";
+    } else if (g7a === "FAIL" || g7b === "FAIL") {
+        cls = "v-wait"; big = "PUT ONLY";
+        msg = "Distance and front end clear, so put side is live. <b>Call side blocked</b> due to structural momentum/gap parameters.";
+    } else if (g3 === "FAIL") {
+        cls = "v-no"; big = "PRICE FAIL";
+        msg = "All gates clear, but quoted credit of <b>" + pct(credFrac, 3) + "</b> falls short of the required <b>" + pct(req, 3) + "</b> of width at " + zq.toFixed(2) + " sigma.";
+    } else if (g3 === "-") {
+        cls = "v-wait"; big = "AWAITING QUOTE";
+        msg = "Gates clear. Enter fillable credit to verify price gate. Required at " + zq.toFixed(2) + " sigma is <b>" + pct(req, 3) + "</b> of width.";
+    } else {
+        cls = "v-go"; big = "TRADE";
+        msg = "All gates clear. Quoted credit of <b>" + pct(credFrac, 3) + "</b> meets the <b>" + pct(req, 3) + "</b> requirement at " + zq.toFixed(2) + " sigma.";
+    }
+
+    const tg = (v) => v === "PASS" ? "pass" : v === "FAIL" ? "fail" : "soft";
+
+    $("verdict").innerHTML = '<div class="verdict ' + cls + '"><div class="big">' + big + '</div><div style="flex:1">'
+        + '<div style="margin-bottom:12px">' + msg + '</div><div class="gates">'
+        + '<div class="gate"><b>Gate 1 · Front End</b><span class="tag ' + tg(g1) + '">' + g1 + '</span><span>Header IV / VXN = ' + ratio.toFixed(3) + ' (≥0.95 normal, 0.85-0.95 soft)</span></div>'
+        + '<div class="gate"><b>Gate 2 · Distance</b><span class="tag ' + tg(g2) + '">' + g2 + '</span><span>Achievable ' + ach.toFixed(2) + ' sigma vs 2.90 floor (VXN ≥ ' + thr.toFixed(2) + ')</span></div>'
+        + '<div class="gate"><b>Gate 3 · Price</b><span class="tag ' + tg(g3) + '">' + g3 + '</span><span>Requires ' + pct(req, 3) + ' width at ' + zq.toFixed(2) + ' sigma</span></div>'
+        + '<div class="gate"><b>R7 · Monday Gap</b><span class="tag ' + tg(g7a) + '">' + g7a + '</span><span>' + (gap === null ? "Enter prior Friday close" : (pct(gap, 2) + ' vs -2.00% block')) + '</span></div>'
+        + '<div class="gate"><b>R7 · Prior Week</b><span class="tag ' + tg(g7b) + '">' + g7b + '</span><span>' + (pw === null ? "Enter prior week's open" : (pct(pw, 2) + ' vs -3.00% block')) + '</span></div>'
+        + '<div class="gate"><b>R8 · Earnings</b><span class="tag ' + (earn ? "soft" : "pass") + '">' + (earn ? "HALVE" : "CLEAR") + '</span><span>' + (earn ? "Inside reporting window — halve call side size." : "Outside reporting window.") + '</span></div>'
+        + '</div></div></div>';
+
+    $("regime").innerHTML = '<div class="kv"><span>Sigma over ' + dte + 'd</span><span>' + pct(sig, 3) + '</span></div>'
+        + '<div class="kv"><span>One sigma in points</span><span>' + pts.toFixed(2) + '</span></div>'
+        + '<div class="kv"><span>VXN quintile</span><span>' + band.name + ' (' + band.range + ')</span></div>'
+        + '<div class="kv"><span>Break-even @2.90σ (Band)</span><span>' + pct(be(band, 2.9), 3) + '</span></div>'
+        + '<div class="kv"><span>Break-even @2.90σ (All)</span><span>' + pct(be(K.putAll, 2.9), 3) + '</span></div>'
+        + '<div class="note">' + band.note + '</div>';
+
+    const fdesc = ratio >= 0.95
+        ? "NORMAL — Front end aligned with VXN. Standard credit structure."
+        : ratio >= 0.85
+        ? "SOFT — Front end slightly below VXN. Expect thinner credit."
+        : "COLLAPSED — Market pricing calmer than VXN. Credit will be constrained.";
+
+    $("frontend").innerHTML = '<div class="kv"><span>Header IV</span><span>' + hiv.toFixed(2) + '%</span></div>'
+        + '<div class="kv"><span>VXN</span><span>' + vxn.toFixed(2) + '</span></div>'
+        + '<div class="kv"><span>Ratio</span><span class="' + (ratio >= 0.95 ? 'pass' : ratio >= 0.85 ? 'soft' : 'fail') + '">' + ratio.toFixed(3) + '</span></div>'
+        + '<div class="note"><b>' + fdesc + '</b></div>';
+
+    const zs = [2.25, 2.50, 2.75, 2.90, 3.20, 3.50, 4.00];
+    let ph = '<tr><th>z</th><th>Short K</th><th>Long K</th><th>% below spot</th><th>BE all-weeks</th><th>BE this band</th><th>Required x' + marg + '</th><th>Touch 1-in</th><th>Settle 1-in</th></tr>';
+    for (const z of zs) {
+        const Ks = S * Math.exp(0.5 * sig * sig - z * sig), Kl = Ks - W;
+        const bA = be(K.putAll, z), bB = be(band, z), rq = Math.max(bA, bB) * marg;
+        ph += '<tr class="' + (Math.abs(z - 2.90) < 0.001 ? 'hit' : '') + '"><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
+            + '<td>' + pct(Ks / S - 1, 2) + '</td><td>' + pct(bA, 3) + '</td><td>' + pct(bB, 3) + '</td><td><b>' + pct(rq, 3) + '</b></td>'
+            + '<td>' + fmtYears(everyN(interp(K.zL, K.putTouch, z))) + '</td><td>' + fmtYears(everyN(interp(K.zL, K.putSettle, z))) + '</td></tr>';
+    }
+    $("puts").innerHTML = ph;
+    $("putnote").innerHTML = "Strikes rounded to whole points. Required = Max(BE_all, BE_band) × " + marg + "x margin. Fillable execution required.";
+
+    let ch = '<tr><th>z</th><th>Short K</th><th>Long K</th><th>% above spot</th><th>BE all-weeks</th><th>Touch 1-in</th><th>Settle 1-in</th></tr>';
+    for (const z of [2.25, 2.50, 2.75, 2.90, 3.20, 3.50]) {
+        const Ks = S * Math.exp(0.5 * sig * sig + z * sig), Kl = Ks + W;
+        ch += '<tr class="' + ((z >= 2.5 && z <= 3.0) ? 'hit' : '') + '"><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
+            + '<td>' + pct(Ks / S - 1, 2) + '</td><td>' + pct(be(K.callAll, z), 3) + '</td>'
+            + '<td>' + fmtYears(everyN(interp(K.zL, K.callTouch, z))) + '</td><td>' + fmtYears(everyN(interp(K.zL, K.callSettle, z))) + '</td></tr>';
+    }
+    $("calls").innerHTML = ch;
+    $("callnote").innerHTML = '<div class="nobox"><b>IF THERE IS NO BID AT 2.50 SIGMA, SELL NO CALL SIDE AT ALL.</b> Never move strikes inward to find a bid.</div>';
+
+    const nav = V("nav"), baseP = V("base") / 100, cap = V("cap"), norm = V("norm");
+    const rat = credFrac > 0 && bar > 0 ? credFrac / bar : 0;
+    const mult = Math.min(cap, Math.max(0, rat / norm));
+    const risk = nav * baseP * mult;
+    const peak = baseP * cap;
+    const perC = (W - V("cred")) * 100;
+    const cons = perC > 0 ? Math.floor(risk / perC) : 0;
+
+    $("sizeout").innerHTML = '<div class="kv"><span>Credit / break-even</span><span>' + (rat ? rat.toFixed(2) + "x" : "-") + '</span></div>'
+        + '<div class="kv"><span>Edge multiple (cap ' + cap + 'x)</span><span>' + mult.toFixed(2) + 'x</span></div>'
+        + '<div class="kv"><span>Risk capital deploy</span><span>$' + Math.round(risk).toLocaleString() + '</span></div>'
+        + '<div class="kv"><span>As % of NAV</span><span>' + pct(risk / nav, 1) + '</span></div>'
+        + '<div class="kv"><span>Contracts ($' + perC.toFixed(0) + ' risk)</span><span>' + cons + '</span></div>';
+
+    const stopSh = 0.03 * (W - V("cred")), stopD = risk * 0.03;
+    $("stopout").innerHTML = '<div class="kv"><span>Stop (3% VaR)</span><span>$' + Math.round(stopD).toLocaleString() + '</span></div>'
+        + '<div class="kv"><span>Per share value</span><span>$' + stopSh.toFixed(3) + '</span></div>'
+        + '<div class="warnbox"><b>Stop is mandatory on capped leverage weeks.</b> Set stop order upon entry.</div>';
+
+    // --- Black-Scholes Matrix Section Calculation ---
+    const sigmaBS = vxn / 100;
+    const TBS = dte / 365;
+    const rBS = (parseFloat($("bs_r").value) || 4.0) / 100;
+    const premBS = parseFloat($("bs_prem").value) || 0.09;
+
+    $("bs_sig_disp").value = sigmaBS.toFixed(4) + " (from " + vxn.toFixed(2) + "% VXN)";
+
+    const put03 = findPutStrikeBS(0.03, S, TBS, rBS, sigmaBS);
+    const put025 = findPutStrikeBS(0.025, S, TBS, rBS, sigmaBS);
+    const put02 = findPutStrikeBS(0.02, S, TBS, rBS, sigmaBS);
+
+    const call03 = findCallStrikeBS(0.03, S, TBS, rBS, sigmaBS);
+    const call025 = findCallStrikeBS(0.025, S, TBS, rBS, sigmaBS);
+    const call02 = findCallStrikeBS(0.02, S, TBS, rBS, sigmaBS);
+    const callPrem = findCallStrikeFromPremiumBS(premBS, S, TBS, rBS, sigmaBS);
+
+    let bsh = '<thead><tr><th>Target Type</th><th>Option Side</th><th>Target Delta / Premium</th><th>Calculated Strike (K)</th><th>Rounded Strike</th><th>% OTM Distance</th></tr></thead><tbody>';
+    bsh += '<tr><td>Delta Target</td><td>Put</td><td>0.030 Put Delta</td><td>' + (isNaN(put03) ? '-' : put03.toFixed(2)) + '</td><td>' + (isNaN(put03) ? '-' : Math.round(put03)) + '</td><td>' + (isNaN(put03) ? '-' : pct(put03 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Delta Target</td><td>Put</td><td>0.025 Put Delta</td><td>' + (isNaN(put025) ? '-' : put025.toFixed(2)) + '</td><td>' + (isNaN(put025) ? '-' : Math.round(put025)) + '</td><td>' + (isNaN(put025) ? '-' : pct(put025 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Delta Target</td><td>Put</td><td>0.020 Put Delta</td><td>' + (isNaN(put02) ? '-' : put02.toFixed(2)) + '</td><td>' + (isNaN(put02) ? '-' : Math.round(put02)) + '</td><td>' + (isNaN(put02) ? '-' : pct(put02 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Delta Target</td><td>Call</td><td>0.030 Call Delta</td><td>' + (isNaN(call03) ? '-' : call03.toFixed(2)) + '</td><td>' + (isNaN(call03) ? '-' : Math.round(call03)) + '</td><td>' + (isNaN(call03) ? '-' : pct(call03 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Delta Target</td><td>Call</td><td>0.025 Call Delta</td><td>' + (isNaN(call025) ? '-' : call025.toFixed(2)) + '</td><td>' + (isNaN(call025) ? '-' : Math.round(call025)) + '</td><td>' + (isNaN(call025) ? '-' : pct(call025 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Delta Target</td><td>Call</td><td>0.020 Call Delta</td><td>' + (isNaN(call02) ? '-' : call02.toFixed(2)) + '</td><td>' + (isNaN(call02) ? '-' : Math.round(call02)) + '</td><td>' + (isNaN(call02) ? '-' : pct(call02 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr class="hit"><td>Premium Target</td><td>Call</td><td>$' + premBS.toFixed(2) + ' Call Premium</td><td>' + (isNaN(callPrem) ? 'Out of Range' : callPrem.toFixed(2)) + '</td><td>' + (isNaN(callPrem) ? '-' : Math.round(callPrem)) + '</td><td>' + (isNaN(callPrem) ? '-' : pct(callPrem / S - 1, 2)) + '</td></tr>';
+    bsh += '</tbody>';
+
+    $("bs_table").innerHTML = bsh;
+
+    $("foot").innerHTML = "Desk v1.0 · Calibrated to 1,331-week QQQ study · Integrated Black-Scholes Engine · Confidential Policy & Quantitative Framework.";
+}
+
+document.querySelectorAll("input").forEach(el => el.addEventListener("input", render));
 render();
-</script></body></html>
+</script>
+
+</body>
+</html>
