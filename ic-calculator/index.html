@@ -45,26 +45,6 @@
             font-weight: 600;
         }
         .back-link:hover { text-decoration: underline; }
-
-        .pdf-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: #F8FAFC;
-            color: #0F172A;
-            border: 1px solid #CBD5E1;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 8.5pt;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .pdf-btn:hover {
-            background-color: #F1F5F9;
-            border-color: #059669;
-            color: #059669;
-        }
         
         .header {
             border-bottom: 3px solid #0F172A;
@@ -264,12 +244,6 @@
             background: #FEF2F2;
             color: #DC2626;
         }
-
-        @media print {
-            body { background: #FFFFFF; padding: 0; }
-            .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
-            .nav-header { display: none; }
-        }
     </style>
 </head>
 <body>
@@ -277,14 +251,6 @@
 <div class="container">
     <div class="nav-header">
         <a href="/" class="back-link">← Back to Document Repository</a>
-        <button onclick="window.print()" class="pdf-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Download PDF
-        </button>
     </div>
 
     <div class="header">
@@ -342,16 +308,15 @@
         <div class="grid g2"><div id="sizeout"></div><div id="stopout"></div></div>
     </div>
 
-    <h2>6 · Black-Scholes Delta & Premium Target Matrix <span class="pill">Colab Model Engine</span></h2>
+    <h2>6 · Black-Scholes Delta Target Matrix <span class="pill">Header IV Engine</span></h2>
     <div class="panel">
-        <div class="grid g3" style="margin-bottom:16px">
+        <div class="grid g2" style="margin-bottom:16px">
             <div><label>Risk-Free Rate (r) %</label><input id="bs_r" type="number" step="0.5" value="4.0"></div>
-            <div><label>Target Call Premium ($)</label><input id="bs_prem" type="number" step="0.01" value="0.09"></div>
-            <div><label>Implied Vol (σ) <span>from VXN</span></label><input id="bs_sig_disp" type="text" readonly disabled style="background:#F1F5F9; color:#64748B;"></div>
+            <div><label>Applied Implied Vol (σ)</label><input id="bs_sig_disp" type="text" readonly disabled style="background:#F1F5F9; color:#0F172A; font-weight:700;"></div>
         </div>
         <div style="overflow-x:auto"><table id="bs_table"></table></div>
         <div class="note">
-            Calculates exact strikes for specific OTM Delta targets (0.030, 0.025, 0.020) and a target Call premium ($0.09) using the Black-Scholes pricing model with Brent's method root-finding.
+            Calculates exact strikes for specific OTM Delta targets (0.030, 0.025, 0.020) using the Black-Scholes pricing model with Brent's bisection root-finding method, calibrated directly to the Expiration Header IV.
         </div>
     </div>
 
@@ -386,7 +351,7 @@ const V = id => parseFloat($(id).value);
 const pct = (x, d) => (x * 100).toFixed(d === undefined ? 3 : d) + "%";
 const be = (f, z) => Math.exp(f.a + f.b * z);
 
-// --- Black-Scholes Math Functions (ported from Python) ---
+// --- Black-Scholes Math Functions ---
 function normCDF(x) {
     const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
     const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
@@ -402,13 +367,6 @@ function calculateCallDelta(S, K, T, r, sigma) {
     return normCDF(d1);
 }
 
-function blackScholesCallPrice(S, K, T, r, sigma) {
-    const d1 = (Math.log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * Math.sqrt(T));
-    const d2 = d1 - sigma * Math.sqrt(T);
-    return S * normCDF(d1) - K * Math.exp(-r * T) * normCDF(d2);
-}
-
-// Bisection root finder (replaces brentq)
 function solveRoot(f, a, b, tol = 1e-5, maxIter = 100) {
     let fa = f(a), fb = f(b);
     if (fa * fb > 0) return NaN;
@@ -432,11 +390,6 @@ function findPutStrikeBS(targetDeltaPut, S, T, r, sigma) {
 function findCallStrikeBS(targetDeltaCall, S, T, r, sigma) {
     const f = K => calculateCallDelta(S, K, T, r, sigma) - targetDeltaCall;
     return solveRoot(f, S, S * 4.0);
-}
-
-function findCallStrikeFromPremiumBS(targetPremium, S, T, r, sigma) {
-    const f = K => blackScholesCallPrice(S, K, T, r, sigma) - targetPremium;
-    return solveRoot(f, S, S * 5.0);
 }
 
 function bandFor(v) {
@@ -592,13 +545,12 @@ function render() {
         + '<div class="kv"><span>Per share value</span><span>$' + stopSh.toFixed(3) + '</span></div>'
         + '<div class="warnbox"><b>Stop is mandatory on capped leverage weeks.</b> Set stop order upon entry.</div>';
 
-    // --- Black-Scholes Matrix Section Calculation ---
-    const sigmaBS = vxn / 100;
+    // --- Black-Scholes Delta Matrix Calculation (Strictly uses Header IV) ---
+    const sigmaBS = hiv / 100;
     const TBS = dte / 365;
     const rBS = (parseFloat($("bs_r").value) || 4.0) / 100;
-    const premBS = parseFloat($("bs_prem").value) || 0.09;
 
-    $("bs_sig_disp").value = sigmaBS.toFixed(4) + " (from " + vxn.toFixed(2) + "% VXN)";
+    $("bs_sig_disp").value = sigmaBS.toFixed(4) + " (from " + hiv.toFixed(2) + "% Header IV)";
 
     const put03 = findPutStrikeBS(0.03, S, TBS, rBS, sigmaBS);
     const put025 = findPutStrikeBS(0.025, S, TBS, rBS, sigmaBS);
@@ -607,16 +559,14 @@ function render() {
     const call03 = findCallStrikeBS(0.03, S, TBS, rBS, sigmaBS);
     const call025 = findCallStrikeBS(0.025, S, TBS, rBS, sigmaBS);
     const call02 = findCallStrikeBS(0.02, S, TBS, rBS, sigmaBS);
-    const callPrem = findCallStrikeFromPremiumBS(premBS, S, TBS, rBS, sigmaBS);
 
-    let bsh = '<thead><tr><th>Target Type</th><th>Option Side</th><th>Target Delta / Premium</th><th>Calculated Strike (K)</th><th>Rounded Strike</th><th>% OTM Distance</th></tr></thead><tbody>';
-    bsh += '<tr><td>Delta Target</td><td>Put</td><td>0.030 Put Delta</td><td>' + (isNaN(put03) ? '-' : put03.toFixed(2)) + '</td><td>' + (isNaN(put03) ? '-' : Math.round(put03)) + '</td><td>' + (isNaN(put03) ? '-' : pct(put03 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Delta Target</td><td>Put</td><td>0.025 Put Delta</td><td>' + (isNaN(put025) ? '-' : put025.toFixed(2)) + '</td><td>' + (isNaN(put025) ? '-' : Math.round(put025)) + '</td><td>' + (isNaN(put025) ? '-' : pct(put025 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Delta Target</td><td>Put</td><td>0.020 Put Delta</td><td>' + (isNaN(put02) ? '-' : put02.toFixed(2)) + '</td><td>' + (isNaN(put02) ? '-' : Math.round(put02)) + '</td><td>' + (isNaN(put02) ? '-' : pct(put02 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Delta Target</td><td>Call</td><td>0.030 Call Delta</td><td>' + (isNaN(call03) ? '-' : call03.toFixed(2)) + '</td><td>' + (isNaN(call03) ? '-' : Math.round(call03)) + '</td><td>' + (isNaN(call03) ? '-' : pct(call03 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Delta Target</td><td>Call</td><td>0.025 Call Delta</td><td>' + (isNaN(call025) ? '-' : call025.toFixed(2)) + '</td><td>' + (isNaN(call025) ? '-' : Math.round(call025)) + '</td><td>' + (isNaN(call025) ? '-' : pct(call025 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Delta Target</td><td>Call</td><td>0.020 Call Delta</td><td>' + (isNaN(call02) ? '-' : call02.toFixed(2)) + '</td><td>' + (isNaN(call02) ? '-' : Math.round(call02)) + '</td><td>' + (isNaN(call02) ? '-' : pct(call02 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr class="hit"><td>Premium Target</td><td>Call</td><td>$' + premBS.toFixed(2) + ' Call Premium</td><td>' + (isNaN(callPrem) ? 'Out of Range' : callPrem.toFixed(2)) + '</td><td>' + (isNaN(callPrem) ? '-' : Math.round(callPrem)) + '</td><td>' + (isNaN(callPrem) ? '-' : pct(callPrem / S - 1, 2)) + '</td></tr>';
+    let bsh = '<thead><tr><th>Option Side</th><th>Target Delta</th><th>Calculated Strike (K)</th><th>Rounded Strike</th><th>% OTM Distance</th></tr></thead><tbody>';
+    bsh += '<tr><td>Put</td><td>0.030 Put Delta</td><td>' + (isNaN(put03) ? '-' : put03.toFixed(2)) + '</td><td>' + (isNaN(put03) ? '-' : Math.round(put03)) + '</td><td>' + (isNaN(put03) ? '-' : pct(put03 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Put</td><td>0.025 Put Delta</td><td>' + (isNaN(put025) ? '-' : put025.toFixed(2)) + '</td><td>' + (isNaN(put025) ? '-' : Math.round(put025)) + '</td><td>' + (isNaN(put025) ? '-' : pct(put025 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Put</td><td>0.020 Put Delta</td><td>' + (isNaN(put02) ? '-' : put02.toFixed(2)) + '</td><td>' + (isNaN(put02) ? '-' : Math.round(put02)) + '</td><td>' + (isNaN(put02) ? '-' : pct(put02 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Call</td><td>0.030 Call Delta</td><td>' + (isNaN(call03) ? '-' : call03.toFixed(2)) + '</td><td>' + (isNaN(call03) ? '-' : Math.round(call03)) + '</td><td>' + (isNaN(call03) ? '-' : pct(call03 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Call</td><td>0.025 Call Delta</td><td>' + (isNaN(call025) ? '-' : call025.toFixed(2)) + '</td><td>' + (isNaN(call025) ? '-' : Math.round(call025)) + '</td><td>' + (isNaN(call025) ? '-' : pct(call025 / S - 1, 2)) + '</td></tr>';
+    bsh += '<tr><td>Call</td><td>0.020 Call Delta</td><td>' + (isNaN(call02) ? '-' : call02.toFixed(2)) + '</td><td>' + (isNaN(call02) ? '-' : Math.round(call02)) + '</td><td>' + (isNaN(call02) ? '-' : pct(call02 / S - 1, 2)) + '</td></tr>';
     bsh += '</tbody>';
 
     $("bs_table").innerHTML = bsh;
