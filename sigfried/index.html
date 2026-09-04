@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investment Thesis — Atlas Wealth</title>
 
-    <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Embedded Geometric Atlas SVG Favicon (Monochrome) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%230F172A'/></svg>">
 
     <style>
@@ -49,11 +47,11 @@
             margin-bottom: 24px;
         }
 
-        .brand-logo {
+        .brand-logo, .brand-logo:visited, .brand-logo:hover, .brand-logo:active {
             display: flex;
             align-items: center;
             gap: 16px;
-            text-decoration: none;
+            text-decoration: none !important;
             color: #0F172A;
         }
 
@@ -68,6 +66,15 @@
 
         .brand-name-atlas { font-weight: 800; }
         .brand-name-wealth { font-weight: 300; opacity: 0.65; }
+
+        /* Custom Trimmed Slash for 'WEA\TH' */
+        .brand-slash {
+            font-weight: 700;
+            color: #0F172A;
+            display: inline-block;
+            transform: scaleY(0.88) translateY(-1px);
+            margin: 0 -1px;
+        }
 
         /* Action Sub-Header */
         .nav-header {
@@ -290,7 +297,6 @@
 
 <div class="container">
 
-    <!-- Top Brand Lockup -->
     <div class="brand-header">
         <a href="https://strategy.atlaswealth.cc" class="brand-logo">
             <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -299,12 +305,11 @@
                 <circle cx="20" cy="22" r="2.5" fill="#0F172A"/>
             </svg>
             <span class="brand-name">
-                <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEALTH</span>
+                <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEA<span class="brand-slash">\</span>TH</span>
             </span>
         </a>
     </div>
 
-    <!-- Navigation & PDF Download Button -->
     <div class="nav-header">
         <a href="https://strategy.atlaswealth.cc" class="back-link">← Back to Strategy Portal</a>
         <button onclick="window.print()" class="pdf-btn">
@@ -317,12 +322,10 @@
         </button>
     </div>
 
-    <!-- Document Header -->
     <div class="header">
         <h1>Investment Thesis</h1>
     </div>
 
-    <!-- Meta Information -->
     <div class="meta-grid">
         <div class="meta-item">Author: <strong>Atlas</strong></div>
         <div class="meta-item">Category: <strong>Strategy Specification</strong></div>
@@ -411,7 +414,6 @@
         **This graph shows the 5-year rolling average CAGR of portfolios started annually from 2010 to 2025, with each portfolio's CAGR calculated from its start year to the last update date from the table above. Each point reflects the average CAGR of portfolios in a 5-year window (e.g., 2010–2014 would be bar 2014). The trend indicates higher average CAGRs for windows with earlier start years, showing improved returns for older portfolios**
     </p>
 
-    <!-- Footer -->
     <footer>
         <div>© Atlas Capital Research. Confidential Policy Portal.</div>
         <div><a href="https://strategy.atlaswealth.cc">← Return to Strategy Portal</a></div>
