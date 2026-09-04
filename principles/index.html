@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Principles of Investing — Atlas Wealth</title>
     
-    <!-- KaTeX Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
 
-    <!-- Embedded Geometric Atlas SVG Favicon (Monochrome) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%230F172A'/></svg>">
 
     <style>
@@ -32,13 +30,14 @@
             font-size: 10.5pt;
         }
 
+        /* Expanded document width to 960px with generous internal padding */
         .container { 
-            max-width: 820px; 
+            max-width: 960px; 
             margin: 0 auto; 
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             border-radius: 12px;
-            padding: 48px 56px;
+            padding: 56px 64px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
 
@@ -129,7 +128,7 @@
         }
 
         h1.doc-title { 
-            font-size: 24pt; 
+            font-size: 26pt; 
             font-weight: 800;
             margin: 0 0 6px 0;
             color: #0F172A;
@@ -154,7 +153,7 @@
 
         /* Typography */
         h2 {
-            font-size: 12.5pt;
+            font-size: 13pt;
             font-weight: 800;
             color: #0F172A;
             border-bottom: 1px solid #E2E8F0;
@@ -184,11 +183,11 @@
 
         blockquote {
             margin: 24px 0;
-            padding: 16px 20px;
+            padding: 18px 24px;
             background: #FAF9F6;
             border-left: 3px solid #0F172A;
             font-family: 'Newsreader', Georgia, serif;
-            font-size: 11pt;
+            font-size: 11.5pt;
             color: #0F172A;
             border-radius: 0 6px 6px 0;
             line-height: 1.6;
@@ -198,7 +197,7 @@
             background: #FAF9F6;
             border: 1px solid #E2E8F0;
             border-left: 4px solid #0F172A;
-            padding: 18px 22px;
+            padding: 20px 24px;
             margin: 28px 0;
             border-radius: 0 8px 8px 0;
         }
@@ -247,7 +246,7 @@
         .equation-box {
             background: #FAF9F6;
             border: 1px solid #E2E8F0;
-            padding: 16px;
+            padding: 18px;
             border-radius: 8px;
             text-align: center;
             margin: 24px 0;
@@ -274,10 +273,10 @@
             .brand-header, .nav-header, footer { display: none; }
         }
 
-        @media (max-width: 640px) {
-            body { padding: 32px 16px; }
-            .container { padding: 28px 20px; }
-            h1.doc-title { font-size: 18pt; }
+        @media (max-width: 768px) {
+            body { padding: 24px 12px; }
+            .container { padding: 32px 20px; }
+            h1.doc-title { font-size: 20pt; }
             .brand-header { flex-direction: column; align-items: flex-start; gap: 12px; }
             footer { flex-direction: column; gap: 16px; }
         }
@@ -287,7 +286,6 @@
 
 <div class="container">
 
-    <!-- Top Brand Lockup -->
     <div class="brand-header">
         <a href="https://strategy.atlaswealth.cc" class="brand-logo">
             <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -302,7 +300,6 @@
         <div class="doc-badge">Policy Document 01</div>
     </div>
 
-    <!-- Navigation & PDF Download Button -->
     <div class="nav-header">
         <a href="https://strategy.atlaswealth.cc" class="back-link">← Back to Strategy Portal</a>
         <button onclick="window.print()" class="pdf-btn">
@@ -315,12 +312,10 @@
         </button>
     </div>
 
-    <!-- Document Header -->
     <div class="header">
         <h1 class="doc-title">Principles of Investing</h1>
     </div>
 
-    <!-- Meta Information -->
     <div class="meta-grid">
         <div class="meta-item">Author: <strong>Atlas</strong></div>
         <div class="meta-item">Category: <strong>Strategy</strong></div>
@@ -443,7 +438,6 @@
         <li>Investing success does not require a high IQ, complex modeling skills or the ability to come up with complicated formulas. If you are right about a business whose value is largely dependent on a single key factor that is both easy to understand and enduring, the payoff is the same as if you had correctly analyzed an investment alternative characterized by many constantly shifting variables.</li>
     </ul>
 
-    <!-- Footer -->
     <footer>
         <div>© Atlas Capital Research. Confidential Policy Portal.</div>
         <div><a href="https://strategy.atlaswealth.cc">← Return to Strategy Portal</a></div>
