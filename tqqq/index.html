@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TQQQ Asymmetric Strategy & Portfolio Architecture — Atlas Wealth</title>
 
-    <!-- Embedded Geometric Atlas SVG Favicon (Monochrome) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%230F172A'/></svg>">
 
     <style>
@@ -51,11 +50,11 @@
             margin-bottom: 24px;
         }
 
-        .brand-logo {
+        .brand-logo, .brand-logo:visited, .brand-logo:hover, .brand-logo:active {
             display: flex;
             align-items: center;
             gap: 16px;
-            text-decoration: none;
+            text-decoration: none !important;
             color: #0F172A;
         }
 
@@ -70,6 +69,15 @@
 
         .brand-name-atlas { font-weight: 800; }
         .brand-name-wealth { font-weight: 300; opacity: 0.65; }
+
+        /* Custom Trimmed Slash for 'WEA\TH' */
+        .brand-slash {
+            font-weight: 700;
+            color: #0F172A;
+            display: inline-block;
+            transform: scaleY(0.88) translateY(-1px);
+            margin: 0 -1px;
+        }
 
         /* Navigation & PDF Utility Bar */
         .nav-header {
@@ -384,7 +392,6 @@
 
 <div class="container">
 
-    <!-- Top Brand Lockup -->
     <div class="brand-header">
         <a href="https://strategy.atlaswealth.cc" class="brand-logo">
             <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -393,12 +400,11 @@
                 <circle cx="20" cy="22" r="2.5" fill="#0F172A"/>
             </svg>
             <span class="brand-name">
-                <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEALTH</span>
+                <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEA<span class="brand-slash">\</span>TH</span>
             </span>
         </a>
     </div>
 
-    <!-- Navigation & PDF Download Button -->
     <div class="nav-header">
         <a href="https://strategy.atlaswealth.cc" class="back-link">← Back to Strategy Portal</a>
         <button onclick="window.print()" class="pdf-btn">
@@ -411,7 +417,6 @@
         </button>
     </div>
 
-    <!-- Document Header Bar -->
     <div class="header-bar">
         <div>
             <div class="brand-sub">Private Wealth Strategy & Risk Management</div>
@@ -423,7 +428,6 @@
         </div>
     </div>
 
-    <!-- Meta Information -->
     <div class="meta-grid">
         <div class="meta-item"><strong>MEMORANDUM TO:</strong> Investment Committee / Private Client</div>
         <div class="meta-item"><strong>DATE:</strong> August 17, 2026</div>
@@ -544,7 +548,6 @@
         <strong>2. Dry Powder Impairment Protection:</strong> Keeping Bullet 2 in an S&P 500 index fund rather than MMF reduces final strategy wealth by ~40%. When TQQQ touches its -80% trigger, broad equities are down -25% to -50%, forcing forced liquidation of equities at market troughs.
     </p>
 
-    <!-- PAGE BREAK FOR CLEAN TABLE LAYOUT -->
     <div class="page-break"></div>
 
     <h2>4. Full Master Portfolio Simulation ($200,000 Inception)</h2>
@@ -762,7 +765,6 @@
         </tbody>
     </table>
 
-    <!-- 5. Live Portfolio Status & Operational Directive -->
     <h2>5. Current Portfolio Status & Operational Directive</h2>
     <p>
         As of <strong id="live-close-date">Last Market Close</strong>, the satellite engine status is: 
@@ -781,15 +783,11 @@
         </ul>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
         CONFIDENTIAL — FOR INTERNAL INVESTMENT COMMITTEE USE ONLY — NOT FOR PUBLIC DISTRIBUTION
     </div>
 
-</div> <!-- Closes container -->
-
-<!-- Live Market Data Script -->
-<script>
+</div> <script>
     async function fetchLiveTQQQ() {
         const dateElement = document.getElementById('live-close-date');
         const priceElement = document.getElementById('tqqq-last-close');
