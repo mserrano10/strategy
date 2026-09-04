@@ -3,336 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principles of Investing - Private Wealth & Research</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <title>Principles of Investing — Atlas Wealth</title>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%230F172A'/></svg>">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-            background-color: #F1F5F9; 
-            color: #334155; 
-            padding: 40px 20px; 
-            margin: 0; 
-            line-height: 1.6;
-            font-size: 10.5pt;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #FAF9F6;
+            color: #0F172A;
+            line-height: 1.7;
+            padding: 60px 24px;
         }
-        .container { 
-            max-width: 860px; 
-            margin: 0 auto; 
-            background: #FFFFFF;
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            padding: 40px 48px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
         }
-        .nav-header {
+
+        /* Top Header */
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
             border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 24px;
+            margin-bottom: 56px;
         }
-        .back-link {
-            color: #059669;
-            text-decoration: none;
-            font-size: 9.5pt;
-            font-weight: 600;
-        }
-        .back-link:hover { text-decoration: underline; }
 
-        .pdf-btn {
-            display: inline-flex;
+        .brand-logo {
+            display: flex;
             align-items: center;
-            gap: 6px;
-            background-color: #F8FAFC;
+            gap: 16px;
+            text-decoration: none;
             color: #0F172A;
-            border: 1px solid #CBD5E1;
-            padding: 6px 12px;
-            border-radius: 6px;
+        }
+
+        .brand-mark { width: 34px; height: 34px; }
+
+        .brand-name {
+            font-size: 13pt;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .brand-name-atlas { font-weight: 800; }
+        .brand-name-wealth { font-weight: 300; opacity: 0.65; }
+
+        .doc-badge {
+            font-family: ui-monospace, SFMono-Regular, monospace;
+            font-size: 8pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #64748B;
+        }
+
+        /* Article Header */
+        .article-meta {
+            font-family: ui-monospace, SFMono-Regular, monospace;
             font-size: 8.5pt;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #64748B;
+            margin-bottom: 12px;
         }
-        .pdf-btn:hover {
-            background-color: #F1F5F9;
-            border-color: #059669;
-            color: #059669;
-        }
-        
-        .header {
-            border-bottom: 3px solid #0F172A;
-            padding-bottom: 16px;
+
+        h1 {
+            font-size: 26pt;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.25;
+            color: #0F172A;
             margin-bottom: 24px;
         }
-        h1.doc-title { 
-            font-size: 22pt; 
-            font-weight: 800;
-            margin: 0 0 8px 0;
-            color: #0F172A;
-            letter-spacing: -0.5px;
-        }
-        .meta-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            background: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            padding: 16px;
-            border-radius: 6px;
-            font-size: 8.5pt;
-            color: #64748B;
-            margin-bottom: 32px;
-        }
-        .meta-item strong { color: #0F172A; font-weight: 600; }
-        
-        h2 {
-            font-size: 12pt;
-            font-weight: 700;
-            color: #0F172A;
-            border-bottom: 1.5px solid #CBD5E1;
-            padding-bottom: 4px;
-            margin-top: 36px;
-            margin-bottom: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+
+        .lead-paragraph {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 13.5pt;
+            line-height: 1.6;
+            color: #334155;
+            border-left: 2px solid #0F172A;
+            padding-left: 20px;
+            margin-bottom: 48px;
         }
 
-        h3 {
-            font-size: 10.5pt;
+        /* Body Typography */
+        section { margin-bottom: 40px; }
+
+        h2 {
+            font-size: 14pt;
             font-weight: 700;
-            color: #059669;
-            margin-top: 24px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: -0.2px;
+            color: #0F172A;
+            margin: 36px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E2E8F0;
         }
 
         p {
-            margin-top: 0;
-            margin-bottom: 12px;
+            font-size: 10.5pt;
             color: #334155;
-            text-align: justify;
-        }
-
-        blockquote {
-            margin: 20px 0;
-            padding: 14px 18px;
-            background: #F8FAFC;
-            border-left: 4px solid #0F172A;
-            font-style: italic;
-            color: #0F172A;
-            font-size: 10pt;
-            border-radius: 0 6px 6px 0;
-        }
-
-        .callout-box {
-            background: #ECFDF5;
-            border-left: 4px solid #059669;
-            padding: 16px 20px;
-            margin: 20px 0;
-            border-radius: 0 6px 6px 0;
-        }
-        .callout-title {
-            font-weight: 700;
-            color: #064E3B;
-            font-size: 9.5pt;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 20px;
         }
 
         ul, ol {
-            padding-left: 20px;
-            margin: 0 0 16px 0;
-        }
-        li {
-            margin-bottom: 8px;
+            margin: 0 0 24px 20px;
             color: #334155;
+            font-size: 10.5pt;
         }
 
-        .bullet-list-custom {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
-        .bullet-list-custom li {
-            position: relative;
-            padding-left: 20px;
-            margin-bottom: 10px;
-        }
-        .bullet-list-custom li::before {
-            content: "■";
-            position: absolute;
-            left: 0;
-            color: #059669;
-            font-size: 7.5pt;
-            top: 2px;
-        }
+        li { margin-bottom: 8px; }
 
-        .equation-box {
-            background: #F8FAFC;
+        .rule-box {
+            background: #FFFFFF;
             border: 1px solid #E2E8F0;
-            padding: 16px;
-            border-radius: 6px;
-            text-align: center;
-            margin: 20px 0;
-            font-size: 11pt;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 32px 0;
         }
 
-        @media print {
-            body { background: #FFFFFF; padding: 0; }
-            .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
-            .nav-header { display: none; }
+        .rule-box-title {
+            font-family: ui-monospace, SFMono-Regular, monospace;
+            font-size: 8pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #0F172A;
+            margin-bottom: 8px;
+        }
+
+        /* Footer Nav */
+        footer {
+            border-top: 1px solid #E2E8F0;
+            padding-top: 32px;
+            margin-top: 64px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 8.5pt;
+            color: #94A3B8;
+        }
+
+        footer a { color: #0F172A; text-decoration: none; font-weight: 600; }
+        footer a:hover { opacity: 0.6; }
+
+        @media (max-width: 640px) {
+            body { padding: 36px 18px; }
+            h1 { font-size: 20pt; }
+            header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            footer { flex-direction: column; gap: 16px; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="nav-header">
-        <a href="/" class="back-link">← Back to Document Repository</a>
-        <button onclick="window.print()" class="pdf-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Download PDF
-        </button>
+    <div class="container">
+        <header>
+            <a href="https://strategy.atlaswealth.cc" class="brand-logo">
+                <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="4" y1="32" x2="36" y2="32" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M20 6L32 32H8L20 6Z" stroke="#0F172A" stroke-width="2.5" stroke-linejoin="round"/>
+                    <circle cx="20" cy="22" r="2.5" fill="#0F172A"/>
+                </svg>
+                <span class="brand-name">
+                    <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEALTH</span>
+                </span>
+            </a>
+            <div class="doc-badge">Policy Document 01</div>
+        </header>
+
+        <main>
+            <div class="article-meta">Atlas Wealth Management · Core Principles</div>
+            <h1>Principles of Investing</h1>
+            
+            <div class="lead-paragraph">
+                The mandate of Atlas Wealth is the multi-decade preservation and compound expansion of real purchasing power, executed through business valuation rigor and rules-based risk control.
+            </div>
+
+            <section>
+                <h2>1. Ownership Over Speculation</h2>
+                <p>Capital is allocated exclusively into productive assets with enduring economic moats, pricing power, and high return on invested capital (ROIC). Price fluctuations are treated as secondary noise; underlying earnings power is the sole measure of value creation.</p>
+                
+                <div class="rule-box">
+                    <div class="rule-box-title">Core Allocator Mandate</div>
+                    <p style="margin:0;">Do not trade business momentum. Acquire structural cash-flow streams at prices that offer an asymmetric margin of safety relative to conservative intrinsic value estimates.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2>2. Asymmetric Risk & Volatility Decoupling</h2>
+                <p>Volatility is not risk; permanent loss of capital is. Market volatility is systematically harvested through rules-based derivative hedging rather than feared. Option strategies are structured to defined-risk bounds, insulating long equity ownership against catastrophic drawdown regimes.</p>
+            </section>
+
+            <section>
+                <h2>3. Multi-Decade Horizon Discipline</h2>
+                <p>Short-term performance benchmarks encourage structural fragility. Capital architecture must be designed to comfortably withstand deep market panics, liquidity crunches, and inflationary regimes without forced liquidations.</p>
+            </section>
+        </main>
+
+        <footer>
+            <div>© Atlas Capital Research. Confidential Policy Portal.</div>
+            <div><a href="https://strategy.atlaswealth.cc">← Back to Strategy Portal</a></div>
+        </footer>
     </div>
-
-    <div class="header">
-        <h1 class="doc-title">Principles of Investing</h1>
-    </div>
-
-    <div class="meta-grid">
-        <div class="meta-item">Author: <strong>Atlas</strong></div>
-        <div class="meta-item">Category: <strong>Strategy</strong></div>
-        <div class="meta-item">Created: <strong>June 17, 2025</strong></div>
-        <div class="meta-item">Last Updated: <strong>October 2, 2025</strong></div>
-    </div>
-
-    <h2>A brief definition: What is (good) investing?</h2>
-    
-    <blockquote>
-        “Investing is often described as the process of laying out money now in the expectation of receiving more money in the future. At Berkshire we take a more demanding approach, defining investing as the transfer to others of purchasing power now with the reasoned expectation of receiving more purchasing power – after taxes have been paid on nominal gains – in the future. More succinctly, investing is forgoing consumption now in order to have the ability to consume more at a later date.”<br>
-        <strong>— Warren E. Buffett</strong>
-    </blockquote>
-
-    <p>Stealing also from the legendary chairman of Berkshire Hathaway, a simple example illustrates how investment should be thought of:</p>
-    
-    <ul class="bullet-list-custom">
-        <li>If you forgo <strong>today</strong> 10 hamburgers to purchase an investment;</li>
-        <li><strong>Then</strong> receive dividends which, after tax, buy you 2 hamburgers; and</li>
-        <li><strong>After that</strong> receive, upon sale of your holdings, after-tax proceeds that will buy you eight more hamburgers,</li>
-        <li><strong>Then</strong> you have had <em>no real income</em> from your investment, no matter how much it appreciated in dollars. You may feel richer. But you won't be richer.</li>
-    </ul>
-
-    <p>In financial parlance, what matters is your <strong>after-tax, inflation-adjusted returns</strong>.</p>
-    <p>This return is best measured by the Compounded Annual Growth Rate (CAGR) <em>not</em> the average annual return (never cross a river that is on average 4 feet deep) nor the more deceitful but often touted "risk-adjusted returns" often paraded by financial advisors.</p>
-
-    <h2>How, then, can this be done?</h2>
-    <p>To no one's surprise, when you can acquire a (1) quality business at a (2) favorable price, led by (3) able management, you will position yourself to reap substantial returns on your investment.</p>
-
-    <h3>Good Businesses</h3>
-    <p>There seems to be an almost endless amount of investment opportunities and alternatives: bonds, stocks, real estate, derivatives, art, wine, startups, and the list goes on. Broadly speaking however, we subscribe to the idea that there really are only 3 categories of investments (from the 2011 Berkshire Hathaway letter to shareholders):</p>
-
-    <ol>
-        <li><strong>Currency-based investments:</strong> Money-market funds, bonds, mortgages, CDs, etc. Often (mistakenly so) said to be among the safest available when in reality they are sure to be the most dangerous in the long run. Their beta (a Wall Street Greek letter for volatility) might be zero, but their risk is sky high because the purchasing power of their currency denomination has been and will continue to deteriorate. You will keep your principal and payments in a timely fashion, but the purchasing power of those will decline dramatically in the future. This will continue to be the case for the foreseeable future so long as there is a centralized control of the money supply intent on increasing it beyond the total real output of the economy.</li>
-        <li><strong>Unproductive assets:</strong> Gold, Silver, precious stones and metals are the bigger examples of this category. These are purchased in the buyer's hope that someone else – who also knows that the assets will be forever unproductive – will pay more for them in the future. Specifically, because there will be a greater demand for it in the future.</li>
-        <li><strong>Productive assets:</strong> Investment in productive assets: businesses, farms, or certain types of real estate to name the most important. Ideally, these assets should have the ability in inflationary times to deliver output that will retain its purchasing-power value while requiring a minimum of new capital investment. Whether the currency a century from now is based on gold, seashells, shark teeth, or a piece of paper, people will be willing to exchange a couple of minutes of their daily labor for other goods and services. With unimportant exceptions, such as bankruptcies in which some of a company's losses are borne by creditors, the most that owners in aggregate can earn between now and Judgment Day is what their businesses in aggregate earn.</li>
-    </ol>
-
-    <p>The first two categories enjoy maximum popularity at peaks of fear: Terror over economic collapse drives individuals to currency-based assets, most particularly U.S. obligations, and fear of currency collapse fosters movement to sterile assets such as gold. Our own preference is the third category.</p>
-
-    <div class="callout-box">
-        <div class="callout-title">So which of these productive assets are worth owning?</div>
-        <p style="margin:0;">The best answer is to own them all. A low-cost, broad basket of American businesses has proven, time and again, to outperform virtually any other strategy. To be specific: a low-cost index fund of the S&P 500, over time, will prove the winner. What we propose is there can be a way to own parts of amazing individual businesses that can outperform the whole over time. Having said this, some businesses turn out to be more productive than others as measured by their ability to generate earnings and their return on the assets required to produce those earnings; and these are of special interest to us as investors.</p>
-    </div>
-
-    <h2>Price and Business Value</h2>
-    
-    <blockquote>
-        “It's far better to buy a wonderful company at a fair price than a fair company at a wonderful price.”<br>
-        <strong>— Charlie Munger</strong>
-    </blockquote>
-
-    <p>In our earlier definition of investment, we used an increase in purchasing power as our measuring stick. It follows that a good investment is one that increases this purchasing power. To increase my purchasing power, I must have more cash tomorrow than I do today. Simple logic tells us that the best investment will be the one that gives me the most cash tomorrow relative to the price I pay for it today. This brings us to the key question: How much should I be willing to forgo today (invest) to obtain that future cash?</p>
-
-    <p>This is a question of opportunity cost. Assume a government bond will pay 3% interest in one year. I can invest $10,000 today and be guaranteed to receive $300 additional dollars a year from now.</p>
-
-    <p>Now say, bonds are too boring and pay too little for my liking and I want to invest in a business. I discover a shoe store downtown, the owner of which wants to sell his business to travel the world for $10,000. After looking at the financials, I know the business produces $1,000 USD in profit every year like clockwork (a 10% return vs 3%). It is a no-brainer to buy the business.</p>
-
-    <p>Now let's go to public markets. To decide if a stock like Apple is cheap or expensive, we compare what we pay to what we get, using a bond as the alternative. In 2023, Apple generated $99.6 billion in free cash flow (FCF) against a $2.99 trillion market capitalization:</p>
-
-    <div class="equation-box">
-        $$\text{FCF Yield} = \frac{\$99.6\text{B}}{\$2.99\text{T}} \approx 3.33\%$$
-    </div>
-
-    <p>If a 1-year U.S. Treasury bond in 2023 yielded 5%, the bond paid 5 cents per dollar vs Apple's 3.33 cents. To justify buying Apple, you had to believe its cash flow or stock price would grow enough to beat the bond's return.</p>
-
-    <div class="callout-box">
-        <div class="callout-title">Key Valuation Heuristics</div>
-        <ul style="margin:0; padding-left: 16px;">
-            <li>Welcome lower market prices of stocks you own as an opportunity to acquire even more of a good thing at a better price.</li>
-            <li>Make no attempt to predict how security markets will behave; short-term forecasts are useless.</li>
-            <li>In all investments, look to business performance, not stock market performance. If you are correct in expectations regarding the business, the market eventually will follow along.</li>
-            <li>Market price and intrinsic value often follow very different paths – sometimes for extended periods – but eventually they meet.</li>
-            <li>It's crucial to understand that stocks often trade at truly foolish prices, both high and low. "Efficient" markets exist only in textbooks.</li>
-        </ul>
-    </div>
-
-    <h2>On Time-Preference</h2>
-
-    <ul class="bullet-list-custom">
-        <li>We never take the one-year figure very seriously. Instead, we recommend not less than a five-year test as a rough yardstick of economic performance. Ideally, a decade.</li>
-        <li>No matter how great the talent or effort, some things just take time: watering a plant twice as much won't make it grow faster.</li>
-        <li>As Ben Graham said: "In the short run, the market is a voting machine but in the long run it is a weighing machine."</li>
-        <li>Our stay-put behavior reflects our view that the stock market serves as a relocation center at which money is moved from the active to the patient.</li>
-        <li>A tolerance for short-term swings improves our long-term prospects. In baseball lingo, our performance yardstick is slugging percentage, not batting average.</li>
-        <li>We continue to make more money when snoring than when active.</li>
-        <li>For investors as a whole, returns decrease as motion increases. Time in the market beats timing the market.</li>
-        <li>A willingness to look unimaginative for a sustained period – or even to look foolish – is essential.</li>
-    </ul>
-
-    <h2>On Risk</h2>
-    <p>Investing is an activity in which consumption today is forgone in an attempt to allow greater consumption at a later date. "Risk" is the possibility that this objective won't be attained.</p>
-
-    <p>The unconventional, but inescapable, conclusion to be drawn from the past fifty years is that it has been far safer to invest in a diversified collection of American businesses than to invest in securities – Treasuries, for example – whose values have been tied to American currency.</p>
-
-    <p>Stock prices will always be far more volatile than cash-equivalent holdings. Over the long term, however, currency-denominated instruments are far riskier investments than widely-diversified stock portfolios. Volatility is far from synonymous with risk.</p>
-
-    <blockquote>
-        “In the stock market, the most important organ is the stomach. Not the brain.”<br>
-        <strong>— Peter Lynch</strong>
-    </blockquote>
-
-    <h2>Assumptions in Thinking (Axioms)</h2>
-    <p>We frame the entire compendium of principles around unprovable rules that guide our framework:</p>
-
-    <ul class="bullet-list-custom">
-        <li><strong>Monetary Distortion:</strong> Money and Time are distorted through monetary intervention. Interest rates are artificial and therefore we have artificially priced time. Credit expansion fosters an unsustainable boom followed inevitably by a crash. You WILL at one point or another experience a decline of ~50% of your net worth as part of the "bust."</li>
-        <li><strong>American Exceptionalism:</strong> We live in the era of American exceptionalism and this will be true for our lifetimes.</li>
-        <li><strong>Single Purpose:</strong> There is only one explicit purpose for investing: Maximizing our wealth over time.</li>
-        <li><strong>Ensemble Returns vs Individual Risk:</strong> The historical 7%-11% CAGR of the US stock market is observed in the ensemble, not all individual investors. You can bank on those returns provided you are not forced into a "liquidation" event (medical emergency, job loss).</li>
-    </ul>
-
-    <h2>Other Thoughts</h2>
-    <ul class="bullet-list-custom">
-        <li>Before looking at new investments, we consider adding to old ones. If a business is attractive enough to buy once, it may well pay to repeat the process.</li>
-        <li>Over the years, a number of very smart people have learned the hard way that a long string of impressive numbers multiplied by a single zero always equals zero.</li>
-        <li>We prefer a lumpy 15% to a smooth 10%.</li>
-        <li>To invest successfully, you need not understand beta, efficient markets, modern portfolio theory, option pricing or emerging markets. You may, in fact, be better off knowing nothing about these.</li>
-        <li>In allocating capital, activity does not correlate with achievement. Indeed, frenetic behavior is often counterproductive.</li>
-        <li>Investing success does not require a high IQ, complex modeling skills or the ability to come up with complicated formulas. If you are right about a business whose value is largely dependent on a single key factor that is both easy to understand and enduring, the payoff is the same as if you had correctly analyzed an investment alternative characterized by many constantly shifting variables.</li>
-    </ul>
-
-</div>
 
 </body>
 </html>
