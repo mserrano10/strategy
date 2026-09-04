@@ -43,19 +43,19 @@
 
         /* Top Brand Header */
         .brand-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: none; /* Removed */
-    padding-bottom: 0;   /* Reduced */
-    margin-bottom: 16px;
-}
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: none; /* Removed */
+            padding-bottom: 0;   /* Reduced */
+            margin-bottom: 16px;
+        }
 
-        .brand-logo {
+        .brand-logo, .brand-logo:visited, .brand-logo:hover, .brand-logo:active {
             display: flex;
             align-items: center;
             gap: 16px;
-            text-decoration: none;
+            text-decoration: none !important;
             color: #0F172A;
         }
 
@@ -71,6 +71,15 @@
         .brand-name-atlas { font-weight: 800; }
         .brand-name-wealth { font-weight: 300; opacity: 0.65; }
 
+        /* Custom Trimmed Slash for 'WEA\TH' */
+        .brand-slash {
+            font-weight: 700;
+            color: #0F172A;
+            display: inline-block;
+            transform: scaleY(0.88) translateY(-1px);
+            margin: 0 -1px;
+        }
+
         .doc-badge {
             font-family: ui-monospace, SFMono-Regular, monospace;
             font-size: 8pt;
@@ -82,13 +91,14 @@
 
         /* Nav & Actions Sub-Header */
         .nav-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 36px;
-    padding-bottom: 0;
-    border-bottom: none; /* Removed */
-}
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+            padding-bottom: 0;
+            border-bottom: none; /* Removed */
+        }
+
         .back-link {
             color: #0F172A;
             text-decoration: none;
@@ -121,10 +131,10 @@
 
         /* Document Title */
         .header {
-    border-bottom: 2px solid #0F172A;
-    padding-bottom: 16px;
-    margin-bottom: 24px;
-}
+            border-bottom: 2px solid #0F172A;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
 
         h1.doc-title { 
             font-size: 26pt; 
@@ -293,10 +303,9 @@
                 <circle cx="20" cy="22" r="2.5" fill="#0F172A"/>
             </svg>
             <span class="brand-name">
-                <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEALTH</span>
+                <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEA<span class="brand-slash">\</span>TH</span>
             </span>
         </a>
-        
     </div>
 
     <div class="nav-header">
@@ -324,7 +333,7 @@
 
     <h2>A brief definition: What is (good) investing?</h2>
     
-    <blockquote>
+    blockquote>
         “Investing is often described as the process of laying out money now in the expectation of receiving more money in the future. At Berkshire we take a more demanding approach, defining investing as the transfer to others of purchasing power now with the reasoned expectation of receiving more purchasing power – after taxes have been paid on nominal gains – in the future. More succinctly, investing is forgoing consumption now in order to have the ability to consume more at a later date.”<br>
         <strong>— Warren E. Buffett</strong>
     </blockquote>
