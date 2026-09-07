@@ -718,7 +718,6 @@
     document.querySelectorAll("input").forEach(el => el.addEventListener("input", renderDesk));
     document.addEventListener("DOMContentLoaded", async () => {
     try {
-        // Fetch the live json generated daily by GitHub Actions
         const res = await fetch("./data.json");
         if (res.ok) {
             const liveData = await res.json();
