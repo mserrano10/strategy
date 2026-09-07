@@ -1,3 +1,4 @@
+import os
 import json
 import re
 import urllib.request
@@ -40,12 +41,15 @@ def get_macro_data():
     except Exception as e:
         print(f"Trailing PE fetch error: {e}")
 
-    # Save output to data.json
-    output_path = "macro-desk/data.json" if True else "data.json"
+    # Explicitly target heat-index directory
+    target_dir = "heat-index" if os.path.exists("heat-index") else "."
+    os.makedirs(target_dir, exist_ok=True)
+    output_path = os.path.join(target_dir, "data.json")
+
     with open(output_path, "w") as f:
         json.dump(data, f, indent=2)
     
-    print("Successfully updated data.json")
+    print(f"Successfully updated {output_path}")
 
 if __name__ == "__main__":
     get_macro_data()
