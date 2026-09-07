@@ -41,15 +41,21 @@ def get_macro_data():
     except Exception as e:
         print(f"Trailing PE fetch error: {e}")
 
-    # Explicitly target heat-index directory
-    target_dir = "heat-index" if os.path.exists("heat-index") else "."
+    # Universal Folder Auto-Detection Logic
+    possible_folders = ["heat-index", "macro-desk"]
+    target_dir = "."
+    for folder in possible_folders:
+        if os.path.isdir(folder):
+            target_dir = folder
+            break
+            
     os.makedirs(target_dir, exist_ok=True)
     output_path = os.path.join(target_dir, "data.json")
 
     with open(output_path, "w") as f:
         json.dump(data, f, indent=2)
     
-    print(f"Successfully updated {output_path}")
+    print(f"SUCCESS: Written macro data to {output_path}")
 
 if __name__ == "__main__":
     get_macro_data()
