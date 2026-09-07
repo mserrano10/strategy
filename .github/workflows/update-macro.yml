@@ -3,7 +3,7 @@ name: Daily Macro Data Scraper
 on:
   schedule:
     - cron: '0 0 * * *'  # Runs daily at midnight UTC
-  workflow_dispatch:      # Manual trigger button
+  workflow_dispatch:      # Allows manual trigger
 
 jobs:
   scrape:
@@ -17,16 +17,13 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Ensure Destination Directory Exists
-        run: mkdir -p heat-index
-
-      - name: Execute Scraper
+      - name: Run Python Scraper
         run: python scraper.py
 
-      - name: Commit and Push Updated JSON
+      - name: Commit and Push Updated Data
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add heat-index/data.json
+          git add data.json heat-index/data.json macro-desk/data.json || true
           git diff-index --quiet HEAD || git commit -m "auto: daily macro data refresh"
           git push
