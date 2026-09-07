@@ -1,0 +1,29 @@
+name: Daily Macro Data Scraper
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:      # Adds a manual "Run Workflow" button in GitHub UI
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Execute Scraper
+        run: python scraper.py
+
+      - name: Commit and Push Updated JSON
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add macro-desk/data.json || git add data.json
+          git diff-index --quiet HEAD || git commit -m "auto: daily macro data refresh"
+          git push
