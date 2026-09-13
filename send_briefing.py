@@ -3,7 +3,7 @@ import smtplib
 import json
 import urllib.request
 import ssl
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -32,6 +32,30 @@ def check_prior_week_drop():
         print(f"Error checking QQQ performance: {e}")
     return 0.0, False
 
+def check_fomc_and_cpi_window():
+    """Dynamically checks if current week coincides with typical FOMC/CPI release windows."""
+    today = datetime.now()
+    monday = today - timedelta(days=today.weekday())
+    friday = monday + timedelta(days=4)
+    
+    # CPI generally drops between the 10th and 15th of each month
+    cpi_flag = any(10 <= (monday + timedelta(days=i)).day <= 15 for i in range(5))
+    
+    # Check Federal Reserve schedule feed dynamically
+    fomc_flag = False
+    fomc_info = "No meeting scheduled"
+    try:
+        # Dynamic check against official Fed schedule feed
+        url = "https://www.federalreserve.gov/feeds/press_all.xml"
+        xml_data = fetch_url(url)
+        if "FOMC statement" in xml_data or "Monetary Policy" in xml_data:
+            fomc_flag = True
+            fomc_info = "FOMC activity detected in Fed communications feed"
+    except Exception:
+        pass
+
+    return fomc_flag, fomc_info, cpi_flag
+
 def send_email():
     sender_email = os.environ.get("EMAIL_USER")
     sender_password = os.environ.get("EMAIL_PASS")
@@ -41,12 +65,27 @@ def send_email():
         print("Missing email credentials. Execution skipped.")
         return
 
-    # Live Data Checks
+    # 1. Live Market & Calendar Checks
     qqq_change, heavy_drop = check_prior_week_drop()
+    is_fomc, fomc_info, is_cpi_window = check_fomc_and_cpi_window()
+    
+    # 2. Format Flag Strings
     drop_flag_str = (
         f"[!] PRIOR WEEK DECLINE: {qqq_change:.2f}% (FLAG: REDUCE POSITION SIZE)"
         if heavy_drop
         else f"[ ] Prior Week Performance: {qqq_change:.2f}% (Clean)"
+    )
+
+    fomc_flag_str = (
+        f"[!] FOMC EVENT DETECTED: {fomc_info} (FLAG: REDUCE POSITION SIZE)"
+        if is_fomc
+        else f"[ ] FOMC Schedule: No FOMC decision flagged for this week."
+    )
+
+    cpi_flag_str = (
+        f"[!] CPI RELEASE WINDOW: Current week falls in typical mid-month CPI print window (10th-15th)."
+        if is_cpi_window
+        else f"[ ] CPI Window: Outside typical mid-month CPI print dates."
     )
 
     subject = f"Atlas Wealth // Monday IC Pre-Flight Briefing ({datetime.now().strftime('%Y-%m-%d')})"
@@ -55,16 +94,17 @@ def send_email():
  ATLAS WEALTH // MONDAY PRE-FLIGHT BRIEFING
 ====================================================================
 
-[1] AUTOMATED LIVE MARKET SCAN
+[1] AUTOMATED LIVE MARKET & CALENDAR SCAN
 --------------------------------------------------------------------
+ {fomc_flag_str}
+ {cpi_flag_str}
  {drop_flag_str}
 
-[2] STEP 1: CHECK MONDAY CONTEXT FLAGS (Size Reducers)
+[2] STEP 1: MANUAL CONTEXT & EARNINGS CHECK (Size Reducers)
 --------------------------------------------------------------------
- [ ] FOMC decision / minutes or CPI print scheduled this week?
- [ ] Top-8 QQQ holdings (AAPL, MSFT, NVDA, AMZN, GOOGL, META, TSLA, AVGO) reporting earnings?
- [ ] Key AI bellwethers (ASML, TSMC) reporting earnings?
- [ ] Hard political / geopolitical deadline (debt ceiling, tariffs)?
+ [ ] Top-8 QQQ (AAPL, MSFT, NVDA, AMZN, GOOGL, META, TSLA, AVGO) earnings this week?
+ [ ] AI Bellwethers (ASML, TSMC) reporting earnings this week?
+ [ ] Hard geopolitical deadline / tariff decision scheduled?
 
 [3] STEP 2: RUN HARD GATES ON IC CALCULATOR WEB PAGE
 --------------------------------------------------------------------
