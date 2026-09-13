@@ -94,17 +94,17 @@ def send_email():
  ATLAS WEALTH // MONDAY PRE-FLIGHT BRIEFING
 ====================================================================
 
-[1] AUTOMATED LIVE MARKET & CALENDAR SCAN
+[1] AUTOMATED LIVE MARKET & CALENDAR SCAN (Size Reducers)
 --------------------------------------------------------------------
  {fomc_flag_str}
  {cpi_flag_str}
+ {earnings_str}
  {drop_flag_str}
 
-[2] STEP 1: MANUAL CONTEXT & EARNINGS CHECK (Size Reducers)
+[2] STEP 1: GEOPOLITICAL & AD-HOC CONTEXT CHECK (Manual)
 --------------------------------------------------------------------
- [ ] Top-8 QQQ (AAPL, MSFT, NVDA, AMZN, GOOGL, META, TSLA, AVGO) earnings this week?
- [ ] AI Bellwethers (ASML, TSMC) reporting earnings this week?
- [ ] Hard geopolitical deadline / tariff decision scheduled?
+ [ ] Major unannounced geopolitical deadline, debt ceiling date, or tariff news?
+     --> IF YES: Consider trading smaller than the edge multiple suggests.
 
 [3] STEP 2: RUN HARD GATES ON IC CALCULATOR WEB PAGE
 --------------------------------------------------------------------
