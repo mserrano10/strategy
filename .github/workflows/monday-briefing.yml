@@ -1,0 +1,24 @@
+name: Monday Morning Briefing Email
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'  # Runs every Monday at 12:00 UTC (8:00 AM EST)
+  workflow_dispatch:        # Manual trigger button
+
+jobs:
+  send-briefing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Briefing Script
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+        run: python send_briefing.py
