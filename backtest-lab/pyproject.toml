@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "backtest-lab"
+version = "0.1.0"
+description = "Local portfolio backtests for Atlas Wealth. The static page only displays committed results."
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "yfinance>=0.2.40",
+    "matplotlib>=3.8",
+    "lxml>=4.9",
+]
+
+[project.optional-dependencies]
+sharadar = ["nasdaq-data-link>=1.0.0"]
+
+[tool.setuptools.packages.find]
+include = ["backtest_lab*"]
