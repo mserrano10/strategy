@@ -11,7 +11,7 @@ import pandas as pd
 
 from backtest_lab.calendarutil import required_through
 from backtest_lab.cli import parse_end
-from backtest_lab.data.caps import market_cap, split_adjusted_share_basis
+from backtest_lab.data.caps import corrupt_close_tickers, market_cap, split_adjusted_share_basis
 from backtest_lab.data.sharadar import API_KEY_ENV, SharadarSource
 from backtest_lab.data.yfinance_source import YFinanceSource, _cache_covers
 
@@ -88,6 +88,22 @@ class SharadarTests(unittest.TestCase):
         with self.assertRaises(NotImplementedError) as universe:
             source.universe()
         self.assertIn("SHARADAR/TICKERS", str(universe.exception))
+
+
+class CorruptCloseTests(unittest.TestCase):
+    def test_reverse_split_blowups_are_dropped_and_berkshire_is_kept(self):
+        index = pd.to_datetime(["2020-01-02", "2026-10-14"])
+        close = pd.DataFrame(
+            {
+                "GPUS": [3.9e9, 0.13],
+                "BRK-A": [400_000.0, 790_000.0],
+                "AAPL": [100.0, 200.0],
+            },
+            index=index,
+        )
+        self.assertEqual(corrupt_close_tickers(close), ["GPUS"])
+        basis = pd.Series({pd.Timestamp("2020-01-02"): 1e9})
+        self.assertIsNone(market_cap(basis, 20_000.0, pd.Timestamp("2020-06-01")))
 
 
 class CacheTests(unittest.TestCase):

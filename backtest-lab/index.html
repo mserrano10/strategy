@@ -410,7 +410,7 @@
         </div>
 
         <h2>1. Summary</h2>
-        <p>Click a row for the equity curve, the yearly ledger, and the holdings. No benchmark is plotted. Sharpe uses daily returns, a 252-day year, and a risk-free rate of zero.</p>
+        <p>Click a row for the equity curve, the yearly ledger, and the holdings. The dashed line on every chart is SPY total return, started from the same capital. Sharpe uses daily returns, a 252-day year, and a risk-free rate of zero.</p>
         <div class="table-scroll">
             <table>
                 <thead>
@@ -428,9 +428,18 @@
             </table>
         </div>
 
-        <h2>2. Equity Curves</h2>
+        <h2>2. Current list vs point-in-time</h2>
+        <p>Same rules, two universes. “Current” ranks today’s S&amp;P 500 every year. “Point-in-time” walks Wikipedia’s selected changes backward. SPY is the reference on the same window as the current-list book.</p>
+        <div class="table-scroll" id="pit-compare"></div>
+
+        <h2>3. Size floor</h2>
+        <p>Prior-year winners among today’s US common stocks that cleared the cap floor at the prior year-end. Delisted names are not in the listing file.</p>
+        <div class="table-scroll" id="size-compare"></div>
+
+        <h2>4. Equity Curves</h2>
         <div class="toolbar">
-            <div class="readout" id="compare-readout">Rebased to 100 at each book’s first mark.</div>
+            <div id="chart-filters"></div>
+            <div class="readout" id="compare-readout">Rebased to 100 at each book’s first mark. SPY is the dashed line.</div>
             <div>
                 <button type="button" class="pdf-btn active" id="scale-log">Log</button>
                 <button type="button" class="pdf-btn" id="scale-linear">Linear</button>
@@ -439,7 +448,7 @@
         <div class="legend" id="legend"></div>
         <div class="chart-wrap"><svg id="compare-chart" viewBox="0 0 880 320" role="img" aria-label="Equity curves of every book"></svg></div>
 
-        <h2>3. <span id="detail-title">Book</span></h2>
+        <h2>5. <span id="detail-title">Book</span></h2>
         <p id="detail-desc"></p>
         <div id="detail-flag"></div>
         <div class="meta-grid metrics" id="detail-metrics"></div>
@@ -450,7 +459,7 @@
         <div class="chart-wrap"><svg id="detail-chart" viewBox="0 0 880 280" role="img" aria-label="Selected equity curve"></svg></div>
         <div class="chart-wrap"><svg id="dd-chart" viewBox="0 0 880 120" role="img" aria-label="Drawdown"></svg></div>
 
-        <h2>4. Yearly Returns</h2>
+        <h2>6. Yearly Returns</h2>
         <div class="table-scroll">
         <table>
             <thead>
@@ -465,14 +474,17 @@
         </table>
         </div>
 
-        <h2>5. Holdings</h2>
+        <h2>7. Holdings</h2>
         <div id="holdings"></div>
 
-        <h2 id="events-heading">6. Rule Log</h2>
+        <h2 id="events-heading">8. Rule Log</h2>
         <div id="events"></div>
 
-        <h2>7. Caveats</h2>
+        <h2>9. Caveats</h2>
         <div class="callout ink" id="caveats"></div>
+
+        <h2 id="study-heading" class="hidden">10. Event study</h2>
+        <div id="study"></div>
     </div>
 
     <div class="footer">
@@ -488,7 +500,32 @@ const state = {
     reports: [],
     selected: null,
     log: true,
+    chartFilter: "pit",
+    study: null,
 };
+
+const SPY_COLOR = "#0369A1";
+
+function family(report) {
+    if (report.id.indexOf("tqqq") === 0) return "tqqq";
+    if (/-1?\d+b$/.test(report.id) || (report.universe && report.universe.id === "us-listed")) return "size";
+    if (report.id.endsWith("-pit") || (report.universe && report.universe.point_in_time)) return "pit";
+    return "current";
+}
+
+function visibleReports() {
+    if (state.chartFilter === "all") return state.reports.filter((report) => report.kind !== "event-study");
+    if (state.chartFilter === "pit") {
+        return state.reports.filter((report) => family(report) === "current" || family(report) === "pit");
+    }
+    return state.reports.filter((report) => family(report) === state.chartFilter);
+}
+
+function spySeries(report) {
+    const bench = report && report.benchmark;
+    if (!bench || !bench.equity || !bench.equity.length) return null;
+    return bench;
+}
 
 function pct(value, signed) {
     if (value === null || value === undefined || Number.isNaN(value)) return "—";
@@ -525,6 +562,9 @@ function signedClass(value) {
 }
 
 function badge(report) {
+    if (report.universe && report.universe.point_in_time) {
+        return '<span class="status-badge ink">Point-in-time attempt</span>';
+    }
     if (!report.data_source.survivorship_bias_free) {
         return '<span class="status-badge bad">Survivorship-biased</span>';
     }
@@ -683,22 +723,73 @@ function renderSummary() {
         body.appendChild(tr);
         report._color = COLORS[index % COLORS.length];
     });
+    const anchor = state.reports.find((report) => report.id === "best-returner" && spySeries(report))
+        || state.reports.find((report) => spySeries(report));
+    const bench = spySeries(anchor);
+    if (bench) {
+        const m = bench.metrics;
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+            "<td><strong>S&amp;P 500 (SPY)</strong><br><span class=\"status-badge ink\">Reference</span></td>" +
+            '<td class="num ' + signedClass(m.total_return) + '">' + pct(m.total_return, true) + "</td>" +
+            '<td class="num ' + signedClass(m.cagr) + '">' + pct(m.cagr, true) + "</td>" +
+            '<td class="num neg">' + pct(m.max_drawdown, false) + "</td>" +
+            '<td class="num">' + pct(m.volatility, false) + "</td>" +
+            '<td class="num">' + num(m.sharpe) + "</td>" +
+            '<td class="num">' + money(m.final_equity) + "</td>";
+        body.appendChild(tr);
+    }
+    renderPitCompare();
+    renderSizeCompare();
 }
 
 function renderLegend() {
     const legend = el("legend");
     legend.innerHTML = "";
-    state.reports.forEach((report) => {
+    visibleReports().forEach((report) => {
         const button = document.createElement("button");
         button.type = "button";
         button.innerHTML = '<span class="swatch" style="background:' + report._color + '"></span>' + report.name;
         button.addEventListener("click", () => select(report.id));
         legend.appendChild(button);
     });
+    const spy = document.createElement("span");
+    spy.style.cssText = "display:inline-flex;align-items:center;gap:6px;font-weight:600;";
+    spy.innerHTML = '<span class="swatch" style="background:' + SPY_COLOR + ';height:0;border-top:2px dashed ' + SPY_COLOR + '"></span>S&amp;P 500 (SPY)';
+    legend.appendChild(spy);
+}
+
+function renderFilters() {
+    const root = el("chart-filters");
+    const filters = [
+        ["pit", "Current vs point-in-time"],
+        ["size", "Size floor"],
+        ["tqqq", "TQQQ"],
+        ["all", "All books"],
+    ];
+    root.innerHTML = "";
+    filters.forEach(([id, label]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "pdf-btn" + (state.chartFilter === id ? " active" : "");
+        button.textContent = label;
+        button.addEventListener("click", () => {
+            state.chartFilter = id;
+            renderFilters();
+            renderLegend();
+            renderCompare();
+        });
+        root.appendChild(button);
+    });
 }
 
 function renderCompare() {
-    const series = state.reports.map((report) => ({
+    const shown = visibleReports();
+    if (!shown.length) {
+        el("compare-chart").innerHTML = "";
+        return;
+    }
+    const series = shown.map((report) => ({
         color: report._color,
         name: report.name,
         points: report.equity.map((row) => ({
@@ -710,6 +801,17 @@ function renderCompare() {
     // series for the x labels. Rebase already makes levels comparable.
     // Align by padding shorter series is unnecessary if windows match.
     // Use the longest series as the x axis and carry the others forward.
+    const spyAnchor = shown.find((report) => spySeries(report));
+    const spy = spySeries(spyAnchor);
+    if (spy && spy.equity.length && shown.length) {
+        const base = spy.equity[0].equity;
+        series.push({
+            color: SPY_COLOR,
+            name: "S&P 500 (SPY)",
+            dash: "5 4",
+            points: spy.equity.map((row) => ({ date: row.date, value: (row.equity / base) * 100 })),
+        });
+    }
     const longest = series.reduce((a, b) => (a.points.length >= b.points.length ? a : b));
     const aligned = series.map((s) => {
         const byDate = new Map(s.points.map((p) => [p.date, p.value]));
@@ -718,7 +820,7 @@ function renderCompare() {
             if (byDate.has(p.date)) last = byDate.get(p.date);
             return { date: p.date, value: byDate.has(p.date) ? byDate.get(p.date) : (s.points[0].date > p.date ? null : last) };
         }).filter((p) => p.value !== null);
-        return { color: s.color, name: s.name, points };
+        return { color: s.color, name: s.name, dash: s.dash, points };
     });
     drawChart(el("compare-chart"), aligned, { log: state.log, height: 320 });
     el("scale-log").classList.toggle("active", state.log);
@@ -731,11 +833,14 @@ function renderDetail() {
     state.selected = report.id;
     el("detail-title").textContent = report.name;
     el("detail-desc").textContent = report.description;
+    const pit = report.universe && report.universe.point_in_time;
+    const flagTitle = report.data_source.survivorship_bias_free ? "Free source" : (pit ? "Point-in-time attempt" : "Survivorship-biased");
     el("detail-flag").innerHTML =
-        '<div class="callout' + (report.data_source.survivorship_bias_free ? " ink" : "") + '">' +
-        '<div class="callout-title">' + (report.data_source.survivorship_bias_free ? "Free source" : "Survivorship-biased") + "</div>" +
+        '<div class="callout' + (report.data_source.survivorship_bias_free || pit ? " ink" : "") + '">' +
+        '<div class="callout-title">' + flagTitle + "</div>" +
         "<p style=\"margin:0;\">" + report.data_source.banner + "</p></div>";
     const m = report.metrics;
+    const bench = spySeries(report);
     const cells = [
         ["Total return", pct(m.total_return, true)],
         ["CAGR", pct(m.cagr, true)],
@@ -744,23 +849,126 @@ function renderDetail() {
         ["Sharpe (rf=0)", num(m.sharpe)],
         ["Final equity", money(m.final_equity)],
     ];
+    if (bench) {
+        const b = bench.metrics;
+        cells.push(
+            ["SPY total return", pct(b.total_return, true)],
+            ["SPY CAGR", pct(b.cagr, true)],
+            ["SPY max drawdown", pct(b.max_drawdown, false)]
+        );
+    }
     el("detail-metrics").innerHTML = cells.map(([label, value]) =>
         '<div class="meta-item"><strong>' + label + '</strong><span class="metric-value">' + value + "</span></div>"
     ).join("");
     el("png-link").href = "results/" + report.id + ".png";
     el("detail-readout").textContent = report.start + " → " + report.end + " · " + report.rebalance + " · cost " + report.cost_bps + " bps";
-    drawChart(el("detail-chart"), [{
+    const detailSeries = [{
         color: "#0F172A",
+        name: report.name,
         points: report.equity.map((row) => ({ date: row.date, value: row.equity })),
-    }], { log: false, height: 280 });
+    }];
+    if (bench) {
+        detailSeries.push({
+            color: SPY_COLOR,
+            name: "S&P 500 (SPY)",
+            dash: "5 4",
+            points: bench.equity.map((row) => ({ date: row.date, value: row.equity })),
+        });
+    }
+    drawChart(el("detail-chart"), detailSeries, { log: false, height: 280 });
     drawDrawdown(el("dd-chart"), report.equity);
     renderYearly(report);
     renderHoldings(report);
     renderEvents(report);
     renderCaveats(report);
     document.querySelectorAll("#summary-body tr").forEach((row, index) => {
-        row.classList.toggle("selected", state.reports[index].id === report.id);
+        const item = state.reports[index];
+        row.classList.toggle("selected", !!(item && item.id === report.id));
     });
+}
+
+function renderPitCompare() {
+    const root = el("pit-compare");
+    const bases = ["best-returner", "top5-returners", "biggest", "top5-biggest"];
+    const rows = bases.map((id) => {
+        const current = state.reports.find((report) => report.id === id);
+        const pit = state.reports.find((report) => report.id === id + "-pit");
+        if (!current && !pit) return "";
+        const label = (current || pit).name.replace(" (point-in-time)", "");
+        const spy = spySeries(current || pit);
+        return "<tr><td><strong>" + label + "</strong></td>" +
+            metricCells(current) + metricCells(pit) + metricCells(spy && { metrics: spy.metrics }) + "</tr>";
+    }).join("");
+    if (!rows) {
+        root.innerHTML = "<p>Point-in-time books are not in this results folder yet.</p>";
+        return;
+    }
+    root.innerHTML = "<table><thead><tr><th>Book</th><th class=\"num\">Current total</th><th class=\"num\">Current CAGR</th><th class=\"num\">Current max DD</th>" +
+        "<th class=\"num\">PIT total</th><th class=\"num\">PIT CAGR</th><th class=\"num\">PIT max DD</th>" +
+        "<th class=\"num\">SPY total</th><th class=\"num\">SPY CAGR</th><th class=\"num\">SPY max DD</th></tr></thead><tbody>" +
+        rows + "</tbody></table>";
+}
+
+function renderSizeCompare() {
+    const root = el("size-compare");
+    const bases = [["best-returner", "Best returner"], ["top5-returners", "Top 5 returners"]];
+    const rows = bases.map(([id, label]) => {
+        const ten = state.reports.find((report) => report.id === id + "-10b");
+        const two = state.reports.find((report) => report.id === id + "-2b");
+        if (!ten && !two) return "";
+        return "<tr><td><strong>" + label + "</strong></td>" + metricCells(ten) + metricCells(two) + "</tr>";
+    }).join("");
+    if (!rows) {
+        root.innerHTML = "<p>Size-floor books are not in this results folder yet.</p>";
+        return;
+    }
+    root.innerHTML = "<table><thead><tr><th>Book</th><th class=\"num\">≥$10B total</th><th class=\"num\">≥$10B CAGR</th><th class=\"num\">≥$10B max DD</th>" +
+        "<th class=\"num\">≥$2B total</th><th class=\"num\">≥$2B CAGR</th><th class=\"num\">≥$2B max DD</th></tr></thead><tbody>" +
+        rows + "</tbody></table>";
+}
+
+function metricCells(report) {
+    if (!report || !report.metrics) return '<td class="num">—</td><td class="num">—</td><td class="num">—</td>';
+    const m = report.metrics;
+    return '<td class="num ' + signedClass(m.total_return) + '">' + pct(m.total_return, true) + "</td>" +
+        '<td class="num ' + signedClass(m.cagr) + '">' + pct(m.cagr, true) + "</td>" +
+        '<td class="num neg">' + pct(m.max_drawdown, false) + "</td>";
+}
+
+function renderStudy() {
+    const heading = el("study-heading");
+    const root = el("study");
+    const study = state.study;
+    if (!study || !study.summary) {
+        heading.classList.add("hidden");
+        root.innerHTML = "";
+        return;
+    }
+    heading.classList.remove("hidden");
+    const s = study.summary;
+    const rate = (count, total) => total ? (count + " / " + total + " (" + (100 * count / total).toFixed(0) + "%)") : "—";
+    const worst = (items) => (items || []).map((item) =>
+        "<li><strong>" + item.ticker + "</strong> " + (item.name || "") + " — next-year " + pct(item.next_return, true) +
+        (item.return === undefined ? "" : " after a " + pct(item.return, true) + " year") + "</li>"
+    ).join("");
+    const years = (study.years || []).map((row) => {
+        const winner = row.winner || {};
+        const names = (row.top5 || []).map((item) => item.ticker + " " + pct(item.next_return, true)).join(", ");
+        return "<tr><td><strong>" + row.year + "</strong></td><td>" + (winner.ticker || "—") + "</td>" +
+            '<td class="num ' + signedClass(winner.return) + '">' + pct(winner.return, true) + "</td>" +
+            '<td class="num ' + signedClass(winner.next_return) + '">' + pct(winner.next_return, true) + "</td>" +
+            "<td>" + names + (row.partial_next_year ? " · partial" : "") + "</td></tr>";
+    }).join("");
+    root.innerHTML =
+        "<p>Signal years with a finished next year: " + s.completed_years + ". " +
+        "The #1 returner fell more than 30% the next year in " + rate(s.winner_down_30, s.winner_observed) +
+        " and more than 50% in " + rate(s.winner_down_50, s.winner_observed) + ". " +
+        "Across top-5 slots, more than 30% happened in " + rate(s.top5_down_30, s.top5_observed) +
+        " and more than 50% in " + rate(s.top5_down_50, s.top5_observed) + ".</p>" +
+        '<div class="callout"><div class="callout-title">Worst next years, #1</div><ul>' + worst(s.worst_winners) + "</ul>" +
+        '<div class="callout-title" style="margin-top:12px;">Worst next years, top 5</div><ul>' + worst(s.worst_top5) + "</ul></div>" +
+        '<div class="table-scroll"><table><thead><tr><th>Year</th><th>#1</th><th class="num">Year return</th><th class="num">Next year</th><th>Top 5 next-year returns</th></tr></thead><tbody>' +
+        years + "</tbody></table></div>";
 }
 
 function renderYearly(report) {
@@ -800,7 +1008,8 @@ function renderHoldings(report) {
             const signal = h.prior_year_return !== undefined && h.prior_year_return !== null
                 ? pct(h.prior_year_return, true)
                 : "—";
-            return "<tr><td><strong>" + h.ticker + "</strong></td><td>" + (h.name || "") + "</td>" +
+            const flag = h.flag ? "<div style=\"font-size:8pt;color:#64748B;\">" + h.flag + "</div>" : "";
+            return "<tr><td><strong>" + h.ticker + "</strong></td><td>" + (h.name || "") + flag + "</td>" +
                 '<td class="num">' + pct(h.weight, false) + "</td>" +
                 '<td class="num">' + signal + "</td>" +
                 '<td class="num">' + cap(h.market_cap) + "</td></tr>";
@@ -840,7 +1049,15 @@ function renderCaveats(report) {
 
 function select(id) {
     state.selected = id;
+    const report = state.reports.find((item) => item.id === id);
+    if (report) {
+        const group = family(report);
+        state.chartFilter = group === "current" || group === "pit" ? "pit" : group;
+    }
     history.replaceState(null, "", "#" + id);
+    renderFilters();
+    renderLegend();
+    renderCompare();
     renderDetail();
     const node = el("detail-title");
     if (node && node.scrollIntoView) node.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -898,10 +1115,15 @@ async function main() {
         const hash = decodeURIComponent(location.hash.replace("#", ""));
         state.selected = reports.some((r) => r.id === hash) ? hash : reports[0].id;
         el("app").classList.remove("hidden");
+        if (manifest.event_study) {
+            state.study = await fetch("results/" + manifest.event_study).then((response) => response.ok ? response.json() : null).catch(() => null);
+        }
         renderSummary();
+        renderFilters();
         renderLegend();
         renderCompare();
         renderDetail();
+        renderStudy();
         wireScale();
         wireHover();
         window.addEventListener("hashchange", () => {

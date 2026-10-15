@@ -8,7 +8,7 @@ from datetime import date
 
 from backtest_lab import __version__
 from backtest_lab.data import get_source
-from backtest_lab.report import write_report
+from backtest_lab.report import attach_benchmark, write_report
 from backtest_lab.strategies import STRATEGIES, VARIANT_IDS, get_strategy
 from backtest_lab.strategies.base import RunContext
 
@@ -28,6 +28,17 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument("--start", required=True, type=int, help="first calendar year to hold, e.g. 2015")
     run.add_argument("--end", default="today", help="today, a year (2024), or a date (2024-10-15)")
     run.add_argument("--source", default="yfinance", choices=["yfinance", "sharadar"])
+    run.add_argument(
+        "--universe",
+        default="sp500-current",
+        choices=["sp500-current", "sp500-pit", "us-listed"],
+        help="sp500-current (survivorship-biased), sp500-pit, or us-listed",
+    )
+    run.add_argument(
+        "--min-cap",
+        default=None,
+        help="size floor for us-listed, e.g. 10b or 2b",
+    )
     run.add_argument("--cost-bps", type=float, default=0.0, help="one-way cost in basis points (default 0)")
     run.add_argument("--capital", type=float, default=10_000.0)
     run.add_argument(
@@ -74,6 +85,14 @@ def markdown_table(out_dir) -> str:
     for item in manifest.get("reports", []):
         report = json.loads((out_dir / item["file"]).read_text())
         metrics = report["metrics"]
+        bias = report["data_source"]["survivorship_bias_free"]
+        universe = (report.get("universe") or {}).get("id", "")
+        if universe == "sp500-pit":
+            data = "free, point-in-time attempt"
+        elif bias:
+            data = "free source"
+        else:
+            data = "free, survivorship-biased"
         rows.append(
             [
                 report["name"],
@@ -84,9 +103,26 @@ def markdown_table(out_dir) -> str:
                 _num(metrics.get("sharpe")),
                 _money(metrics.get("final_equity")),
                 f"{report['start']} → {report['end']}",
-                "free, survivorship-biased" if not report["data_source"]["survivorship_bias_free"] else "free source",
+                data,
             ]
         )
+    if rows:
+        sample = json.loads((out_dir / manifest["reports"][0]["file"]).read_text())
+        bench = (sample.get("benchmark") or {}).get("metrics")
+        if bench:
+            rows.append(
+                [
+                    "S&P 500 (SPY)",
+                    _pct(bench.get("total_return")),
+                    _pct(bench.get("cagr")),
+                    _pct(bench.get("max_drawdown")),
+                    _pct(bench.get("volatility")),
+                    _num(bench.get("sharpe")),
+                    _money(bench.get("final_equity")),
+                    f"{bench.get('start')} → {bench.get('end')}",
+                    "reference, total return",
+                ]
+            )
     header = [
         "Strategy",
         "Total return",
@@ -105,7 +141,10 @@ def markdown_table(out_dir) -> str:
     for row in rows:
         lines.append("| " + " | ".join(row) + " |")
     lines.append("")
-    lines.append("Starting capital $10,000. No benchmark. Sharpe is annualized from daily returns with rf = 0.")
+    lines.append(
+        "Starting capital $10,000. SPY total return is a reference row, rebased to the same capital. "
+        "Sharpe is annualized from daily returns with rf = 0."
+    )
     return "\n".join(lines)
 
 
@@ -114,26 +153,27 @@ def _run(args, out) -> int:
     if args.start < 1990 or args.start > end.year:
         raise SystemExit(f"--start {args.start} is outside the end date {end.isoformat()}")
     source = get_source(args.source, refresh=args.refresh_data)
-    ctx = RunContext(
-        source=source,
-        start_year=args.start,
-        end=end,
-        capital=args.capital,
-        cost_bps=args.cost_bps,
-        rebalance=args.rebalance,
-        refresh_universe=args.refresh_universe,
-    )
-    if args.strategy == "all":
-        targets = [(strategy, None) for strategy in STRATEGIES]
-    else:
-        strategy = get_strategy(args.strategy)
-        only = args.strategy if args.strategy in VARIANT_IDS else None
-        targets = [(strategy, only)]
-
+    if args.strategy == "event-study":
+        return _event_study(args, source, end, out)
+    jobs = _jobs(args)
     failures = []
-    for strategy, only in targets:
+    spy = _spy_series(source, args.start, end)
+    for strategy, only, universe_id, min_cap in jobs:
         label = strategy.id if only is None else only
+        if universe_id != "sp500-current":
+            label = f"{label} [{universe_id}{'' if not min_cap else ' ' + _cap_tag(min_cap)}]"
         print(f"\n=== {label} ===")
+        ctx = RunContext(
+            source=source,
+            start_year=args.start,
+            end=end,
+            capital=args.capital,
+            cost_bps=args.cost_bps,
+            rebalance=args.rebalance,
+            refresh_universe=args.refresh_universe,
+            universe_id=universe_id,
+            min_market_cap=min_cap,
+        )
         try:
             if only is None:
                 reports = strategy.run(ctx)
@@ -144,6 +184,8 @@ def _run(args, out) -> int:
             print(f"FAILED {label}: {exc}", file=sys.stderr)
             continue
         for report in reports:
+            if spy is not None:
+                attach_benchmark(report, spy)
             path = write_report(report, out)
             _print_report(report, path)
     print("\n" + markdown_table(out))
@@ -155,11 +197,114 @@ def _run(args, out) -> int:
     return 0
 
 
+def _jobs(args):
+    universe_id = args.universe
+    min_cap = parse_min_cap(args.min_cap) if args.min_cap else None
+    rank = [item for item in STRATEGIES if item.id in {"best-returner", "top5-returners", "biggest", "top5-biggest"}]
+    returns_only = [item for item in rank if item.mode == "return"]
+    if args.strategy == "all":
+        return [(strategy, None, "sp500-current", None) for strategy in STRATEGIES]
+    if args.strategy == "pit":
+        return [(strategy, None, "sp500-pit", None) for strategy in rank]
+    if args.strategy == "size":
+        floors = [min_cap] if min_cap else [10_000_000_000.0, 2_000_000_000.0]
+        return [
+            (strategy, None, "us-listed", floor)
+            for floor in floors
+            for strategy in returns_only
+        ]
+    strategy = get_strategy(args.strategy)
+    only = args.strategy if args.strategy in VARIANT_IDS else None
+    return [(strategy, only, universe_id, min_cap)]
+
+
+def _event_study(args, source, end, out) -> int:
+    import json
+
+    from backtest_lab.data.adjust import apply_identity
+    from backtest_lab.data.sp500_pit import load_point_in_time
+    from backtest_lab.data.stooq import supplement
+    from backtest_lab.eventstudy import build_event_study
+
+    pit = load_point_in_time(refresh=args.refresh_universe)
+    tickers = pit.tickers_between(args.start - 1, end.year)
+    for rename in pit.renames():
+        if rename["new"] not in tickers:
+            tickers.append(rename["new"])
+    start = date(args.start - 2, 1, 1)
+    history = source.history(tickers, start, end)
+    status = supplement(history, tickers, start, end, source.cache_dir / "stooq")
+    adjusted, notes = apply_identity(history.adjusted_close, pit)
+    if status.blocked:
+        notes.append("Stooq returned a browser check, so it filled no delisted names.")
+    elif status.filled:
+        notes.append(f"Stooq filled {len(status.filled)} tickers. Those bars are price return, not total return.")
+    payload = build_event_study(adjusted, pit, args.start, end, notes)
+    out.mkdir(parents=True, exist_ok=True)
+    path = out / "event-study.json"
+    path.write_text(json.dumps(payload, indent=2) + "\n")
+    manifest_path = out / "manifest.json"
+    if manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text())
+    else:
+        manifest = {"title": "Backtest Lab", "reports": []}
+    manifest["event_study"] = "event-study.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+    summary = payload["summary"]
+    print(
+        f"event study {args.start}–{end.isoformat()}  "
+        f"completed years {summary['completed_years']}  "
+        f"#1 down >30% {summary['winner_down_30']}/{summary['winner_observed']}  "
+        f"#1 down >50% {summary['winner_down_50']}/{summary['winner_observed']}  "
+        f"top5 down >30% {summary['top5_down_30']}/{summary['top5_observed']}  "
+        f"top5 down >50% {summary['top5_down_50']}/{summary['top5_observed']}"
+    )
+    for row in payload["years"]:
+        names = ", ".join(row.get("unpriceable_names") or []) or "—"
+        print(f"  {row['year']}: members {row['members']}  priced {row['priced']}  unpriceable {row['unpriceable']}  {names}")
+    print(f"wrote {path}")
+    return 0
+
+
+def _spy_series(source, start_year: int, end):
+    try:
+        history = source.history(["SPY"], date(start_year - 2, 1, 1), end)
+    except Exception as exc:  # noqa: BLE001
+        print(f"SPY benchmark unavailable: {exc}", file=sys.stderr)
+        return None
+    frame = history.adjusted_close
+    if frame is None or "SPY" not in frame.columns:
+        print("SPY benchmark unavailable: no adjusted close", file=sys.stderr)
+        return None
+    return frame["SPY"].dropna()
+
+
+def parse_min_cap(value: str) -> float:
+    text = value.strip().lower().replace(",", "").replace("$", "").replace("_", "")
+    mult = 1.0
+    if text.endswith("b"):
+        mult = 1_000_000_000.0
+        text = text[:-1]
+    elif text.endswith("m"):
+        mult = 1_000_000.0
+        text = text[:-1]
+    return float(text) * mult
+
+
+def _cap_tag(value: float) -> str:
+    if value >= 1_000_000_000:
+        return f"{value / 1_000_000_000:.0f}b"
+    return f"{value / 1_000_000:.0f}m"
+
+
 def _print_list() -> None:
     print(f"backtest-lab {__version__}")
     for strategy in STRATEGIES:
         print(f"  {strategy.id:<16} {strategy.name}")
-    print("  all               run every strategy")
+    print("  all               run every strategy on today's S&P 500")
+    print("  pit               four rank books on the point-in-time S&P 500")
+    print("  size              best and top-5 returners at $10B and $2B")
+    print("  event-study       next-year returns of #1 and top 5 since --start")
     print("tqqq also writes tqqq-buy-hold and tqqq-two-bullet.")
 
 

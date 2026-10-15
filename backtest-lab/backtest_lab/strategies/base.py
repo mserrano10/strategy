@@ -22,3 +22,5 @@ class RunContext:
     cost_bps: float
     rebalance: str = "annual"
     refresh_universe: bool = False
+    universe_id: str = "sp500-current"
+    min_market_cap: float | None = None

@@ -25,6 +25,7 @@ class Holding:
     sector: str | None = None
     prior_year_return: float | None = None
     market_cap: float | None = None
+    flag: str | None = None
 
 
 @dataclass
@@ -166,6 +167,7 @@ def simulate_annual(
                         "weight": weights[holding.ticker],
                         "prior_year_return": holding.prior_year_return,
                         "market_cap": holding.market_cap,
+                        **({"flag": holding.flag} if holding.flag else {}),
                     }
                     for holding in book.holdings
                     if holding.ticker in weights
@@ -227,10 +229,11 @@ def prior_year_returns(adjusted: pd.DataFrame, year: int) -> pd.Series:
     start_days = adjusted.index[adjusted.index.year == year - 1]
     if len(end_days) == 0 or len(start_days) == 0:
         return pd.Series(dtype=float)
-    px1 = adjusted.loc[end_days[-1]]
-    px0 = adjusted.loc[start_days[-1]]
+    px1 = pd.to_numeric(adjusted.loc[end_days[-1]], errors="coerce")
+    px0 = pd.to_numeric(adjusted.loc[start_days[-1]], errors="coerce")
     ret = px1 / px0 - 1.0
-    ok = px0.gt(0) & px1.gt(0) & np.isfinite(ret)
+    finite = np.isfinite(pd.to_numeric(ret, errors="coerce").to_numpy(dtype=float, na_value=np.nan))
+    ok = px0.gt(0) & px1.gt(0) & pd.Series(finite, index=ret.index)
     return ret.where(ok).dropna()
 
 
@@ -238,7 +241,9 @@ def _usable_weights(book: Book, prices: pd.Series, old_shares: dict[str, float])
     warnings = []
     for ticker in old_shares:
         price = prices.get(ticker)
-        if price is None or not _positive(price):
+        # A bankruptcy wipe is a dust price, which is a real (total-loss) close.
+        # A missing close still cannot be sold.
+        if not _non_negative(price):
             raise ValueError(f"cannot sell {ticker} on {book.rebalance.date()}: missing close")
     kept = []
     for holding in book.holdings:
@@ -275,3 +280,11 @@ def _positive(value) -> bool:
     except (TypeError, ValueError):
         return False
     return number == number and number > 0
+
+
+def _non_negative(value) -> bool:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return False
+    return number == number and number >= 0

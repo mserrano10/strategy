@@ -57,6 +57,28 @@ def basis_from_current_shares(shares: float) -> pd.Series:
     return pd.Series({pd.Timestamp("1900-01-01"): float(shares)})
 
 
+# A split-adjusted close above this, paired with a live print under LIVE_PRINT_OK,
+# is Yahoo's reverse-split history blowing up. NVR and other real four-digit
+# stocks stay under it. Berkshire Hathaway class A is above both bounds, so the
+# live-print test keeps it.
+CORRUPT_CLOSE = 20_000.0
+LIVE_PRINT_OK = 10_000.0
+# Above the largest real company. A bigger "cap" is a broken share or price series.
+MAX_PLAUSIBLE_CAP = 15_000_000_000_000.0
+
+
+def corrupt_close_tickers(close: pd.DataFrame) -> list[str]:
+    """Tickers whose adjusted history is not a usable price."""
+    bad = []
+    for ticker in close.columns:
+        column = pd.to_numeric(close[ticker], errors="coerce").dropna()
+        if column.empty:
+            continue
+        if float(column.max()) > CORRUPT_CLOSE and float(column.iloc[-1]) < LIVE_PRINT_OK:
+            bad.append(str(ticker))
+    return bad
+
+
 def market_cap(basis: pd.Series, close: float, asof: pd.Timestamp) -> float | None:
     if basis is None or len(basis) == 0 or close is None or not (close > 0):
         return None
@@ -65,4 +87,7 @@ def market_cap(basis: pd.Series, close: float, asof: pd.Timestamp) -> float | No
     share_basis = float(before.iloc[-1] if len(before) else basis.iloc[0])
     if not (share_basis > 0):
         return None
-    return share_basis * float(close)
+    cap = share_basis * float(close)
+    if cap > MAX_PLAUSIBLE_CAP:
+        return None
+    return cap
