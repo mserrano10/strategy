@@ -53,10 +53,20 @@ def main(argv: list[str] | None = None) -> int:
     table = sub.add_parser("table", help="print the markdown table for results already on disk")
     table.add_argument("--out", default=None)
 
+    mark = sub.add_parser(
+        "forward-mark",
+        help="mark the frozen Oct 15, 2026 forward-test books; does not rerun backtests",
+    )
+    mark.add_argument("--refresh-data", action="store_true", help="ignore the local Yahoo cache")
+
     args = parser.parse_args(argv)
     if args.command == "list":
         _print_list()
         return 0
+    if args.command == "forward-mark":
+        from backtest_lab.forward import main_mark
+
+        return main_mark(refresh=args.refresh_data)
     out = _out_dir(getattr(args, "out", None))
     if args.command == "table":
         print(markdown_table(out))

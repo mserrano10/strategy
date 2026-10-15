@@ -171,6 +171,21 @@ market_cap(t) = shares(t*) × (splits after t*) × split_adjusted_close(t)
 - **Partial years.** The last calendar year is marked `partial` when the curve has not reached late December. `--end today` does that to the current year.
 - **Not advice.** This is a research ledger. It is not a recommendation to trade.
 
+## Forward test
+
+The forward test is a separate ledger. It does not rerun the backtests and it does not rewrite `results/<strategy>.json`.
+
+Each book is the 2026 cohort already in those files: the names the rule held after the 2025-12-31 close. The return starts at the Oct 15, 2026 official close, not at that rebalance. Point-in-time Best Returner and Top 5 Returners are their own sleeves. The two cap books match across the current list and the point-in-time list, so each has one sleeve. TQQQ buy-and-hold is not included. The two-bullet book is frozen at the sleeve weights after the May 26, 2026 limit exit (SPY and two BIL sleeves, no TQQQ). It is not reset to 90/10, and a new drawdown trigger is not taken.
+
+Frozen picks live in `forward/picks.json`. The page reads `results/forward-test.json`. Entry prices stay blank until the first completed cash session on or after Oct 15. A same-day Yahoo bar before 21:00 UTC is not that close.
+
+```bash
+cd backtest-lab
+python3 -m backtest_lab forward-mark
+```
+
+GitHub Actions runs that command at 21:30 UTC on weekdays (`.github/workflows/forward-test.yml`) and commits those two files.
+
 ## Tests
 
 ```bash
