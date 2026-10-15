@@ -791,30 +791,31 @@ function reportCells(report) {
     return "<td><strong>" + report.name + "</strong><br>" + badge(report) + "</td>" + metricTds(report.metrics);
 }
 
-function summaryBooks() {
-    return state.reports.filter(isShown).slice().sort((left, right) => {
-        const a = left.metrics && typeof left.metrics.cagr === "number" ? left.metrics.cagr : -Infinity;
-        const b = right.metrics && typeof right.metrics.cagr === "number" ? right.metrics.cagr : -Infinity;
-        return b - a;
-    });
+function cagrOf(metrics) {
+    return metrics && typeof metrics.cagr === "number" ? metrics.cagr : -Infinity;
 }
 
 function summaryMarkup() {
     const anchor = summaryAnchor();
     const bench = spySeries(anchor);
-    const rows = summaryBooks().map((report) =>
-        '<tr class="clickable" tabindex="0" data-open="' + report.id + '">' + reportCells(report) + "</tr>"
-    ).join("");
-    const spy = bench
-        ? "<tr><td>" + spyLabel() + "</td>" + metricTds(bench.metrics) + "</tr>"
-        : "";
+    const rows = state.reports.filter(isShown).map((report) => ({
+        cagr: cagrOf(report.metrics),
+        html: '<tr class="clickable" tabindex="0" data-open="' + report.id + '">' + reportCells(report) + "</tr>",
+    }));
+    if (bench) {
+        rows.push({
+            cagr: cagrOf(bench.metrics),
+            html: "<tr><td>" + spyLabel() + "</td>" + metricTds(bench.metrics) + "</tr>",
+        });
+    }
+    rows.sort((left, right) => right.cagr - left.cagr);
     const windowNote = bench && bench.metrics
         ? "<p>SPY is the current-list window, " + bench.metrics.start + " → " + bench.metrics.end + ".</p>"
         : "";
     const pitNote = SHOW_POINT_IN_TIME ? "" : " Point-in-time books are withheld until Sharadar.";
     return "<h2>Summary</h2>" +
-        "<p>Sorted by CAGR, highest first. SPY stays last as the reference." + pitNote + " Open a row for that idea’s variants, chart, and forward test. Sharpe uses daily returns, a 252-day year, and a risk-free rate of zero.</p>" +
-        '<div class="table-scroll"><table>' + TABLE_HEAD + "<tbody>" + rows + spy + "</tbody></table></div>" +
+        "<p>Sorted by CAGR, highest first, including SPY." + pitNote + " Open a row for that idea’s variants, chart, and forward test. Sharpe uses daily returns, a 252-day year, and a risk-free rate of zero.</p>" +
+        '<div class="table-scroll"><table>' + TABLE_HEAD + "<tbody>" + rows.map((row) => row.html).join("") + "</tbody></table></div>" +
         windowNote +
         studyMarkup();
 }
