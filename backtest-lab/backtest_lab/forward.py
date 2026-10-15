@@ -1,8 +1,10 @@
-"""Frozen forward test from the Oct 15, 2026 close.
+"""Forward test from the Oct 15, 2026 close.
 
 The annual books are the 2026 cohorts already published in ``results/``.
-This module does not rerun those backtests and does not rewrite their
-files. A daily job marks the frozen weights to market.
+Top 5 Biggest is the exception: the forward sleeve ranks companies, so
+Alphabet is one line. This module does not rerun those backtests and does
+not rewrite their files. A daily job marks the frozen weights, and it keeps
+stepping the two-bullet rules.
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ LABEL = "Forward test, live since Oct 15, 2026"
 INCEPTION = date(2026, 10, 15)
 CAPITAL = 10_000.0
 CLOSE_HOUR_UTC = 21
+PICKS_VERSION = 2
 
 # Current-list cap books and their point-in-time twins. Included once when
 # the 2026 holdings match. A mismatch is a hard error so a new name is not
@@ -45,12 +48,15 @@ BOOK_IDS = (
 )
 
 ENTRY_RULE = (
-    "Entry is the adjusted close on the first completed US cash session on or "
-    "after 2026-10-15. A same-day bar is not that close until 21:00 UTC, which "
-    "is after both the 20:00 UTC (EDT) and 21:00 UTC (EST) cash closes. "
-    "The entry price is written once and is not revised if Yahoo later restates "
-    "the historical print. Later marks divide that session's adjusted close by "
-    "the frozen entry."
+    "For the stock books, entry is the adjusted close on the first completed US "
+    "cash session on or after 2026-10-15. A same-day bar is not that close until "
+    "21:00 UTC, which is after both the 20:00 UTC (EDT) and 21:00 UTC (EST) cash "
+    "closes. The entry price is written once and is not revised if Yahoo later "
+    "restates the historical print. Later marks divide that session's adjusted "
+    "close by the frozen entry. The two-bullet book does not use those ratios. "
+    "It carries the engine state from the Oct 14, 2026 close and applies the "
+    "live rules on each forward session. Its chart is rebased so that session "
+    "equals the starting capital."
 )
 
 AMBIGUITIES = [
@@ -75,13 +81,17 @@ AMBIGUITIES = [
         "two-bullet sleeve."
     ),
     (
-        "The two-bullet book is frozen at the sleeve weights after the May 26, 2026 "
-        "limit exit: SPY plus two BIL sleeves, and no TQQQ. It is not reset to "
-        "90/10. A new drawdown trigger after inception is not taken."
+        "The two-bullet forward book keeps the live rules. The engine state is "
+        "taken at the Oct 14, 2026 close: SPY shares, both bullet cash balances, "
+        "and the unlocked high-water mark. Each new session can arm a bullet at "
+        "a 50% or 80% drawdown, buy 50/25/25 at the trigger and about 30 and 60 "
+        "days later, or sell at 10× the lowest close since the trigger."
     ),
     (
-        "Top 5 Biggest holds both GOOGL and GOOG. Both share classes are in the "
-        "S&P, and both ranked in the top five by approximated cap."
+        "Top 5 Biggest ranks companies. Alphabet counts once, as GOOGL, the larger "
+        "share class at the 2025 close. GOOG does not take a second slot, so the "
+        "fifth company is AMZN. The published backtest still lists both classes. "
+        "The current list and the point-in-time list agree on this forward cohort."
     ),
 ]
 
@@ -138,6 +148,7 @@ def build_picks(reports: Path | None = None) -> dict:
     _require_shared_cap_books(loaded)
     books = [_book_from_report(loaded[book_id], loaded) for book_id in BOOK_IDS]
     return {
+        "picks_version": PICKS_VERSION,
         "label": LABEL,
         "inception": INCEPTION.isoformat(),
         "initial_capital": CAPITAL,
@@ -227,6 +238,7 @@ def mark_to_market(
     *,
     now: datetime | None = None,
     prices: pd.DataFrame | None = None,
+    tqqq: dict | None = None,
     picks_file: Path | None = None,
     published_file: Path | None = None,
     reports: Path | None = None,
@@ -245,8 +257,8 @@ def mark_to_market(
     inception = date.fromisoformat(picks["inception"])
 
     if picks.get("entry_session"):
-        panel = prices if prices is not None else _fetch_prices(picks, inception, now, refresh)
-        published = _publish_live(picks, panel, now)
+        panel, tqqq = _panel_and_tape(picks, inception, now, refresh, prices, tqqq)
+        published = _publish_live(picks, panel, now, tqqq)
     elif not close_is_due(inception, now):
         published = _publish_waiting(
             picks,
@@ -254,7 +266,7 @@ def mark_to_market(
             "Entry prices lock at the Oct 15, 2026 close. That session is not complete yet, so these books have no return.",
         )
     else:
-        panel = prices if prices is not None else _fetch_prices(picks, inception, now, refresh)
+        panel, tqqq = _panel_and_tape(picks, inception, now, refresh, prices, tqqq)
         session = entry_session_date(panel, inception, now)
         if session is None or not _row_covers(panel, session, _tickers_to_price(picks)):
             published = _publish_waiting(
@@ -264,7 +276,7 @@ def mark_to_market(
             )
         else:
             picks = _lock_entries(picks, panel, session)
-            published = _publish_live(picks, panel, now)
+            published = _publish_live(picks, panel, now, tqqq)
 
     if write:
         _write_json(picks_file, picks)
@@ -324,10 +336,9 @@ def _book_from_report(report: dict, loaded: dict[str, dict]) -> dict:
     cohort = _cohort_2026(report)
     book_id = report["id"]
     if book_id == "tqqq-two-bullet":
-        holdings = [_tqqq_holding(row) for row in cohort["holdings"]]
-        derivation = _tqqq_derivation(report, cohort)
-        signal_date = cohort["period_end"]
-        also = None
+        return _tqqq_book()
+    if book_id == "top5-biggest":
+        return _top5_company_book(report, loaded)
     else:
         holdings = [_rank_holding(row) for row in cohort["holdings"]]
         derivation = _rank_derivation(report, cohort)
@@ -347,6 +358,149 @@ def _book_from_report(report: dict, loaded: dict[str, dict]) -> dict:
     if also:
         book["shared_sleeve"] = also
     return book
+
+
+def company_key(name: str) -> str:
+    """Share classes of one company share the name before the class label."""
+    text = name or ""
+    for marker in (" (Class ", " Class "):
+        if marker in text:
+            text = text.split(marker)[0]
+    return text.strip() or name
+
+
+def select_companies(rows: list[dict], n: int) -> list[dict]:
+    """Largest companies, one line each. The larger share class is the line kept."""
+    chosen: list[dict] = []
+    seen: set[str] = set()
+    ordered = sorted(rows, key=lambda row: (-float(row["market_cap"]), row["ticker"]))
+    for row in ordered:
+        key = company_key(row.get("name") or row["ticker"])
+        if key in seen:
+            continue
+        seen.add(key)
+        chosen.append(row)
+        if len(chosen) == n:
+            break
+    return chosen
+
+
+def _top5_company_book(report: dict, loaded: dict[str, dict]) -> dict:
+    rank = json.loads((lab_root() / "forward" / "cap-rank-2025.json").read_text())
+    current = select_companies(rank["current"], 5)
+    pit = select_companies(rank["pit"], 5)
+    if [row["ticker"] for row in current] != [row["ticker"] for row in pit]:
+        raise ValueError("current and point-in-time company ranks differ; Top 5 Biggest needs two sleeves")
+    holdings = []
+    for row in current:
+        holdings.append(
+            {
+                "ticker": row["ticker"],
+                "name": row["name"],
+                "weight": 0.2,
+                "prior_year_return": float(row["prior_year_return"]),
+                "market_cap": float(row["market_cap"]),
+                "entry_price": None,
+                "price_field": "adjusted_close",
+            }
+        )
+    _require_weights(report["id"], holdings)
+    names = ", ".join(row["ticker"] for row in holdings)
+    derivation = (
+        f"2026 cohort of {report['name']}, chosen at the {rank['signal_date']} close, ranked by company. "
+        "Signal: approximated market cap at the prior year-end close. "
+        "Universe: today's S&P 500. The point-in-time membership produces the same five companies, so the books share this sleeve. "
+        "Share classes of one company take one slot, and the slot is the larger class at that close. "
+        "Alphabet is held as GOOGL. "
+        f"The five companies are equal weight: {names}. "
+        "The published backtest still counts GOOG and GOOGL as two holdings. This forward book holds one Alphabet line. "
+        "The position is held until the next year-end close and is not re-ranked in this test. "
+        "The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included."
+    )
+    note = _shared_note("top5-biggest", loaded)
+    return {
+        "id": report["id"],
+        "name": report["name"],
+        "cohort_year": 2026,
+        "signal_date": rank["signal_date"],
+        "derivation": derivation,
+        "holdings": holdings,
+        "shared_sleeve": note,
+    }
+
+
+def _tqqq_book() -> dict:
+    state = json.loads((lab_root() / "forward" / "tqqq-handoff.json").read_text())
+    holdings = _handoff_holdings(state)
+    _require_weights("tqqq-two-bullet", holdings)
+    ath = float(state["ath"])
+    derivation = (
+        "Live two-bullet book. The engine is handed off at the "
+        f"{state['as_of']} close and then follows the rules from the Oct 15, 2026 close. "
+        f"The high-water mark is {ath:.4f} and is unlocked, because the cycle is flat after the "
+        "May 26, 2026 limit exit (both bullets sold at 80.80, ten times a floor of 8.08). "
+        f"Bullet 1 buys when the split-adjusted TQQQ close is at or below {ath * 0.5:.4f} "
+        "(50% below that mark). Bullet 2 buys at or below "
+        f"{ath * 0.2:.4f} (80% below the same locked mark). "
+        "Each bullet spends 50% of the cash it holds at the trigger, then 25% on the first "
+        "session on or after 30 calendar days and 25% after 60. "
+        "A limit sells every TQQQ share at 10× the lowest close since the trigger. "
+        "The SPY core is never rebalanced against the satellite. "
+        "A drawdown after inception is taken. TQQQ is marked on the split-adjusted close. "
+        "SPY and BIL use adjusted closes."
+    )
+    return {
+        "id": "tqqq-two-bullet",
+        "name": "TQQQ Two-Bullet 90/10",
+        "cohort_year": 2026,
+        "signal_date": state["as_of"],
+        "engine": "tqqq-two-bullet",
+        "derivation": derivation,
+        "handoff": state,
+        "rule_state": _rule_view(state),
+        "holdings": holdings,
+    }
+
+
+def _handoff_holdings(state: dict) -> list[dict]:
+    equity = float(state["equity"])
+    bullet1 = state["bullet1"]
+    bullet2 = state["bullet2"]
+    spy_value = equity - float(bullet1["cash"]) - float(bullet2["cash"])
+    if float(bullet1["shares"]) or float(bullet2["shares"]):
+        raise ValueError("the Oct 14 handoff still holds TQQQ; the sleeve split needs a TQQQ price")
+    rows = [
+        ("SPY", "SPDR S&P 500 ETF Trust", "core", spy_value, "adjusted_close"),
+        ("TQQQ", "Bullet 1 ProShares UltraPro QQQ", "bullet-1", 0.0, "split_adjusted_close"),
+        ("TQQQ", "Bullet 2 ProShares UltraPro QQQ", "bullet-2", 0.0, "split_adjusted_close"),
+        ("BIL", "Bullet 1 dry powder (Treasury-bill proxy)", "bullet-1", float(bullet1["cash"]), "adjusted_close"),
+        ("BIL", "Bullet 2 dry powder (Treasury-bill proxy)", "bullet-2", float(bullet2["cash"]), "adjusted_close"),
+    ]
+    holdings = []
+    for ticker, name, sleeve, value, field in rows:
+        holdings.append(
+            {
+                "ticker": ticker,
+                "name": name,
+                "sleeve": sleeve,
+                "weight": 0.0 if equity == 0 else value / equity,
+                "entry_price": None,
+                "price_field": field,
+            }
+        )
+    return holdings
+
+
+def _rule_view(state: dict | None) -> dict | None:
+    if not state:
+        return None
+    return {
+        "as_of": state.get("as_of"),
+        "high_water_mark": state.get("ath"),
+        "locked_high_water_mark": state.get("locked_ath"),
+        "cycle": state.get("cycle"),
+        "floor": state.get("floor"),
+    }
 
 
 def _rank_holding(row: dict) -> dict:
@@ -453,40 +607,15 @@ def _shared_note(book_id: str, loaded: dict[str, dict]) -> str | None:
     return None
 
 
-def _tqqq_derivation(report: dict, cohort: dict) -> str:
-    parts = []
-    for row in cohort["holdings"]:
-        parts.append(f"{row['name']} {float(row['weight']) * 100:.3f}%")
-    mix = "; ".join(parts)
-    sell = next(
-        (
-            event
-            for event in reversed(report.get("events") or [])
-            if event.get("type") == "cycle-end"
-        ),
-        None,
-    )
-    exit_sentence = ""
-    if sell:
-        exit_sentence = (
-            f"On {sell['date']} the cycle ended ({sell['detail']}) "
-        )
-    return (
-        f"Frozen sleeve mix of {report['name']} at the {cohort['period_end']} backtest mark, "
-        "not a new 90/10. "
-        f"{exit_sentence}"
-        "Weights at that mark, which already drift because the sleeves are never rebalanced: "
-        f"{mix}. "
-        "This test marks those weights. It does not arm a new 50% or 80% drawdown trigger, "
-        "and it does not buy TQQQ again. SPY and BIL use adjusted closes. "
-        "A TQQQ sleeve with a non-zero weight would use the split-adjusted close, matching the backtest rule. "
-        "The forward return starts at the Oct 15, 2026 close."
-    )
-
-
 def _load_or_build(path: Path, reports: Path | None) -> dict:
     if path.exists():
-        return json.loads(path.read_text())
+        payload = json.loads(path.read_text())
+        version = payload.get("picks_version")
+        # Files written by tests omit the version. A stale forward file carries
+        # an older version and is rebuilt. Entry prices are still blank until
+        # the Oct 15 close, so a rebuild does not throw away a lock.
+        if version is None or version == PICKS_VERSION:
+            return payload
     return build_picks(reports)
 
 
@@ -503,20 +632,42 @@ def _live_tickers(holdings: list[dict]) -> list[str]:
     return list(dict.fromkeys(row["ticker"] for row in holdings if float(row["weight"]) > 0))
 
 
-def _fetch_prices(picks: dict, inception: date, now: datetime, refresh: bool) -> pd.DataFrame:
+def _panel_and_tape(picks, inception, now, refresh, prices, tqqq):
+    if prices is not None:
+        return prices, tqqq
+    history = _fetch_history(picks, inception, now, refresh)
+    panel = history.adjusted_close
+    if panel is None or panel.empty:
+        panel = pd.DataFrame()
+    else:
+        panel = panel.sort_index()
+        panel = panel[~panel.index.duplicated(keep="last")]
+    tape = {
+        "close": history.close,
+        "high": history.high,
+        "open": history.open,
+        "adjusted_close": panel,
+    }
+    return panel, tape
+
+
+def _fetch_history(picks: dict, inception: date, now: datetime, refresh: bool):
     from datetime import timedelta
 
     from backtest_lab.data.yfinance_source import YFinanceSource
 
     source = YFinanceSource(refresh=refresh)
     start_date = inception - timedelta(days=10)
-    history = source.history(_tickers_to_price(picks), start_date, now.date())
-    panel = history.adjusted_close
-    if panel is None or panel.empty:
-        return pd.DataFrame()
-    panel = panel.sort_index()
-    panel = panel[~panel.index.duplicated(keep="last")]
-    return panel
+    return source.history(_symbols_to_fetch(picks), start_date, now.date())
+
+
+def _symbols_to_fetch(picks: dict) -> list[str]:
+    symbols = _tickers_to_price(picks)
+    if any(book.get("engine") == "tqqq-two-bullet" for book in picks["books"]):
+        for symbol in ("TQQQ", "SPY", "BIL"):
+            if symbol not in symbols:
+                symbols.append(symbol)
+    return symbols
 
 
 def _row_covers(panel: pd.DataFrame, session: date, tickers: list[str]) -> bool:
@@ -562,7 +713,7 @@ def _entries_from_picks(picks: dict) -> dict[str, float]:
     return entries
 
 
-def _publish_live(picks: dict, panel: pd.DataFrame, now: datetime) -> dict:
+def _publish_live(picks: dict, panel: pd.DataFrame, now: datetime, tqqq: dict | None = None) -> dict:
     entry_on = date.fromisoformat(picks["entry_session"])
     entries = _entries_from_picks(picks)
     capital = float(picks["initial_capital"])
@@ -570,10 +721,17 @@ def _publish_live(picks: dict, panel: pd.DataFrame, now: datetime) -> dict:
     spy_curve = mark_curve(spy_holdings, panel, entries, entry_on, capital, now)
     books = []
     for book in picks["books"]:
-        curve = mark_curve(book["holdings"], panel, entries, entry_on, capital, now)
         item = deepcopy(book)
-        item["equity"] = curve
-        item["metrics"] = _metrics(curve)
+        if book.get("engine") == "tqqq-two-bullet":
+            curve, holdings, events, rule_state = mark_two_bullet(book, tqqq, entry_on, now, capital)
+            item["equity"] = curve
+            item["events"] = events
+            item["rule_state"] = rule_state
+            if holdings:
+                item["holdings"] = holdings
+        else:
+            item["equity"] = mark_curve(book["holdings"], panel, entries, entry_on, capital, now)
+        item["metrics"] = _metrics(item["equity"])
         books.append(item)
     as_of = spy_curve[-1]["date"] if spy_curve else None
     return _payload(
@@ -599,12 +757,77 @@ def _publish_live(picks: dict, panel: pd.DataFrame, now: datetime) -> dict:
     )
 
 
+def mark_two_bullet(book: dict, tape: dict | None, entry_on: date, now: datetime, capital: float):
+    """Step the handed-off two-bullet engine through completed sessions and rebase to `capital`."""
+    from backtest_lab.strategies.tqqq import resume_two_bullet
+
+    handoff = book["handoff"]
+    view = _rule_view(handoff)
+    if not tape:
+        return [], [], [], view
+    close = _symbol_series(tape.get("close"), "TQQQ")
+    high = _symbol_series(tape.get("high"), "TQQQ")
+    opened = _symbol_series(tape.get("open"), "TQQQ")
+    spy = _symbol_series(tape.get("adjusted_close"), "SPY")
+    bil = _symbol_series(tape.get("adjusted_close"), "BIL")
+    close = _completed_sessions(close, now)
+    high = _completed_sessions(high, now)
+    opened = _completed_sessions(opened, now)
+    spy = _completed_sessions(spy, now)
+    bil = _completed_sessions(bil, now)
+    if close.empty:
+        return [], [], [], view
+    resumed = resume_two_bullet(handoff, spy, bil, close, high, opened, cost_bps=0.0)
+    points = []
+    for stamp, equity in resumed["equity"].items():
+        session = pd.Timestamp(stamp).date()
+        if session < entry_on:
+            continue
+        points.append((session, float(equity)))
+    if not points:
+        return [], [], [], view
+    scale = capital / points[0][1]
+    curve = [{"date": session.isoformat(), "equity": equity * scale} for session, equity in points]
+    holdings = [_snapshot_holding(row) for row in resumed["holdings"]]
+    events = [event for event in resumed["events"] if event["date"] >= entry_on.isoformat()]
+    return curve, holdings, events, _rule_view(resumed["state"])
+
+
+def _symbol_series(panel, symbol: str) -> pd.Series:
+    if panel is None or len(getattr(panel, "index", [])) == 0 or symbol not in getattr(panel, "columns", []):
+        return pd.Series(dtype=float)
+    series = panel[symbol].dropna().astype(float).sort_index()
+    return series[~series.index.duplicated(keep="last")]
+
+
+def _completed_sessions(series: pd.Series, now: datetime) -> pd.Series:
+    if series is None or series.empty:
+        return pd.Series(dtype=float)
+    keep = [stamp for stamp in series.index if session_complete(pd.Timestamp(stamp).date(), now)]
+    if not keep:
+        return pd.Series(dtype=float)
+    return series.loc[keep]
+
+
+def _snapshot_holding(row: dict) -> dict:
+    ticker = row["ticker"]
+    return {
+        "ticker": ticker,
+        "name": row["name"],
+        "sleeve": _sleeve_name(row["name"], ticker),
+        "weight": 0.0 if row.get("weight") is None else float(row["weight"]),
+        "entry_price": None,
+        "price_field": "split_adjusted_close" if ticker == "TQQQ" else "adjusted_close",
+    }
+
+
 def _publish_waiting(picks: dict, status: str, detail: str) -> dict:
     books = []
     for book in picks["books"]:
         item = deepcopy(book)
         item["equity"] = []
         item["metrics"] = None
+        item["events"] = []
         books.append(item)
     spy = {
         "name": "S&P 500 (SPY)",

@@ -244,11 +244,109 @@ def simulate_two_bullet(
         }
     ]
     warnings: list[str] = []
-    values: dict[pd.Timestamp, float] = {}
-    snapshots: list[dict] = []
     prev_bil = None
     year_ends = _year_end_set(dates)
+    values, snapshots, state = _advance_two_bullet(
+        dates=dates,
+        close=close,
+        high=high,
+        opened=opened,
+        spy=spy,
+        bil=bil,
+        cost_rate=cost_rate,
+        spy_shares=spy_shares,
+        bullet1=bullet1,
+        bullet2=bullet2,
+        ath=ath,
+        locked_ath=locked_ath,
+        floor=floor,
+        cycle=cycle,
+        prev_bil=prev_bil,
+        events=events,
+        year_ends=year_ends,
+    )
+    cohorts = _cohorts_from_snapshots(snapshots, capital)
+    equity_series = pd.Series(values, dtype=float).sort_index()
+    return {
+        "equity": equity_series,
+        "events": events,
+        "cohorts": cohorts,
+        "warnings": warnings,
+        "state": state,
+    }
 
+
+def resume_two_bullet(
+    state: dict,
+    spy_adj: pd.Series,
+    bil_adj: pd.Series,
+    tqqq_close: pd.Series,
+    tqqq_high: pd.Series,
+    tqqq_open: pd.Series,
+    cost_bps: float = 0.0,
+) -> dict:
+    """Continue a frozen two-bullet book. Sessions on or before ``state['as_of']`` are left as history."""
+    as_of = pd.Timestamp(state["as_of"]).tz_localize(None).normalize()
+    close = tqqq_close.astype(float).sort_index()
+    close = close[~close.index.duplicated(keep="last")]
+    dates = close.index[close.index > as_of]
+    if len(dates) == 0:
+        return {"equity": pd.Series(dtype=float), "events": [], "holdings": [], "state": state}
+    high = tqqq_high.reindex(close.index).astype(float).fillna(close)
+    opened = tqqq_open.reindex(close.index).astype(float).fillna(close)
+    spy = spy_adj.reindex(close.index).ffill().astype(float)
+    bil = bil_adj.reindex(close.index).ffill().astype(float)
+    window = dates
+    if spy.reindex(window).isna().any() or bil.reindex(window).isna().any() or close.reindex(window).isna().any():
+        raise ValueError("SPY, BIL, or TQQQ has a gap on a forward session")
+    bullet1 = _bullet_from_state(state["bullet1"])
+    bullet2 = _bullet_from_state(state["bullet2"])
+    events: list[dict] = []
+    values, snapshots, new_state = _advance_two_bullet(
+        dates=window,
+        close=close,
+        high=high,
+        opened=opened,
+        spy=spy,
+        bil=bil,
+        cost_rate=cost_bps / 10_000.0,
+        spy_shares=float(state["spy_shares"]),
+        bullet1=bullet1,
+        bullet2=bullet2,
+        ath=None if state.get("ath") is None else float(state["ath"]),
+        locked_ath=None if state.get("locked_ath") is None else float(state["locked_ath"]),
+        floor=None if state.get("floor") is None else float(state["floor"]),
+        cycle=bool(state["cycle"]),
+        prev_bil=None if state.get("prev_bil") is None else float(state["prev_bil"]),
+        events=events,
+        year_ends=set(),
+    )
+    equity = pd.Series(values, dtype=float).sort_index()
+    holdings = snapshots[-1]["holdings"] if snapshots else []
+    return {"equity": equity, "events": events, "holdings": holdings, "state": new_state}
+
+
+def _advance_two_bullet(
+    dates,
+    close,
+    high,
+    opened,
+    spy,
+    bil,
+    cost_rate,
+    spy_shares,
+    bullet1,
+    bullet2,
+    ath,
+    locked_ath,
+    floor,
+    cycle,
+    prev_bil,
+    events,
+    year_ends,
+):
+    values: dict[pd.Timestamp, float] = {}
+    snapshots: list[dict] = []
     for dt in dates:
         stamp = pd.Timestamp(dt)
         px = float(close.loc[dt])
@@ -316,14 +414,60 @@ def simulate_two_bullet(
         if stamp in year_ends or stamp == pd.Timestamp(dates[-1]):
             snapshots.append(_snapshot(stamp, equity, spy_shares, float(spy.loc[dt]), bullet1, bullet2, px))
 
-    cohorts = _cohorts_from_snapshots(snapshots, capital)
-    equity_series = pd.Series(values, dtype=float).sort_index()
+    state = _engine_state(
+        as_of=pd.Timestamp(dates[-1]),
+        spy_shares=spy_shares,
+        bullet1=bullet1,
+        bullet2=bullet2,
+        ath=ath,
+        locked_ath=locked_ath,
+        floor=floor,
+        cycle=cycle,
+        prev_bil=prev_bil,
+        equity=float(values[pd.Timestamp(dates[-1])]),
+    )
+    return values, snapshots, state
+
+
+def _engine_state(as_of, spy_shares, bullet1, bullet2, ath, locked_ath, floor, cycle, prev_bil, equity) -> dict:
     return {
-        "equity": equity_series,
-        "events": events,
-        "cohorts": cohorts,
-        "warnings": warnings,
+        "as_of": pd.Timestamp(as_of).date().isoformat(),
+        "spy_shares": float(spy_shares),
+        "ath": None if ath is None else float(ath),
+        "locked_ath": None if locked_ath is None else float(locked_ath),
+        "floor": None if floor is None else float(floor),
+        "cycle": bool(cycle),
+        "prev_bil": None if prev_bil is None else float(prev_bil),
+        "equity": float(equity),
+        "bullet1": _bullet_state(bullet1),
+        "bullet2": _bullet_state(bullet2),
     }
+
+
+def _bullet_state(bullet: _Bullet) -> dict:
+    trigger = None if bullet.trigger is None else pd.Timestamp(bullet.trigger).date().isoformat()
+    return {
+        "name": bullet.name,
+        "cash": float(bullet.cash),
+        "shares": float(bullet.shares),
+        "active": bool(bullet.active),
+        "trigger": trigger,
+        "budget": float(bullet.budget),
+        "tranches": int(bullet.tranches),
+    }
+
+
+def _bullet_from_state(payload: dict) -> _Bullet:
+    trigger = payload.get("trigger")
+    return _Bullet(
+        name=payload["name"],
+        cash=float(payload["cash"]),
+        shares=float(payload.get("shares") or 0.0),
+        active=bool(payload.get("active")),
+        trigger=None if not trigger else pd.Timestamp(trigger),
+        budget=float(payload.get("budget") or 0.0),
+        tranches=int(payload.get("tranches") or 0),
+    )
 
 
 def _drawn_down(price: float, ath: float, drawdown: float) -> bool:

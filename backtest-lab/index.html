@@ -506,7 +506,7 @@
         <div id="study"></div>
 
         <h2 id="forward-heading">11. Forward test, live since Oct 15, 2026</h2>
-        <p>Separate from the backtests above. Each book is the strategy's current-year cohort, marked from the Oct 15, 2026 close. The dashed line is SPY, started from the same $10,000.</p>
+        <p>Separate from the backtests above. Each stock book is the strategy's current-year cohort, marked from the Oct 15, 2026 close. Top 5 Biggest counts a company once. The two-bullet book keeps running its rules. The dashed line is SPY, started from the same $10,000.</p>
         <div id="forward"></div>
     </div>
 
@@ -1204,19 +1204,36 @@ function renderForward(payload) {
                 "</td><td class=\"num\">" + signal + "</td><td class=\"num\">" + cap(holding.market_cap) +
                 "</td><td class=\"num\">" + entry + "</td></tr>";
         }).join("");
+        const rule = book.rule_state
+            ? "<p>High-water mark " + Number(book.rule_state.high_water_mark).toFixed(2) +
+              (book.rule_state.cycle ? ", cycle open" : ", cycle flat") +
+              (book.rule_state.floor == null ? "" : ", floor " + Number(book.rule_state.floor).toFixed(2)) +
+              ". Rules stay live after the Oct 15, 2026 close.</p>"
+            : "";
+        const events = (book.events || []).map((event) =>
+            "<tr><td>" + esc(event.date) + "</td><td>" + esc(event.type) +
+            (event.bullet ? " · " + esc(event.bullet) : "") + "</td><td>" + esc(event.detail) + "</td></tr>"
+        ).join("");
+        const eventTable = events
+            ? '<div class="table-scroll"><table><thead><tr><th>Date</th><th>Event</th><th>Detail</th></tr></thead><tbody>' +
+              events + "</tbody></table></div>"
+            : "";
         const empty = !book.equity || !book.equity.length;
+        const waiting = book.engine === "tqqq-two-bullet"
+            ? "No mark yet. From the Oct 15, 2026 close the two-bullet rules stay live."
+            : "No mark yet. The first point is the Oct 15, 2026 close.";
         const chart = empty
-            ? '<p class="forward-empty">No mark yet. The first point is the Oct 15, 2026 close.</p>'
+            ? '<p class="forward-empty">' + waiting + "</p>"
             : '<div class="legend"><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;"><span class="swatch" style="background:#0F172A"></span>' +
               esc(book.name) + '</span><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;"><span class="swatch" style="background:' +
               SPY_COLOR + ';height:0;border-top:2px dashed ' + SPY_COLOR + '"></span>S&amp;P 500 (SPY)</span></div>' +
               '<div class="chart-wrap"><svg id="forward-chart-' + esc(book.id) + '" viewBox="0 0 880 220" role="img" aria-label="' +
               esc(book.name) + ' forward test"></svg></div>';
         return '<div class="forward-book"><p class="forward-name">' + esc(book.name) + "</p><p>" +
-            esc(book.derivation) + "</p><div class=\"table-scroll\"><table><thead><tr>" +
+            esc(book.derivation) + "</p>" + rule + "<div class=\"table-scroll\"><table><thead><tr>" +
             "<th>Ticker</th><th>Name</th><th>Sleeve</th><th class=\"num\">Weight</th>" +
             "<th class=\"num\">2025 return</th><th class=\"num\">Cap</th><th class=\"num\">Entry</th>" +
-            "</tr></thead><tbody>" + holdings + "</tbody></table></div>" + chart + "</div>";
+            "</tr></thead><tbody>" + holdings + "</tbody></table></div>" + eventTable + chart + "</div>";
     }).join("");
     root.innerHTML = header + table + cards;
     books.forEach((book) => {

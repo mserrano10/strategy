@@ -16,7 +16,9 @@ from backtest_lab.forward import (
     build_picks,
     close_is_due,
     mark_to_market,
+    mark_two_bullet,
     marked_equity,
+    select_companies,
     session_complete,
 )
 
@@ -58,7 +60,16 @@ class ForwardPickTests(unittest.TestCase):
             cohort = next(row for row in report["cohorts"] if row["year"] == 2026)
             frozen = [(row["ticker"], row["weight"]) for row in by_id[book_id]["holdings"]]
             published = [(row["ticker"], row["weight"]) for row in cohort["holdings"]]
-            self.assertEqual(frozen, published)
+            if book_id == "top5-biggest":
+                self.assertEqual(
+                    [row["ticker"] for row in by_id[book_id]["holdings"]],
+                    ["NVDA", "AAPL", "GOOGL", "MSFT", "AMZN"],
+                )
+            elif book_id == "tqqq-two-bullet":
+                self.assertEqual([row["ticker"] for row in by_id[book_id]["holdings"]], [row["ticker"] for row in cohort["holdings"]])
+                self.assertEqual(sum(row["weight"] for row in by_id[book_id]["holdings"] if row["ticker"] == "TQQQ"), 0.0)
+            else:
+                self.assertEqual(frozen, published)
             self.assertIn("Oct 15, 2026", by_id[book_id]["derivation"])
             if book_id == "tqqq-two-bullet":
                 self.assertEqual(by_id[book_id]["signal_date"], cohort["period_end"])
@@ -91,7 +102,7 @@ class ForwardPickTests(unittest.TestCase):
         self.assertEqual(by_id["biggest"]["holdings"][0]["ticker"], "NVDA")
         self.assertEqual(
             [row["ticker"] for row in by_id["top5-biggest"]["holdings"]],
-            ["NVDA", "AAPL", "GOOGL", "GOOG", "MSFT"],
+            ["NVDA", "AAPL", "GOOGL", "MSFT", "AMZN"],
         )
 
     def test_two_bullet_is_the_post_exit_mix(self):
@@ -102,8 +113,14 @@ class ForwardPickTests(unittest.TestCase):
         self.assertAlmostEqual(weights[("SPY", "core")], 0.6705914163902598)
         self.assertAlmostEqual(weights[("BIL", "bullet-1")], 0.2571593027697674)
         self.assertAlmostEqual(weights[("BIL", "bullet-2")], 0.07224928083997285)
-        self.assertIn("not a new 90/10", book["derivation"])
-        self.assertIn("2026-05-26", book["derivation"])
+        self.assertEqual(book["handoff"]["as_of"], "2026-10-14")
+        self.assertFalse(book["handoff"]["cycle"])
+        self.assertGreater(book["handoff"]["ath"], 80.8)
+        self.assertEqual(book["handoff"]["bullet1"]["shares"], 0.0)
+        self.assertEqual(book["handoff"]["bullet2"]["shares"], 0.0)
+        self.assertIn("50%", book["derivation"])
+        self.assertIn("10×", book["derivation"])
+        self.assertIn("May 26, 2026", book["derivation"])
 
     def test_size_floor_derivation_is_the_listing_universe(self):
         book = next(row for row in self.picks["books"] if row["id"] == "best-returner-10b")
@@ -115,7 +132,11 @@ class ForwardPickTests(unittest.TestCase):
         biggest = next(row for row in self.picks["books"] if row["id"] == "biggest")
         top5 = next(row for row in self.picks["books"] if row["id"] == "top5-biggest")
         self.assertIn("share this sleeve", biggest["derivation"])
-        self.assertIn("GOOG", top5["derivation"])
+        self.assertEqual(
+            [row["ticker"] for row in top5["holdings"]],
+            ["NVDA", "AAPL", "GOOGL", "MSFT", "AMZN"],
+        )
+        self.assertIn("ranked by company", top5["derivation"])
         self.assertNotIn("tqqq-buy-hold", [book["id"] for book in self.picks["books"]])
 
 
@@ -203,6 +224,51 @@ class MarkTests(unittest.TestCase):
         self.assertAlmostEqual(book["metrics"]["total_return"], 0.10)
         self.assertEqual(published["spy"]["name"], "S&P 500 (SPY)")
 
+    def test_companies_keep_the_larger_share_class(self):
+        rows = [
+            {"ticker": "GOOG", "name": "Alphabet Inc. (Class C)", "market_cap": 10},
+            {"ticker": "GOOGL", "name": "Alphabet Inc. (Class A)", "market_cap": 12},
+            {"ticker": "AMZN", "name": "Amazon", "market_cap": 9},
+            {"ticker": "ZZZ", "name": "Other", "market_cap": 1},
+        ]
+        picked = select_companies(rows, 2)
+        self.assertEqual([row["ticker"] for row in picked], ["GOOGL", "AMZN"])
+
+    def test_two_bullet_buys_the_first_tranche_on_a_fifty_percent_drawdown(self):
+        book = _flat_two_bullet_book()
+        index = pd.to_datetime(["2026-10-15", "2026-11-16"])
+        close = pd.DataFrame({"TQQQ": [50.0, 50.0]}, index=index)
+        high = close.copy()
+        opened = close.copy()
+        adjusted = pd.DataFrame({"SPY": [100.0, 100.0], "BIL": [100.0, 100.0]}, index=index)
+        tape = {"close": close, "high": high, "open": opened, "adjusted_close": adjusted}
+        now = datetime(2026, 11, 16, 21, 30, tzinfo=timezone.utc)
+        curve, holdings, events, rule = mark_two_bullet(
+            book, tape, date(2026, 10, 15), now, 10_000
+        )
+        self.assertEqual(curve[0]["equity"], 10_000)
+        buys = [event for event in events if event["type"] == "buy"]
+        self.assertEqual([event["date"] for event in buys], ["2026-10-15", "2026-11-16"])
+        self.assertEqual(buys[0]["bullet"], "bullet-1")
+        self.assertAlmostEqual(buys[0]["shares"], 5.0, places=6)
+        self.assertTrue(rule["cycle"])
+        self.assertEqual(rule["high_water_mark"], 100.0)
+        tqqq = [row for row in holdings if row["ticker"] == "TQQQ" and row["sleeve"] == "bullet-1"]
+        self.assertGreater(tqqq[0]["weight"], 0)
+
+    def test_two_bullet_ignores_a_forty_percent_drawdown(self):
+        book = _flat_two_bullet_book()
+        index = pd.to_datetime(["2026-10-15"])
+        close = pd.DataFrame({"TQQQ": [60.0]}, index=index)
+        adjusted = pd.DataFrame({"SPY": [100.0], "BIL": [100.0]}, index=index)
+        tape = {"close": close, "high": close.copy(), "open": close.copy(), "adjusted_close": adjusted}
+        now = datetime(2026, 10, 15, 21, 30, tzinfo=timezone.utc)
+        _curve, _holdings, events, rule = mark_two_bullet(
+            book, tape, date(2026, 10, 15), now, 10_000
+        )
+        self.assertEqual(events, [])
+        self.assertFalse(rule["cycle"])
+
     def test_equal_weight_book(self):
         holdings = [
             {"ticker": "AAA", "weight": 0.5},
@@ -233,6 +299,38 @@ class PageAndBacktestTests(unittest.TestCase):
         for book_id, total in BACKTEST_TOTALS.items():
             payload = json.loads((RESULTS / f"{book_id}.json").read_text())
             self.assertAlmostEqual(payload["metrics"]["total_return"], total, places=8)
+
+
+def _flat_two_bullet_book() -> dict:
+    state = {
+        "as_of": "2026-10-14",
+        "spy_shares": 90.0,
+        "ath": 100.0,
+        "locked_ath": None,
+        "floor": None,
+        "cycle": False,
+        "prev_bil": 100.0,
+        "equity": 10_000.0,
+        "bullet1": {
+            "name": "bullet-1",
+            "cash": 500.0,
+            "shares": 0.0,
+            "active": False,
+            "trigger": None,
+            "budget": 0.0,
+            "tranches": 0,
+        },
+        "bullet2": {
+            "name": "bullet-2",
+            "cash": 500.0,
+            "shares": 0.0,
+            "active": False,
+            "trigger": None,
+            "budget": 0.0,
+            "tranches": 0,
+        },
+    }
+    return {"handoff": state, "holdings": []}
 
 
 def _one_name_picks() -> dict:

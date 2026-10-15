@@ -1,0 +1,28 @@
+{
+  "as_of": "2026-10-14",
+  "spy_shares": 53.14182632141442,
+  "ath": 87.22000122070312,
+  "locked_ath": null,
+  "floor": null,
+  "cycle": false,
+  "prev_bil": 91.5199966430664,
+  "equity": 60987.87549665466,
+  "bullet1": {
+    "name": "bullet-1",
+    "cash": 15683.597644961097,
+    "shares": 0.0,
+    "active": false,
+    "trigger": null,
+    "budget": 0.0,
+    "tranches": 0
+  },
+  "bullet2": {
+    "name": "bullet-2",
+    "cash": 4406.329612140891,
+    "shares": 0.0,
+    "active": false,
+    "trigger": null,
+    "budget": 0.0,
+    "tranches": 0
+  }
+}

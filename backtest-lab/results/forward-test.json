@@ -6,14 +6,14 @@
   "as_of": null,
   "entry_session": null,
   "status_detail": "Entry prices lock at the Oct 15, 2026 close. That session is not complete yet, so these books have no return.",
-  "entry_rule": "Entry is the adjusted close on the first completed US cash session on or after 2026-10-15. A same-day bar is not that close until 21:00 UTC, which is after both the 20:00 UTC (EDT) and 21:00 UTC (EST) cash closes. The entry price is written once and is not revised if Yahoo later restates the historical print. Later marks divide that session's adjusted close by the frozen entry.",
+  "entry_rule": "For the stock books, entry is the adjusted close on the first completed US cash session on or after 2026-10-15. A same-day bar is not that close until 21:00 UTC, which is after both the 20:00 UTC (EDT) and 21:00 UTC (EST) cash closes. The entry price is written once and is not revised if Yahoo later restates the historical print. Later marks divide that session's adjusted close by the frozen entry. The two-bullet book does not use those ratios. It carries the engine state from the Oct 14, 2026 close and applies the live rules on each forward session. Its chart is rebased so that session equals the starting capital.",
   "ambiguities": [
     "The forward test starts at the Oct 15, 2026 close. A same-day Yahoo bar before 21:00 UTC is an intraday print and is not the entry. Until that close exists, entry prices stay blank and the books have no return.",
     "Annual books use the 2026 cohort chosen at the 2025-12-31 close. They are not re-ranked here. The backtest path from that rebalance through the last session before inception is not part of the forward return.",
     "Point-in-time Best Returner and Top 5 Returners are their own sleeves, because their 2026 names differ from the current-list books. Biggest and Top 5 Biggest hold the same names in both universes on this cohort, so each cap rule has one sleeve.",
     "TQQQ buy-and-hold is not in the forward test. The TQQQ book is the two-bullet sleeve.",
-    "The two-bullet book is frozen at the sleeve weights after the May 26, 2026 limit exit: SPY plus two BIL sleeves, and no TQQQ. It is not reset to 90/10. A new drawdown trigger after inception is not taken.",
-    "Top 5 Biggest holds both GOOGL and GOOG. Both share classes are in the S&P, and both ranked in the top five by approximated cap."
+    "The two-bullet forward book keeps the live rules. The engine state is taken at the Oct 14, 2026 close: SPY shares, both bullet cash balances, and the unlocked high-water mark. Each new session can arm a bullet at a 50% or 80% drawdown, buy 50/25/25 at the trigger and about 30 and 60 days later, or sell at 10\u00d7 the lowest close since the trigger.",
+    "Top 5 Biggest ranks companies. Alphabet counts once, as GOOGL, the larger share class at the 2025 close. GOOG does not take a second slot, so the fifth company is AMZN. The published backtest still lists both classes. The current list and the point-in-time list agree on this forward cohort."
   ],
   "separate_from_backtests": true,
   "spy": {
@@ -44,7 +44,8 @@
         }
       ],
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "best-returner-pit",
@@ -64,7 +65,8 @@
         }
       ],
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "best-returner-10b",
@@ -84,7 +86,8 @@
         }
       ],
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "best-returner-2b",
@@ -104,7 +107,8 @@
         }
       ],
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "top5-returners",
@@ -160,7 +164,8 @@
         }
       ],
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "top5-returners-pit",
@@ -216,7 +221,8 @@
         }
       ],
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "top5-returners-10b",
@@ -272,7 +278,8 @@
         }
       ],
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "top5-returners-2b",
@@ -328,7 +335,8 @@
         }
       ],
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "biggest",
@@ -349,14 +357,15 @@
       ],
       "shared_sleeve": "Biggest (point-in-time) holds the same names on this cohort, so the two books share this sleeve.",
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "top5-biggest",
       "name": "Top 5 Biggest",
       "cohort_year": 2026,
       "signal_date": "2025-12-31",
-      "derivation": "2026 cohort of Top 5 Biggest, chosen at the 2025-12-31 close. Signal: approximated market cap at the prior year-end close. Universe: today's S&P 500, applied to the 2025 signal year. 500 names were eligible out of 503. That list is survivorship-biased. The five names are equal weight. The position is held until the next year-end close and is not re-ranked in this test. Picks: NVDA (Nvidia, 2025 total return +38.9%, cap $4.541T at the signal close); AAPL (Apple Inc., 2025 total return +9.1%, cap $4.035T at the signal close); GOOGL (Alphabet Inc. (Class A), 2025 total return +66.0%, cap $3.791T at the signal close); GOOG (Alphabet Inc. (Class C), 2025 total return +65.4%, cap $3.788T at the signal close); MSFT (Microsoft, 2025 total return +15.6%, cap $3.595T at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included. Top 5 Biggest (point-in-time) holds the same names on this cohort, so the two books share this sleeve.",
+      "derivation": "2026 cohort of Top 5 Biggest, chosen at the 2025-12-31 close, ranked by company. Signal: approximated market cap at the prior year-end close. Universe: today's S&P 500. The point-in-time membership produces the same five companies, so the books share this sleeve. Share classes of one company take one slot, and the slot is the larger class at that close. Alphabet is held as GOOGL. The five companies are equal weight: NVDA, AAPL, GOOGL, MSFT, AMZN. The published backtest still counts GOOG and GOOGL as two holdings. This forward book holds one Alphabet line. The position is held until the next year-end close and is not re-ranked in this test. The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
       "holdings": [
         {
           "ticker": "NVDA",
@@ -386,15 +395,6 @@
           "price_field": "adjusted_close"
         },
         {
-          "ticker": "GOOG",
-          "name": "Alphabet Inc. (Class C)",
-          "weight": 0.2,
-          "prior_year_return": 0.6541775715953533,
-          "market_cap": 3788141138413.154,
-          "entry_price": null,
-          "price_field": "adjusted_close"
-        },
-        {
           "ticker": "MSFT",
           "name": "Microsoft",
           "weight": 0.2,
@@ -402,24 +402,70 @@
           "market_cap": 3594827887917.222,
           "entry_price": null,
           "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "AMZN",
+          "name": "Amazon",
+          "weight": 0.2,
+          "prior_year_return": 0.05209903808910643,
+          "market_cap": 2467515737956.5005,
+          "entry_price": null,
+          "price_field": "adjusted_close"
         }
       ],
       "shared_sleeve": "Top 5 Biggest (point-in-time) holds the same names on this cohort, so the two books share this sleeve.",
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     },
     {
       "id": "tqqq-two-bullet",
       "name": "TQQQ Two-Bullet 90/10",
       "cohort_year": 2026,
       "signal_date": "2026-10-14",
-      "derivation": "Frozen sleeve mix of TQQQ Two-Bullet 90/10 at the 2026-10-14 backtest mark, not a new 90/10. On 2026-05-26 the cycle ended (Limit filled at 80.8000. Satellite cash is back in BIL. A new cycle can start next session.) Weights at that mark, which already drift because the sleeves are never rebalanced: SPDR S&P 500 ETF Trust 67.059%; Bullet 1 ProShares UltraPro QQQ 0.000%; Bullet 2 ProShares UltraPro QQQ 0.000%; Bullet 1 dry powder (Treasury-bill proxy) 25.716%; Bullet 2 dry powder (Treasury-bill proxy) 7.225%. This test marks those weights. It does not arm a new 50% or 80% drawdown trigger, and it does not buy TQQQ again. SPY and BIL use adjusted closes. A TQQQ sleeve with a non-zero weight would use the split-adjusted close, matching the backtest rule. The forward return starts at the Oct 15, 2026 close.",
+      "engine": "tqqq-two-bullet",
+      "derivation": "Live two-bullet book. The engine is handed off at the 2026-10-14 close and then follows the rules from the Oct 15, 2026 close. The high-water mark is 87.2200 and is unlocked, because the cycle is flat after the May 26, 2026 limit exit (both bullets sold at 80.80, ten times a floor of 8.08). Bullet 1 buys when the split-adjusted TQQQ close is at or below 43.6100 (50% below that mark). Bullet 2 buys at or below 17.4440 (80% below the same locked mark). Each bullet spends 50% of the cash it holds at the trigger, then 25% on the first session on or after 30 calendar days and 25% after 60. A limit sells every TQQQ share at 10\u00d7 the lowest close since the trigger. The SPY core is never rebalanced against the satellite. A drawdown after inception is taken. TQQQ is marked on the split-adjusted close. SPY and BIL use adjusted closes.",
+      "handoff": {
+        "as_of": "2026-10-14",
+        "spy_shares": 53.14182632141442,
+        "ath": 87.22000122070312,
+        "locked_ath": null,
+        "floor": null,
+        "cycle": false,
+        "prev_bil": 91.5199966430664,
+        "equity": 60987.87549665466,
+        "bullet1": {
+          "name": "bullet-1",
+          "cash": 15683.597644961097,
+          "shares": 0.0,
+          "active": false,
+          "trigger": null,
+          "budget": 0.0,
+          "tranches": 0
+        },
+        "bullet2": {
+          "name": "bullet-2",
+          "cash": 4406.329612140891,
+          "shares": 0.0,
+          "active": false,
+          "trigger": null,
+          "budget": 0.0,
+          "tranches": 0
+        }
+      },
+      "rule_state": {
+        "as_of": "2026-10-14",
+        "high_water_mark": 87.22000122070312,
+        "locked_high_water_mark": null,
+        "cycle": false,
+        "floor": null
+      },
       "holdings": [
         {
           "ticker": "SPY",
           "name": "SPDR S&P 500 ETF Trust",
           "sleeve": "core",
-          "weight": 0.6705914163902598,
+          "weight": 0.6705914561951912,
           "entry_price": null,
           "price_field": "adjusted_close"
         },
@@ -443,7 +489,7 @@
           "ticker": "BIL",
           "name": "Bullet 1 dry powder (Treasury-bill proxy)",
           "sleeve": "bullet-1",
-          "weight": 0.2571593027697674,
+          "weight": 0.25715927169526315,
           "entry_price": null,
           "price_field": "adjusted_close"
         },
@@ -451,13 +497,14 @@
           "ticker": "BIL",
           "name": "Bullet 2 dry powder (Treasury-bill proxy)",
           "sleeve": "bullet-2",
-          "weight": 0.07224928083997285,
+          "weight": 0.0722492721095456,
           "entry_price": null,
           "price_field": "adjusted_close"
         }
       ],
       "equity": [],
-      "metrics": null
+      "metrics": null,
+      "events": []
     }
   ]
 }

@@ -1,0 +1,188 @@
+{
+  "signal_date": "2025-12-31",
+  "method": "Approximated market cap at the 2025 year-end close. One company: the larger share class is kept.",
+  "current": [
+    {
+      "ticker": "NVDA",
+      "name": "Nvidia",
+      "market_cap": 4540715500000.0,
+      "prior_year_return": 0.38916540459304416
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap": 4034508208011.4746,
+      "prior_year_return": 0.09052613334426618
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap": 3791094278022.0,
+      "prior_year_return": 0.6599359066612884
+    },
+    {
+      "ticker": "GOOG",
+      "name": "Alphabet Inc. (Class C)",
+      "market_cap": 3788141138413.154,
+      "prior_year_return": 0.6541775715953533
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "market_cap": 3594827887917.222,
+      "prior_year_return": 0.15584237329363515
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "market_cap": 2467515737956.5005,
+      "prior_year_return": 0.05209903808910643
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "market_cap": 1663775129193.6802,
+      "prior_year_return": 0.1309312942525831
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "market_cap": 1640954890772.3386,
+      "prior_year_return": 0.5063297715486017
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla, Inc.",
+      "market_cap": 1495687399843.078,
+      "prior_year_return": 0.11360936335891059
+    },
+    {
+      "ticker": "BRK-B",
+      "name": "Berkshire Hathaway",
+      "market_cap": 1084384296909.5737,
+      "prior_year_return": 0.1089172150770894
+    },
+    {
+      "ticker": "LLY",
+      "name": "Lilly (Eli)",
+      "market_cap": 963404197911.653,
+      "prior_year_return": 0.4024557479237567
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart",
+      "market_cap": 888255372699.4729,
+      "prior_year_return": 0.24489689639055
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase",
+      "market_cap": 886025690192.5132,
+      "prior_year_return": 0.3726630243832372
+    },
+    {
+      "ticker": "V",
+      "name": "Visa Inc.",
+      "market_cap": 676834217544.9095,
+      "prior_year_return": 0.11758294996157148
+    },
+    {
+      "ticker": "ORCL",
+      "name": "Oracle Corporation",
+      "market_cap": 560001778821.7163,
+      "prior_year_return": 0.18128087690696937
+    }
+  ],
+  "pit": [
+    {
+      "ticker": "NVDA",
+      "name": "Nvidia",
+      "market_cap": 4540715500000.0,
+      "prior_year_return": 0.38916540459304416
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap": 4034508208011.4746,
+      "prior_year_return": 0.09052613334426618
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap": 3791094278022.0,
+      "prior_year_return": 0.6599359066612884
+    },
+    {
+      "ticker": "GOOG",
+      "name": "Alphabet Inc. (Class C)",
+      "market_cap": 3788141138413.154,
+      "prior_year_return": 0.6541775715953533
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "market_cap": 3594827887917.222,
+      "prior_year_return": 0.15584237329363515
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "market_cap": 2467515737956.5005,
+      "prior_year_return": 0.05209903808910643
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "market_cap": 1663775129193.6802,
+      "prior_year_return": 0.1309312942525831
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "market_cap": 1640954890772.3386,
+      "prior_year_return": 0.5063297715486017
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla, Inc.",
+      "market_cap": 1495687399843.078,
+      "prior_year_return": 0.11360936335891059
+    },
+    {
+      "ticker": "BRK-B",
+      "name": "Berkshire Hathaway",
+      "market_cap": 1084384296909.5737,
+      "prior_year_return": 0.1089172150770894
+    },
+    {
+      "ticker": "LLY",
+      "name": "Lilly (Eli)",
+      "market_cap": 963404197911.653,
+      "prior_year_return": 0.4024557479237567
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart",
+      "market_cap": 888255372699.4729,
+      "prior_year_return": 0.24489689639055
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase",
+      "market_cap": 886025690192.5132,
+      "prior_year_return": 0.3726630243832372
+    },
+    {
+      "ticker": "V",
+      "name": "Visa Inc.",
+      "market_cap": 676834217544.9095,
+      "prior_year_return": 0.11758294996157148
+    },
+    {
+      "ticker": "ORCL",
+      "name": "Oracle Corporation",
+      "market_cap": 560001778821.7163,
+      "prior_year_return": 0.18128087690696937
+    }
+  ]
+}
