@@ -406,6 +406,27 @@
             .brand-header { flex-direction: column; align-items: flex-start; gap: 12px; }
             .meta-grid, .meta-grid.metrics { grid-template-columns: 1fr; }
             .header-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .tabbar {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                overscroll-behavior-x: contain;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x proximity;
+                margin-left: -20px;
+                margin-right: -20px;
+                padding: 0 20px 6px;
+                scrollbar-width: thin;
+                scrollbar-color: #CBD5E1 transparent;
+            }
+            .tabbar::-webkit-scrollbar { height: 4px; }
+            .tabbar::-webkit-scrollbar-thumb {
+                background: #CBD5E1;
+                border-radius: 4px;
+            }
+            .tabbar .pdf-btn {
+                flex: 0 0 auto;
+                scroll-snap-align: start;
+            }
         }
     </style>
 </head>
@@ -1146,6 +1167,17 @@ function renderTabs() {
         button.addEventListener("click", () => show(tab.id, null, "push"));
         bar.appendChild(button);
     });
+    revealActiveTab();
+}
+
+function revealActiveTab() {
+    const bar = el("tabbar");
+    const active = bar && bar.querySelector(".pdf-btn.active");
+    if (!active || bar.scrollWidth <= bar.clientWidth + 1) return;
+    const barRect = bar.getBoundingClientRect();
+    const activeRect = active.getBoundingClientRect();
+    const delta = activeRect.left - barRect.left - (bar.clientWidth - activeRect.width) / 2;
+    bar.scrollLeft += delta;
 }
 
 function render() {
