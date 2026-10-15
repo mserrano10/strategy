@@ -186,6 +186,7 @@ def _run(args, out) -> int:
         for report in reports:
             if spy is not None:
                 attach_benchmark(report, spy)
+                _attach_brackets(report, spy)
             path = write_report(report, out)
             _print_report(report, path)
     print("\n" + markdown_table(out))
@@ -239,7 +240,8 @@ def _event_study(args, source, end, out) -> int:
         notes.append("Stooq returned a browser check, so it filled no delisted names.")
     elif status.filled:
         notes.append(f"Stooq filled {len(status.filled)} tickers. Those bars are price return, not total return.")
-    payload = build_event_study(adjusted, pit, args.start, end, notes)
+    spy = _spy_series(source, args.start, end)
+    payload = build_event_study(adjusted, pit, args.start, end, notes, spy=spy)
     out.mkdir(parents=True, exist_ok=True)
     path = out / "event-study.json"
     path.write_text(json.dumps(payload, indent=2) + "\n")
@@ -259,11 +261,39 @@ def _event_study(args, source, end, out) -> int:
         f"top5 down >30% {summary['top5_down_30']}/{summary['top5_observed']}  "
         f"top5 down >50% {summary['top5_down_50']}/{summary['top5_observed']}"
     )
+    _print_distribution(summary.get("distribution"))
     for row in payload["years"]:
         names = ", ".join(row.get("unpriceable_names") or []) or "—"
         print(f"  {row['year']}: members {row['members']}  priced {row['priced']}  unpriceable {row['unpriceable']}  {names}")
     print(f"wrote {path}")
     return 0
+
+
+def _attach_brackets(report: dict, spy) -> None:
+    coverage = (report.get("universe") or {}).get("coverage")
+    cohorts = report.get("cohorts") or []
+    if not coverage or not cohorts or report.get("kind") != "annual-rank":
+        return
+    from backtest_lab.eventstudy import coverage_brackets
+
+    report["robustness"] = coverage_brackets(coverage, cohorts, spy, float(report["initial_capital"]))
+
+
+def _print_distribution(distribution: dict | None) -> None:
+    if not distribution:
+        return
+    for label, block in (("winner", distribution.get("winner")), ("top5", distribution.get("top5"))):
+        if not block:
+            continue
+        for scenario in ("excluded", "worst", "neutral"):
+            stats = block.get(scenario) or {}
+            print(
+                f"  {label} {scenario}: n={stats.get('n')}  "
+                f"median {_pct(stats.get('median'))}  mean {_pct(stats.get('mean'))}  "
+                f"hit vs SPY {_pct(stats.get('hit_rate_vs_spy'))}  "
+                f"<−30% {_pct(stats.get('pct_below_neg_30'))}  "
+                f"<−50% {_pct(stats.get('pct_below_neg_50'))}"
+            )
 
 
 def _spy_series(source, start_year: int, end):
@@ -319,6 +349,14 @@ def _print_report(report: dict, path) -> None:
         f"vol {_pct(metrics.get('volatility'))}  "
         f"Sharpe {_num(metrics.get('sharpe'))}"
     )
+    robustness = report.get("robustness")
+    if robustness:
+        print(
+            "  brackets  "
+            f"excluded {_pct(robustness['excluded'].get('total_return'))}  "
+            f"neutral {_pct(robustness['neutral'].get('total_return'))}  "
+            f"worst {_pct(robustness['worst'].get('total_return'))}"
+        )
     print(f"wrote {path}")
 
 

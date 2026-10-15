@@ -12,10 +12,16 @@ the portfolio math still has a number to hold.
 
 from __future__ import annotations
 
+import re
+
 import pandas as pd
 
 DUST = 1e-6
 CARRY_DAYS = 7
+_DEAL_PRICE = re.compile(
+    r"\$\s*((?:[0-9]{1,3}(?:,[0-9]{3})*|[0-9]+)(?:\.[0-9]+)?)\s+per share",
+    re.IGNORECASE,
+)
 
 
 def apply_identity(panel: pd.DataFrame, pit) -> tuple[pd.DataFrame, list[str]]:
@@ -24,7 +30,11 @@ def apply_identity(panel: pd.DataFrame, pit) -> tuple[pd.DataFrame, list[str]]:
     notes = []
     for rename in pit.renames():
         _stitch_rename(out, rename["old"], rename["new"], pd.Timestamp(rename["date"]))
-    spells = pit.spells()
+    spells = {ticker: list(ranges) for ticker, ranges in pit.spells().items()}
+    # A rename is not an exit. Keep the successor's prices on the old symbol
+    # for as long as the successor itself stays in the index.
+    for rename in pit.renames():
+        spells.setdefault(rename["old"], []).extend(spells.get(rename["new"]) or [])
     recycled = []
     for ticker in list(out.columns):
         ranges = spells.get(ticker)
@@ -36,6 +46,13 @@ def apply_identity(panel: pd.DataFrame, pit) -> tuple[pd.DataFrame, list[str]]:
         if ticker not in out.columns or not removal["bankruptcy"]:
             continue
         _wipe_until_reentry(out, ticker, pd.Timestamp(removal["date"]), spells.get(ticker) or [])
+    for ticker, removal in pit.removals().items():
+        if ticker not in out.columns or removal["bankruptcy"]:
+            continue
+        price = deal_price(removal.get("reason"))
+        if price is None:
+            continue
+        _fill_deal_exit(out, ticker, pd.Timestamp(removal["date"]), price, spells.get(ticker) or [])
     if recycled:
         preview = ", ".join(recycled[:8])
         suffix = "" if len(recycled) <= 8 else ", …"
@@ -50,20 +67,19 @@ def apply_identity(panel: pd.DataFrame, pit) -> tuple[pd.DataFrame, list[str]]:
 
 
 def _stitch_rename(panel: pd.DataFrame, old: str, new: str, when: pd.Timestamp) -> None:
+    """Fill gaps in `old` from `new`. `when` is the rename date, kept for callers.
+
+    Own prints on `old` win. The successor fills only missing cells, including
+    after the rename, so a held share does not stop the day the ticker changes.
+    """
+    del when
     if new not in panel.columns:
         return
-    successor = panel[new].copy()
-    cutoff = when + pd.Timedelta(days=CARRY_DAYS)
-    successor.loc[successor.index > cutoff] = pd.NA
+    successor = panel[new]
     if old not in panel.columns:
-        panel[old] = successor
+        panel[old] = successor.copy()
         return
-    current = panel[old]
-    before = current[(current.index <= cutoff) & current.notna() & (current > 0)]
-    if before.empty:
-        panel[old] = successor
-        return
-    gap = current.isna() & successor.notna() & (panel.index <= cutoff)
+    gap = panel[old].isna() & successor.notna()
     panel.loc[gap, old] = successor.loc[gap]
 
 
@@ -88,11 +104,20 @@ def _mask_to_spells(panel: pd.DataFrame, ticker: str, spells: list[tuple[pd.Time
         else:
             cutoff = end + pd.Timedelta(days=CARRY_DAYS)
             probe = column[(column.index >= start) & (column.index <= cutoff) & column.notna() & (column > 0)]
-            if nxt is None:
+            # A positive print before this exit means the later spell is the
+            # same issuer, temporarily out of the index (AMD, 2013–2017).
+            # Keep those prices. A series that only starts after the exit is
+            # a recycled ticker: blank the gap and the post-exit tail.
+            prior = column[(column.index <= end) & column.notna() & (column > 0)]
+            same_issuer = nxt is not None and len(prior) > 0
+            if same_issuer:
+                region = None
+            elif nxt is None:
                 region = panel.index > cutoff
             else:
                 region = (panel.index > cutoff) & (panel.index < nxt)
-            drop = drop | pd.Series(region, index=panel.index)
+            if region is not None:
+                drop = drop | pd.Series(region, index=panel.index)
         if len(probe):
             covered = True
     panel.loc[drop, ticker] = pd.NA
@@ -142,6 +167,44 @@ def _carry_year_end_prints(panel: pd.DataFrame) -> None:
             if prints.empty:
                 continue
             panel.at[end, ticker] = float(prints.iloc[-1])
+
+
+def deal_price(reason: str | None) -> float | None:
+    """Cash consideration when the Wikipedia note states a per-share price.
+
+    The selected-changes table usually names the buyer and not the price.
+    A match is used only as an exit fill where no print exists on or after
+    the removal. It is not a second price source for a ranking return.
+    """
+    match = _DEAL_PRICE.search(reason or "")
+    if not match:
+        return None
+    try:
+        return float(match.group(1).replace(",", ""))
+    except ValueError:
+        return None
+
+
+def _fill_deal_exit(panel: pd.DataFrame, ticker: str, when: pd.Timestamp, price: float, spells) -> None:
+    column = panel[ticker]
+    prior = column[(column.index < when) & column.notna() & (column > 0)]
+    if prior.empty or price <= 0:
+        return
+    after = column[(column.index >= when) & column.notna() & (column > 0)]
+    if len(after):
+        return
+    nxt = None
+    for start, _end in spells:
+        if start > when:
+            nxt = start
+            break
+    if nxt is None:
+        region = panel.index >= when
+    else:
+        region = (panel.index >= when) & (panel.index < nxt)
+    if not region.any():
+        return
+    panel.loc[region, ticker] = float(price)
 
 
 def _positive(value) -> bool:

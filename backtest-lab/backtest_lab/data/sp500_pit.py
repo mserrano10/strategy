@@ -1,11 +1,13 @@
-"""Point-in-time S&P 500 membership from Wikipedia.
+"""Point-in-time S&P 500 membership.
 
-Start from today's constituents on "List of S&P 500 companies" and walk
-backward through the selected-changes table. That table now lives on
-"Historical components of the S&P 500", which the list page links to.
-A change dated after the as-of day is undone: the added ticker comes out,
-the removed ticker goes back in. A current constituent is also kept out
-until its own "Date added".
+When `universes/sp500_constituents_fja.csv` is present, year-end membership
+is the last snapshot on or before that date from the fja05680/sp500 history
+(1996 onward). Wikipedia's selected-changes table still supplies bankruptcy
+and rename notes, and it extends the last snapshot forward to today.
+
+Without that file, membership falls back to today's constituents on
+"List of S&P 500 companies", walked backward through the selected-changes
+table. A change dated after the as-of day is undone.
 """
 
 from __future__ import annotations
@@ -22,6 +24,21 @@ CHANGES_PAGE = "https://en.wikipedia.org/wiki/Historical_components_of_the_S%26P
 
 BANKRUPTCY_WORDS = ("bankrupt", "chapter 7", "chapter 11", "liquidat")
 RENAME_WORDS = ("ticker", "symbol", "renamed", "name change")
+# A same-day replacement with any of these words is a different company,
+# not a ticker continuation. "market cap" is how Wikipedia labels an
+# ordinary index swap.
+SWAP_WORDS = (
+    "acqui",
+    "bankrupt",
+    "spin",
+    "merger",
+    "split-off",
+    "split off",
+    "receivership",
+    "market cap",
+)
+CONSTITUENTS_FILE = "sp500_constituents_fja.csv"
+ALIAS_LAG_DAYS = 180
 
 
 def load_point_in_time(refresh: bool = False, cache_dir=None) -> "PointInTimeSP500":
@@ -32,11 +49,14 @@ def load_point_in_time(refresh: bool = False, cache_dir=None) -> "PointInTimeSP5
         root = Path(cache_dir)
     current_path = root / "sp500_pit_current.csv"
     changes_path = root / "sp500_changes.csv"
+    constituents_path = root / CONSTITUENTS_FILE
     if not refresh and current_path.exists() and changes_path.exists():
         current = pd.read_csv(current_path, comment="#")
         changes = pd.read_csv(changes_path, comment="#")
         changes["date"] = pd.to_datetime(changes["date"])
-        return PointInTimeSP500(current, changes, source="cache")
+        constituents = _read_constituents(constituents_path)
+        source = "fja05680/sp500 + wikipedia" if constituents is not None else "cache"
+        return PointInTimeSP500(current, changes, source=source, constituents=constituents)
     current, changes = fetch_wikipedia()
     root.mkdir(parents=True, exist_ok=True)
     stamp = date.today().isoformat()
@@ -50,7 +70,9 @@ def load_point_in_time(refresh: bool = False, cache_dir=None) -> "PointInTimeSP5
         + changes.to_csv(index=False)
     )
     print(f"saved point-in-time tables → {current_path.parent} ({len(current)} names, {len(changes)} changes)")
-    return PointInTimeSP500(current, changes, source="wikipedia")
+    constituents = _read_constituents(constituents_path)
+    source = "fja05680/sp500 + wikipedia" if constituents is not None else "wikipedia"
+    return PointInTimeSP500(current, changes, source=source, constituents=constituents)
 
 
 def fetch_wikipedia() -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -64,7 +86,13 @@ def fetch_wikipedia() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 class PointInTimeSP500:
-    def __init__(self, current: pd.DataFrame, changes: pd.DataFrame, source: str = "wikipedia"):
+    def __init__(
+        self,
+        current: pd.DataFrame,
+        changes: pd.DataFrame,
+        source: str = "wikipedia",
+        constituents: pd.DataFrame | None = None,
+    ):
         self.source = source
         self.current = _normalize_current(current)
         self.changes = _normalize_changes(changes)
@@ -73,10 +101,40 @@ class PointInTimeSP500:
             self.current.set_index("ticker")["sector"].to_dict() if "sector" in self.current.columns else {}
         )
         self._removals = _removal_index(self.changes)
-        self._renames = _rename_index(self.changes)
+        self._snapshots = _snapshot_list(constituents)
+        self._alias = _alias_map(self._snapshots, self.current, self.changes)
+        self._renames = _rename_index(self.changes, self._alias)
 
     def members_on(self, asof) -> pd.DataFrame:
         asof = pd.Timestamp(asof)
+        if self._snapshots and asof >= self._snapshots[0][0]:
+            members = set(self._snapshot_on(asof))
+            last = self._snapshots[-1][0]
+            if asof > last:
+                # The vendored file ends before today. Walk Wikipedia forward
+                # from that last snapshot so a later addition or removal counts.
+                forward = self.changes[(self.changes["date"] > last) & (self.changes["date"] <= asof)].sort_values("date")
+                for row in forward.itertuples(index=False):
+                    removed = _ticker(row.removed)
+                    added = _ticker(row.added)
+                    if removed:
+                        members.discard(removed)
+                    if added:
+                        members.add(added)
+        else:
+            members = self._walk_wikipedia(asof)
+        rows = []
+        for ticker in sorted(members):
+            rows.append(
+                {
+                    "ticker": ticker,
+                    "name": self.names.get(ticker, ""),
+                    "sector": self.sectors.get(ticker, ""),
+                }
+            )
+        return pd.DataFrame(rows, columns=["ticker", "name", "sector"])
+
+    def _walk_wikipedia(self, asof: pd.Timestamp) -> set[str]:
         members = set()
         for row in self.current.itertuples(index=False):
             added = row.date_added
@@ -93,16 +151,15 @@ class PointInTimeSP500:
                 members.discard(added)
             if removed:
                 members.add(removed)
-        rows = []
-        for ticker in sorted(members):
-            rows.append(
-                {
-                    "ticker": ticker,
-                    "name": self.names.get(ticker, ""),
-                    "sector": self.sectors.get(ticker, ""),
-                }
-            )
-        return pd.DataFrame(rows, columns=["ticker", "name", "sector"])
+        return members
+
+    def _snapshot_on(self, asof: pd.Timestamp) -> frozenset[str]:
+        chosen = self._snapshots[0][1]
+        for day, members in self._snapshots:
+            if day > asof:
+                break
+            chosen = members
+        return chosen
 
     def removal(self, ticker: str) -> dict | None:
         return self._removals.get(ticker)
@@ -126,19 +183,27 @@ class PointInTimeSP500:
     def spells(self) -> dict[str, list[tuple[pd.Timestamp, pd.Timestamp | None]]]:
         """Membership intervals. The end is exclusive, or None while still a member.
 
-        Intervals follow `members_on`, so a ticker that left and later came back
-        (McKesson, or a reused symbol) has two spells. Prices outside a spell
-        are not that spell's company.
+        With the fja snapshot file, intervals follow those snapshots. Otherwise
+        they follow `members_on`. A ticker that left and later came back has
+        two spells.
         """
         cached = getattr(self, "_spells", None)
         if cached is not None:
             return cached
-        bounds = {pd.Timestamp("1950-01-01"), pd.Timestamp("2099-12-31")}
-        bounds.update(pd.Timestamp(value) for value in self.changes["date"])
-        if "date_added" in self.current.columns:
-            bounds.update(pd.Timestamp(value) for value in self.current["date_added"].dropna())
-        dates = sorted(bounds)
-        snapshots = [(day, set(self.members_on(day)["ticker"])) for day in dates]
+        if self._snapshots:
+            snapshots = list(self._snapshots)
+            if snapshots[-1][1]:
+                # Keep a terminal bound so a name that leaves via a Wikipedia
+                # change after the file's last row still gets a closed spell.
+                tail = self._walk_forward_tail(snapshots[-1])
+                snapshots = snapshots[:-1] + tail
+        else:
+            bounds = {pd.Timestamp("1950-01-01"), pd.Timestamp("2099-12-31")}
+            bounds.update(pd.Timestamp(value) for value in self.changes["date"])
+            if "date_added" in self.current.columns:
+                bounds.update(pd.Timestamp(value) for value in self.current["date_added"].dropna())
+            dates = sorted(bounds)
+            snapshots = [(day, set(self.members_on(day)["ticker"])) for day in dates]
         found: dict[str, list[tuple[pd.Timestamp, pd.Timestamp | None]]] = {}
         open_start: dict[str, pd.Timestamp] = {}
         seen: set[str] = set()
@@ -149,11 +214,26 @@ class PointInTimeSP500:
                 found.setdefault(ticker, []).append((start, day))
             for ticker in members - seen:
                 open_start[ticker] = day
-            seen = members
+            seen = set(members)
         for ticker, start in open_start.items():
             found.setdefault(ticker, []).append((start, None))
         self._spells = found
         return found
+
+    def _walk_forward_tail(self, last):
+        day, members = last
+        series = [(day, set(members))]
+        forward = self.changes[self.changes["date"] > day].sort_values("date")
+        current = set(members)
+        for row in forward.itertuples(index=False):
+            removed = _ticker(row.removed)
+            added = _ticker(row.added)
+            if removed:
+                current.discard(removed)
+            if added:
+                current.add(added)
+            series.append((pd.Timestamp(row.date), set(current)))
+        return series
 
 
 def is_bankruptcy(reason: str | None) -> bool:
@@ -308,8 +388,9 @@ def _removal_index(changes: pd.DataFrame) -> dict[str, dict]:
     return found
 
 
-def _rename_index(changes: pd.DataFrame) -> list[dict]:
+def _rename_index(changes: pd.DataFrame, aliases: dict[str, tuple[str, pd.Timestamp]]) -> list[dict]:
     rows = []
+    seen = set()
     for row in changes.itertuples(index=False):
         old = _ticker(row.removed)
         new = _ticker(row.added)
@@ -322,4 +403,125 @@ def _rename_index(changes: pd.DataFrame) -> list[dict]:
                     "reason": row.reason,
                 }
             )
+            seen.add(old)
+    for old, (new, when) in aliases.items():
+        if old in seen:
+            continue
+        rows.append(
+            {
+                "date": pd.Timestamp(when),
+                "old": old,
+                "new": new,
+                "reason": "Ticker continuation. The historical symbol is priced from the later symbol.",
+            }
+        )
     return rows
+
+
+def _read_constituents(path) -> pd.DataFrame | None:
+    if not path.exists():
+        return None
+    frame = pd.read_csv(path)
+    if "date" not in frame.columns or "tickers" not in frame.columns:
+        raise RuntimeError(f"{path} is not a date,tickers constituent file")
+    frame = frame.copy()
+    frame["date"] = pd.to_datetime(frame["date"])
+    frame = frame.dropna(subset=["date"]).sort_values("date")
+    if len(frame) < 100:
+        raise RuntimeError(f"{path} has too few constituent snapshots ({len(frame)})")
+    return frame.reset_index(drop=True)
+
+
+def _snapshot_list(constituents: pd.DataFrame | None) -> list[tuple[pd.Timestamp, frozenset[str]]]:
+    if constituents is None or len(constituents) == 0:
+        return []
+    constituents = constituents.sort_values("date")
+    snapshots = []
+    for row in constituents.itertuples(index=False):
+        members = set()
+        for raw in str(row.tickers).split(","):
+            text = raw.strip()
+            # Removed names in some editions carry a -YYYYMM suffix.
+            if len(text) > 7 and text[-7] == "-" and text[-6:].isdigit():
+                text = text[:-7]
+            ticker = yahoo_symbol(text)
+            if ticker:
+                members.add(ticker)
+        snapshots.append((pd.Timestamp(row.date), frozenset(members)))
+    return snapshots
+
+
+def _alias_map(snapshots, current: pd.DataFrame, changes: pd.DataFrame) -> dict[str, tuple[str, pd.Timestamp]]:
+    """Map a retired symbol onto the later symbol that still has the history.
+
+    A link is kept only when two facts agree: the snapshot file shows the
+    old symbol leaving as the new one appears, and Wikipedia's current list
+    dates that company to well before the symbol change (or, from 2019 on,
+    Wikipedia has no row calling the day a swap, acquisition, or spin).
+    An acquisition that merely replaces one member with another does not link.
+    """
+    if not snapshots:
+        return {}
+    first: dict[str, pd.Timestamp] = {}
+    for day, members in snapshots:
+        for ticker in members:
+            first.setdefault(ticker, day)
+    date_added = {}
+    if "date_added" in current.columns:
+        for row in current.itertuples(index=False):
+            if row.date_added is not None and not pd.isna(row.date_added):
+                date_added[row.ticker] = pd.Timestamp(row.date_added)
+    reasons: dict[pd.Timestamp, list[str]] = {}
+    for row in changes.itertuples(index=False):
+        reasons.setdefault(pd.Timestamp(row.date), []).append(str(row.reason or ""))
+    direct: list[tuple[pd.Timestamp, str, str]] = []
+    for (day0, before), (day1, after) in zip(snapshots, snapshots[1:]):
+        added = set(after - before)
+        removed = set(before - after)
+        if not added or not removed:
+            continue
+        text = " ".join(reasons.get(day1, [])).lower()
+        hostile = any(word in text for word in SWAP_WORDS)
+        rename_language = is_rename(text)
+        if hostile and not rename_language:
+            continue
+        continuations = []
+        for ticker in added:
+            origin = date_added.get(ticker)
+            if origin is None or first.get(ticker) != day1:
+                continue
+            if (day1 - origin).days < ALIAS_LAG_DAYS:
+                continue
+            continuations.append(ticker)
+        if len(removed) == 1 and len(continuations) == 1:
+            others = added - set(continuations)
+            others_ok = all(_is_fresh_add(ticker, day1, date_added) for ticker in others)
+            if others_ok:
+                direct.append((day1, next(iter(removed)), continuations[0]))
+                continue
+        if len(removed) == 1 and len(added) == 1 and day1.year >= 2019:
+            old = next(iter(removed))
+            new = next(iter(added))
+            if first.get(new) != day1:
+                continue
+            origin = date_added.get(new)
+            if origin is not None and (day1 - origin).days < ALIAS_LAG_DAYS:
+                continue
+            if reasons.get(day1) and not rename_language:
+                continue
+            direct.append((day1, old, new))
+    # Newest first, so FB → META and an earlier symbol → FB both land on META.
+    resolved: dict[str, tuple[str, pd.Timestamp]] = {}
+    roots: dict[str, str] = {}
+    for when, old, new in sorted(direct, key=lambda item: item[0], reverse=True):
+        root = roots.get(new, new)
+        roots[old] = root
+        resolved[old] = (root, when)
+    return resolved
+
+
+def _is_fresh_add(ticker: str, day: pd.Timestamp, date_added: dict) -> bool:
+    origin = date_added.get(ticker)
+    if origin is None:
+        return True
+    return abs((day - origin).days) <= 45

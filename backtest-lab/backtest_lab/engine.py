@@ -219,6 +219,13 @@ def cohort_windows(
     return windows
 
 
+# A prior-year move above this multiple (+1000%) is dropped unless a second
+# vendor confirms the print. Yahoo's close and adjusted close are the same
+# split adjustment, so they are not two sources. No free second source
+# confirmed any of these on this run, so every one is dropped.
+EXTREME_ANNUAL_RETURN = 10.0
+
+
 def prior_year_returns(adjusted: pd.DataFrame, year: int) -> pd.Series:
     """Total return over calendar `year`, year-end close to year-end close.
 
@@ -235,6 +242,16 @@ def prior_year_returns(adjusted: pd.DataFrame, year: int) -> pd.Series:
     finite = np.isfinite(pd.to_numeric(ret, errors="coerce").to_numpy(dtype=float, na_value=np.nan))
     ok = px0.gt(0) & px1.gt(0) & pd.Series(finite, index=ret.index)
     return ret.where(ok).dropna()
+
+
+def without_unverified_extremes(scores: pd.Series) -> tuple[pd.Series, list[str]]:
+    """Drop annual returns above +1000%. Those prints were not verified."""
+    if scores is None or len(scores) == 0:
+        return scores, []
+    clean = scores.dropna()
+    extreme = clean[clean > EXTREME_ANNUAL_RETURN]
+    kept = clean[clean <= EXTREME_ANNUAL_RETURN]
+    return kept, sorted(extreme.index.astype(str))
 
 
 def _usable_weights(book: Book, prices: pd.Series, old_shares: dict[str, float]) -> tuple[dict[str, float], list[str]]:

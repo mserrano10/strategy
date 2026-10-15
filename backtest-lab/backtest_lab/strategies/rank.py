@@ -12,7 +12,14 @@ from datetime import date
 import pandas as pd
 
 from backtest_lab.data.caps import corrupt_close_tickers, market_cap
-from backtest_lab.engine import Book, Holding, cohort_windows, prior_year_returns, simulate_annual
+from backtest_lab.engine import (
+    Book,
+    Holding,
+    cohort_windows,
+    prior_year_returns,
+    simulate_annual,
+    without_unverified_extremes,
+)
 from backtest_lab.report import assemble_report
 from backtest_lab.strategies.base import RunContext
 
@@ -190,8 +197,9 @@ class AnnualRank:
             close_row = traded_close.loc[reb] if reb in traded_close.index else None
             caps = _caps_on(close_row, basis, reb) if close_row is not None else pd.Series(dtype=float)
             caps = caps.reindex(list(allowed)).dropna()
+            extreme_names: list[str] = []
             if self.mode == "return":
-                scores = returns
+                scores, extreme_names = without_unverified_extremes(returns)
                 signal = "prior calendar-year total return"
             else:
                 scores = caps
@@ -204,6 +212,22 @@ class AnnualRank:
                 eligible = eligible.reindex(big_enough).dropna()
                 signal = f"{signal}, market cap at least {min_market_cap:,.0f}"
             unpriced = sorted(allowed - set(returns.dropna().index))
+            if min_market_cap:
+                extreme_in_universe = [
+                    ticker
+                    for ticker in extreme_names
+                    if ticker not in set(corrupt)
+                    and ticker in caps.index
+                    and float(caps[ticker]) >= min_market_cap
+                ]
+                # Delisted names are absent from a current listing file, so they
+                # are not in this hole. The hole is the cap-clearing names whose
+                # prior-year return was dropped as unverified.
+                bracket_missing = len(extreme_in_universe)
+                bracket_base = len(eligible) + bracket_missing
+            else:
+                bracket_missing = len(unpriced)
+                bracket_base = len(allowed)
             bankrupt = []
             if membership is not None:
                 for ticker, ret in returns.dropna().items():
@@ -221,6 +245,9 @@ class AnnualRank:
                     "unpriceable": int(len(unpriced)) if self.mode == "return" else int(len(allowed) - len(caps)),
                     "unpriceable_names": unpriced if membership is not None else unpriced[:40],
                     "bankruptcy_modeled": bankrupt,
+                    "extreme_unverified": extreme_names,
+                    "bracket_missing": int(bracket_missing),
+                    "bracket_base": int(bracket_base),
                 }
             )
             if eligible.empty:
@@ -285,6 +312,15 @@ class AnnualRank:
                 )
                 warnings.append(
                     "Unpriceable S&P members by signal year (no usable return): " + preview
+                )
+            extreme_names = sorted({name for row in coverage for name in row.get("extreme_unverified") or []})
+            if extreme_names:
+                preview = ", ".join(extreme_names[:12])
+                suffix = "" if len(extreme_names) <= 12 else ", …"
+                warnings.append(
+                    "Dropped unverified prior-year returns above +1000% "
+                    f"({preview}{suffix}). No second vendor confirmed those prints, "
+                    "so they cannot win a book."
                 )
             bankrupt_names = sorted({name for row in coverage for name in row["bankruptcy_modeled"]})
             if bankrupt_names:
@@ -398,26 +434,46 @@ def _identity(strategy, universe_id: str, min_cap: float | None, membership, mem
         early = sum(counts.get(year, 0) for year in range(1990, 2011))
         report_id = f"{strategy.id}-pit"
         name = f"{strategy.name} (point-in-time)"
-        note = (
-            "Membership is today's S&P 500 walked back through Wikipedia's selected-changes table "
-            "(Historical components of the S&P 500, linked from List of S&P 500 companies). "
-            f"The table records {len(membership.changes)} changes"
-            f" ({early} of them before 2011). Years with only a handful of rows are only partly point-in-time. "
-            "Sharadar TICKERS is the complete membership file."
-        )
+        fja = bool(getattr(membership, "_snapshots", None))
+        if fja:
+            note = (
+                "Membership is the fja05680/sp500 snapshot file (S&P 500 Historical Components & Changes), "
+                "last row carried forward with Wikipedia changes after that file ends. "
+                "Wikipedia's selected-changes table supplies bankruptcy notes and ticker continuations. "
+                f"That table records {len(membership.changes)} changes"
+                f" ({early} of them before 2011) and is not a complete delisting tape. "
+                "A prior-year return above +1000% is dropped unless a second vendor confirms it. "
+                "Sharadar TICKERS is the complete membership file."
+            )
+            source_name = "fja05680/sp500 snapshots + wikipedia selected changes"
+        else:
+            note = (
+                "Membership is today's S&P 500 walked back through Wikipedia's selected-changes table "
+                "(Historical components of the S&P 500, linked from List of S&P 500 companies). "
+                f"The table records {len(membership.changes)} changes"
+                f" ({early} of them before 2011). Years with only a handful of rows are only partly point-in-time. "
+                "Sharadar TICKERS is the complete membership file."
+            )
+            source_name = "wikipedia:List of S&P 500 companies + Historical components selected changes"
         meta = {
             "id": "sp500-pit",
             "survivorship_bias_free": False,
             "point_in_time": True,
-            "source": "wikipedia:List of S&P 500 companies + Historical components selected changes",
+            "source": source_name,
             "note": note,
             "changes_per_year": {str(year): count for year, count in sorted(counts.items())},
             "description": strategy.description.replace("current S&P 500", "point-in-time S&P 500"),
         }
         banner = (
-            "POINT-IN-TIME ATTEMPT — free prices, Wikipedia selected changes. "
-            "Not a complete survivorship-bias-free universe: the changes table is thin before ~2011, "
-            "and names Yahoo and Stooq cannot price are logged. Sharadar (SEP / SF1 / TICKERS) is the exact source."
+            "POINT-IN-TIME ATTEMPT — free prices. "
+            + (
+                "Membership is the fja05680/sp500 history from 1996, not a survivorship-bias-free CRSP tape. "
+                if fja
+                else "Membership is Wikipedia's selected-changes table, which is thin before ~2011. "
+            )
+            + "Names Yahoo and Stooq cannot price are logged. "
+            "Prior-year returns above +1000% are dropped unless a second vendor confirms them. "
+            "Sharadar (SEP / SF1 / TICKERS) is the exact source."
         )
         return report_id, name, meta, banner
     billions = (min_cap or 0) / 1e9
@@ -429,7 +485,9 @@ def _identity(strategy, universe_id: str, min_cap: float | None, membership, mem
         f"with an approximated market cap of at least ${min_cap:,.0f} at the prior year-end. "
         "Delisted names are missing from a current listing file, so this book is survivorship-biased. "
         "Listings whose split-adjusted history peaks above $20,000 while the latest print is under "
-        "$10,000 are dropped (Yahoo reverse-split failures). A cap above $15 trillion is ignored. "
+        "$10,000 are dropped (Yahoo reverse-split failures). "
+        "A prior-year return above +1000% is dropped unless a second vendor confirms it. "
+        "A cap above $15 trillion is ignored. "
         "Sharadar TICKERS plus SF1 marketcap would include delisted names and replace the cap approximation."
     )
     meta = {
@@ -444,7 +502,8 @@ def _identity(strategy, universe_id: str, min_cap: float | None, membership, mem
     banner = (
         "SURVIVORSHIP-BIASED — free Yahoo prices on today's US common-stock listings, "
         f"kept only when approximated market cap was at least ${min_cap:,.0f}. "
-        "Delisted companies are absent. Sharadar would make this exact."
+        "Delisted companies are absent. Prior-year returns above +1000% are dropped unless verified. "
+        "Sharadar would make this exact."
     )
     return report_id, name, meta, banner
 

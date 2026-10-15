@@ -8,12 +8,12 @@ from datetime import date
 import pandas as pd
 
 from backtest_lab.cli import parse_min_cap
-from backtest_lab.data.adjust import apply_identity
+from backtest_lab.data.adjust import apply_identity, deal_price
 from backtest_lab.data.listings import _common_name
-from backtest_lab.data.sp500_pit import PointInTimeSP500, is_bankruptcy
+from backtest_lab.data.sp500_pit import PointInTimeSP500, is_bankruptcy, load_point_in_time
 from backtest_lab.data.symbols import yahoo_symbol
-from backtest_lab.engine import prior_year_returns
-from backtest_lab.eventstudy import build_event_study
+from backtest_lab.engine import prior_year_returns, without_unverified_extremes
+from backtest_lab.eventstudy import build_event_study, coverage_brackets
 
 
 def _pit():
@@ -107,6 +107,8 @@ class MembershipTests(unittest.TestCase):
         adjusted, notes = apply_identity(panel, pit)
         self.assertIn("FB", adjusted.columns)
         self.assertAlmostEqual(float(adjusted.loc[pd.Timestamp("2011-12-30"), "FB"]), 20.0)
+        # The rename is not an exit: December still earns the successor's return.
+        self.assertAlmostEqual(float(adjusted.loc[pd.Timestamp("2012-12-31"), "FB"]), 30.0)
         leh_end = float(adjusted.loc[pd.Timestamp("2008-12-31"), "LEH"])
         self.assertLess(leh_end, 0.01)
         ret = prior_year_returns(adjusted, 2008)
@@ -147,6 +149,130 @@ class MembershipTests(unittest.TestCase):
         self.assertNotIn("BBB", ret.index)
 
 
+class IdentityAndAliasTests(unittest.TestCase):
+    def test_a_continuous_series_is_kept_across_an_index_gap(self):
+        current = pd.DataFrame(
+            {
+                "ticker": ["AMD"],
+                "name": ["Advanced Micro Devices"],
+                "sector": ["Tech"],
+                "date_added": pd.to_datetime(["2017-03-20"]),
+            }
+        )
+        changes = pd.DataFrame(
+            {
+                "date": pd.to_datetime(["2013-09-20", "2017-03-20"]),
+                "added": ["VRTX", "AMD"],
+                "added_name": ["Vertex", "Advanced Micro Devices"],
+                "removed": ["AMD", "URBN"],
+                "removed_name": ["Advanced Micro Devices", "Urban"],
+                "reason": ["Market capitalization changes.", "Market capitalization changes."],
+            }
+        )
+        pit = PointInTimeSP500(current, changes)
+        self.assertNotIn("AMD", set(pit.members_on("2016-12-31")["ticker"]))
+        self.assertIn("AMD", set(pit.members_on("2017-12-31")["ticker"]))
+        index = pd.to_datetime(["2012-12-31", "2016-12-30", "2017-12-29"])
+        panel = pd.DataFrame({"AMD": [10.0, 11.34, 10.28]}, index=index)
+        adjusted, _notes = apply_identity(panel, pit)
+        ret = prior_year_returns(adjusted, 2017)
+        self.assertAlmostEqual(float(ret["AMD"]), 10.28 / 11.34 - 1.0, places=6)
+
+    def test_a_recycled_ticker_does_not_fill_the_old_spell(self):
+        current = pd.DataFrame(
+            {
+                "ticker": ["AMD"],
+                "name": ["Advanced Micro Devices"],
+                "sector": ["Tech"],
+                "date_added": pd.to_datetime(["2017-03-20"]),
+            }
+        )
+        changes = pd.DataFrame(
+            {
+                "date": pd.to_datetime(["2013-09-20", "2017-03-20"]),
+                "added": ["VRTX", "AMD"],
+                "added_name": ["Vertex", "Advanced Micro Devices"],
+                "removed": ["AMD", "URBN"],
+                "removed_name": ["Advanced Micro Devices", "Urban"],
+                "reason": ["Market capitalization changes.", "Market capitalization changes."],
+            }
+        )
+        pit = PointInTimeSP500(current, changes)
+        index = pd.to_datetime(["2016-12-30", "2018-12-31"])
+        panel = pd.DataFrame({"AMD": [50.0, 80.0]}, index=index)
+        adjusted, _notes = apply_identity(panel, pit)
+        self.assertTrue(pd.isna(adjusted.loc[pd.Timestamp("2016-12-30"), "AMD"]))
+        self.assertAlmostEqual(float(adjusted.loc[pd.Timestamp("2018-12-31"), "AMD"]), 80.0)
+
+    def test_a_stated_deal_price_fills_a_missing_exit(self):
+        self.assertAlmostEqual(deal_price("Acquired for $50.25 per share."), 50.25)
+        self.assertIsNone(deal_price("Acquired."))
+        pit = _pit()
+        # OLD leaves on 2016-06-01. Give it a print before that and nothing after.
+        index = pd.to_datetime(["2015-12-31", "2016-12-30"])
+        panel = pd.DataFrame({"OLD": [40.0, pd.NA]}, index=index)
+        pit.removals()["OLD"]["reason"] = "Acquired for $50 per share."
+        adjusted, _notes = apply_identity(panel, pit)
+        self.assertAlmostEqual(float(adjusted.loc[pd.Timestamp("2016-12-30"), "OLD"]), 50.0)
+
+    def test_snapshot_file_links_a_rename_and_not_an_acquisition(self):
+        current = pd.DataFrame(
+            {
+                "ticker": ["META", "ACGL", "ISRG"],
+                "name": ["Meta", "Arch", "Intuitive"],
+                "sector": ["Tech", "Financials", "Health Care"],
+                "date_added": pd.to_datetime(["2013-12-23", "2022-11-01", "2008-06-02"]),
+            }
+        )
+        changes = pd.DataFrame(
+            {
+                "date": pd.to_datetime(["2022-11-01"]),
+                "added": ["ACGL"],
+                "added_name": ["Arch Capital"],
+                "removed": ["TWTR"],
+                "removed_name": ["Twitter"],
+                "reason": ["Elon Musk acquired Twitter."],
+            }
+        )
+        constituents = pd.DataFrame(
+            {
+                "date": pd.to_datetime(
+                    ["2008-06-01", "2008-06-02", "2015-12-31", "2022-06-08", "2022-06-09", "2022-10-31", "2022-11-01"]
+                ),
+                "tickers": [
+                    "BSC,STAY",
+                    "ISRG,STAY",
+                    "FB,ISRG,STAY",
+                    "FB,ISRG,STAY",
+                    "META,ISRG,STAY",
+                    "META,TWTR,ISRG,STAY",
+                    "META,ACGL,ISRG,STAY",
+                ],
+            }
+        )
+        pit = PointInTimeSP500(current, changes, constituents=constituents)
+        linked = {row["old"]: row["new"] for row in pit.renames()}
+        self.assertEqual(linked.get("FB"), "META")
+        self.assertNotIn("TWTR", linked)
+        self.assertNotIn("BSC", linked)
+        self.assertIn("FB", set(pit.members_on("2015-12-31")["ticker"]))
+        self.assertNotIn("META", set(pit.members_on("2015-12-31")["ticker"]))
+
+    def test_vendored_constituents_cover_a_normal_year_and_keep_celgene(self):
+        pit = load_point_in_time()
+        y2018 = set(pit.members_on("2018-12-31")["ticker"])
+        self.assertGreater(len(y2018), 490)
+        self.assertLess(len(y2018), 520)
+        self.assertIn("CELG", y2018)
+        self.assertIn("AMD", y2018)
+        self.assertNotIn("AMD", set(pit.members_on("2016-12-31")["ticker"]))
+        linked = {row["old"]: row["new"] for row in pit.renames()}
+        self.assertEqual(linked.get("FB"), "META")
+        self.assertEqual(linked.get("CTL"), "LUMN")
+        self.assertNotIn("TWTR", linked)
+        self.assertNotIn("BSC", linked)
+
+
 class EventStudyTests(unittest.TestCase):
     def test_counts_a_crash_and_ignores_a_partial_next_year(self):
         pit = _pit()
@@ -173,6 +299,40 @@ class EventStudyTests(unittest.TestCase):
         self.assertEqual(summary["winner_observed"], 1)
         self.assertEqual(summary["winner_down_30"], 1)
         self.assertEqual(summary["winner_down_50"], 1)
+        excluded = summary["distribution"]["winner"]["excluded"]
+        self.assertEqual(excluded["n"], 1)
+        self.assertLess(excluded["median"], -0.5)
+
+    def test_an_unverified_1000_percent_year_cannot_win(self):
+        kept, dropped = without_unverified_extremes(pd.Series({"BIG": 12.0, "OK": 2.0}))
+        self.assertEqual(dropped, ["BIG"])
+        self.assertAlmostEqual(float(kept["OK"]), 2.0)
+        pit = _pit()
+        index = pd.to_datetime(["1999-12-31", "2000-12-29", "2001-12-31"])
+        panel = pd.DataFrame(
+            {"STAY": [10.0, 130.0, 20.0], "LEH": [10.0, 30.0, 15.0]},
+            index=index,
+        )
+        payload = build_event_study(panel, pit, 2000, date(2001, 12, 31), [])
+        self.assertEqual(payload["years"][0]["winner"]["ticker"], "LEH")
+        self.assertIn("STAY", payload["years"][0]["extreme_unverified"])
+
+    def test_coverage_bracket_compounds_the_hole(self):
+        coverage = [{"year": 2016, "members": 10, "unpriceable": 2, "priced": 8}]
+        cohorts = [
+            {
+                "year": 2016,
+                "period_return": 1.0,
+                "rebalance_date": "2015-12-31",
+                "period_end": "2016-12-30",
+            }
+        ]
+        spy = pd.Series([100.0, 110.0], index=pd.to_datetime(["2015-12-31", "2016-12-30"]))
+        result = coverage_brackets(coverage, cohorts, spy, 10_000)
+        self.assertAlmostEqual(result["excluded"]["total_return"], 1.0)
+        self.assertAlmostEqual(result["worst"]["total_return"], 0.6)
+        self.assertAlmostEqual(result["neutral"]["total_return"], 0.82)
+        self.assertAlmostEqual(result["years"][0]["spy_return"], 0.10)
 
 
 class ListingTests(unittest.TestCase):
