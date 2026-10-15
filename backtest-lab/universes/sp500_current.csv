@@ -1,0 +1,508 @@
+# Current S&P 500 constituents used as a free-data proxy.
+# fetched_on: 2026-10-15
+# source: github:datasets/s-and-p-500-companies
+# survivorship_bias_free: false
+ticker,name,sector,source
+MMM,3M,Industrials,github:datasets/s-and-p-500-companies
+AOS,A. O. Smith,Industrials,github:datasets/s-and-p-500-companies
+ABT,Abbott Laboratories,Health Care,github:datasets/s-and-p-500-companies
+ABBV,AbbVie,Health Care,github:datasets/s-and-p-500-companies
+ACN,Accenture,Information Technology,github:datasets/s-and-p-500-companies
+ADBE,Adobe Inc.,Information Technology,github:datasets/s-and-p-500-companies
+AMD,Advanced Micro Devices,Information Technology,github:datasets/s-and-p-500-companies
+AES,AES Corporation,Utilities,github:datasets/s-and-p-500-companies
+AFL,Aflac,Financials,github:datasets/s-and-p-500-companies
+A,Agilent Technologies,Health Care,github:datasets/s-and-p-500-companies
+APD,Air Products,Materials,github:datasets/s-and-p-500-companies
+ABNB,Airbnb,Consumer Discretionary,github:datasets/s-and-p-500-companies
+AKAM,Akamai Technologies,Information Technology,github:datasets/s-and-p-500-companies
+ALB,Albemarle Corporation,Materials,github:datasets/s-and-p-500-companies
+ARE,Alexandria Real Estate Equities,Real Estate,github:datasets/s-and-p-500-companies
+ALGN,Align Technology,Health Care,github:datasets/s-and-p-500-companies
+ALLE,Allegion,Industrials,github:datasets/s-and-p-500-companies
+LNT,Alliant Energy,Utilities,github:datasets/s-and-p-500-companies
+ALL,Allstate,Financials,github:datasets/s-and-p-500-companies
+GOOGL,Alphabet Inc. (Class A),Communication Services,github:datasets/s-and-p-500-companies
+GOOG,Alphabet Inc. (Class C),Communication Services,github:datasets/s-and-p-500-companies
+MO,Altria,Consumer Staples,github:datasets/s-and-p-500-companies
+AMZN,Amazon,Consumer Discretionary,github:datasets/s-and-p-500-companies
+AMCR,Amcor,Materials,github:datasets/s-and-p-500-companies
+AEE,Ameren,Utilities,github:datasets/s-and-p-500-companies
+AEP,American Electric Power,Utilities,github:datasets/s-and-p-500-companies
+AXP,American Express,Financials,github:datasets/s-and-p-500-companies
+AIG,American International Group,Financials,github:datasets/s-and-p-500-companies
+AMT,American Tower,Real Estate,github:datasets/s-and-p-500-companies
+AWK,American Water Works,Utilities,github:datasets/s-and-p-500-companies
+AMP,Ameriprise Financial,Financials,github:datasets/s-and-p-500-companies
+AME,Ametek,Industrials,github:datasets/s-and-p-500-companies
+AMGN,Amgen,Health Care,github:datasets/s-and-p-500-companies
+APH,Amphenol,Information Technology,github:datasets/s-and-p-500-companies
+ADI,Analog Devices,Information Technology,github:datasets/s-and-p-500-companies
+AON,Aon plc,Financials,github:datasets/s-and-p-500-companies
+APA,APA Corporation,Energy,github:datasets/s-and-p-500-companies
+APO,Apollo Global Management,Financials,github:datasets/s-and-p-500-companies
+AAPL,Apple Inc.,Information Technology,github:datasets/s-and-p-500-companies
+AMAT,Applied Materials,Information Technology,github:datasets/s-and-p-500-companies
+APP,AppLovin,Communication Services,github:datasets/s-and-p-500-companies
+APTV,Aptiv,Consumer Discretionary,github:datasets/s-and-p-500-companies
+ACGL,Arch Capital Group,Financials,github:datasets/s-and-p-500-companies
+ADM,Archer Daniels Midland,Consumer Staples,github:datasets/s-and-p-500-companies
+ARES,Ares Management,Financials,github:datasets/s-and-p-500-companies
+ANET,Arista Networks,Information Technology,github:datasets/s-and-p-500-companies
+AJG,Arthur J. Gallagher & Co.,Financials,github:datasets/s-and-p-500-companies
+AIZ,Assurant,Financials,github:datasets/s-and-p-500-companies
+T,AT&T,Communication Services,github:datasets/s-and-p-500-companies
+ATO,Atmos Energy,Utilities,github:datasets/s-and-p-500-companies
+ADSK,Autodesk,Information Technology,github:datasets/s-and-p-500-companies
+ADP,Automatic Data Processing,Industrials,github:datasets/s-and-p-500-companies
+AZO,AutoZone,Consumer Discretionary,github:datasets/s-and-p-500-companies
+AVY,Avery Dennison,Materials,github:datasets/s-and-p-500-companies
+AXON,Axon Enterprise,Industrials,github:datasets/s-and-p-500-companies
+BKR,Baker Hughes,Energy,github:datasets/s-and-p-500-companies
+BALL,Ball Corporation,Materials,github:datasets/s-and-p-500-companies
+BAC,Bank of America,Financials,github:datasets/s-and-p-500-companies
+BAX,Baxter International,Health Care,github:datasets/s-and-p-500-companies
+BDX,Becton Dickinson,Health Care,github:datasets/s-and-p-500-companies
+BRK-B,Berkshire Hathaway,Financials,github:datasets/s-and-p-500-companies
+BBY,Best Buy,Consumer Discretionary,github:datasets/s-and-p-500-companies
+TECH,Bio-Techne,Health Care,github:datasets/s-and-p-500-companies
+BIIB,Biogen,Health Care,github:datasets/s-and-p-500-companies
+BLK,BlackRock,Financials,github:datasets/s-and-p-500-companies
+BX,Blackstone Inc.,Financials,github:datasets/s-and-p-500-companies
+XYZ,"Block, Inc.",Financials,github:datasets/s-and-p-500-companies
+BE,Bloom Energy,Industrials,github:datasets/s-and-p-500-companies
+BNY,BNY Mellon,Financials,github:datasets/s-and-p-500-companies
+BA,Boeing,Industrials,github:datasets/s-and-p-500-companies
+BKNG,Booking Holdings,Consumer Discretionary,github:datasets/s-and-p-500-companies
+BSX,Boston Scientific,Health Care,github:datasets/s-and-p-500-companies
+BMY,Bristol Myers Squibb,Health Care,github:datasets/s-and-p-500-companies
+AVGO,Broadcom,Information Technology,github:datasets/s-and-p-500-companies
+BR,Broadridge Financial Solutions,Industrials,github:datasets/s-and-p-500-companies
+BRO,Brown & Brown,Financials,github:datasets/s-and-p-500-companies
+BF-B,Brown–Forman,Consumer Staples,github:datasets/s-and-p-500-companies
+BG,Bunge Global,Consumer Staples,github:datasets/s-and-p-500-companies
+BXP,"BXP, Inc.",Real Estate,github:datasets/s-and-p-500-companies
+CHRW,C.H. Robinson,Industrials,github:datasets/s-and-p-500-companies
+CDNS,Cadence Design Systems,Information Technology,github:datasets/s-and-p-500-companies
+CPT,Camden Property Trust,Real Estate,github:datasets/s-and-p-500-companies
+COF,Capital One,Financials,github:datasets/s-and-p-500-companies
+CAH,Cardinal Health,Health Care,github:datasets/s-and-p-500-companies
+CCL,Carnival Corporation,Consumer Discretionary,github:datasets/s-and-p-500-companies
+CARR,Carrier Global,Industrials,github:datasets/s-and-p-500-companies
+CVNA,Carvana,Consumer Discretionary,github:datasets/s-and-p-500-companies
+CASY,Casey's,Consumer Staples,github:datasets/s-and-p-500-companies
+CAT,Caterpillar Inc.,Industrials,github:datasets/s-and-p-500-companies
+CBOE,Cboe Global Markets,Financials,github:datasets/s-and-p-500-companies
+CBRE,CBRE Group,Real Estate,github:datasets/s-and-p-500-companies
+CDW,CDW Corporation,Information Technology,github:datasets/s-and-p-500-companies
+COR,Cencora,Health Care,github:datasets/s-and-p-500-companies
+CNC,Centene Corporation,Health Care,github:datasets/s-and-p-500-companies
+CNP,CenterPoint Energy,Utilities,github:datasets/s-and-p-500-companies
+CF,CF Industries,Materials,github:datasets/s-and-p-500-companies
+CRL,Charles River Laboratories,Health Care,github:datasets/s-and-p-500-companies
+SCHW,Charles Schwab Corporation,Financials,github:datasets/s-and-p-500-companies
+CHTR,Charter Communications,Communication Services,github:datasets/s-and-p-500-companies
+CVX,Chevron Corporation,Energy,github:datasets/s-and-p-500-companies
+CMG,Chipotle Mexican Grill,Consumer Discretionary,github:datasets/s-and-p-500-companies
+CB,Chubb Limited,Financials,github:datasets/s-and-p-500-companies
+CHD,Church & Dwight,Consumer Staples,github:datasets/s-and-p-500-companies
+CIEN,Ciena,Information Technology,github:datasets/s-and-p-500-companies
+CI,Cigna,Health Care,github:datasets/s-and-p-500-companies
+CINF,Cincinnati Financial,Financials,github:datasets/s-and-p-500-companies
+CTAS,Cintas,Industrials,github:datasets/s-and-p-500-companies
+CSCO,Cisco,Information Technology,github:datasets/s-and-p-500-companies
+C,Citigroup,Financials,github:datasets/s-and-p-500-companies
+CFG,Citizens Financial Group,Financials,github:datasets/s-and-p-500-companies
+CLX,Clorox,Consumer Staples,github:datasets/s-and-p-500-companies
+CME,CME Group,Financials,github:datasets/s-and-p-500-companies
+CMS,CMS Energy,Utilities,github:datasets/s-and-p-500-companies
+KO,Coca-Cola Company (The),Consumer Staples,github:datasets/s-and-p-500-companies
+CTSH,Cognizant,Information Technology,github:datasets/s-and-p-500-companies
+COHR,Coherent Corp.,Information Technology,github:datasets/s-and-p-500-companies
+COIN,Coinbase,Financials,github:datasets/s-and-p-500-companies
+CL,Colgate-Palmolive,Consumer Staples,github:datasets/s-and-p-500-companies
+CMCSA,Comcast,Communication Services,github:datasets/s-and-p-500-companies
+FIX,Comfort Systems USA,Industrials,github:datasets/s-and-p-500-companies
+COP,ConocoPhillips,Energy,github:datasets/s-and-p-500-companies
+ED,Consolidated Edison,Utilities,github:datasets/s-and-p-500-companies
+STZ,Constellation Brands,Consumer Staples,github:datasets/s-and-p-500-companies
+CEG,Constellation Energy,Utilities,github:datasets/s-and-p-500-companies
+COO,Cooper Companies (The),Health Care,github:datasets/s-and-p-500-companies
+CPRT,Copart,Industrials,github:datasets/s-and-p-500-companies
+GLW,Corning Inc.,Information Technology,github:datasets/s-and-p-500-companies
+CPAY,Corpay,Financials,github:datasets/s-and-p-500-companies
+CSGP,CoStar Group,Real Estate,github:datasets/s-and-p-500-companies
+COST,Costco,Consumer Staples,github:datasets/s-and-p-500-companies
+CRH,CRH plc,Materials,github:datasets/s-and-p-500-companies
+CRWD,CrowdStrike,Information Technology,github:datasets/s-and-p-500-companies
+CCI,Crown Castle,Real Estate,github:datasets/s-and-p-500-companies
+CSX,CSX Corporation,Industrials,github:datasets/s-and-p-500-companies
+CMI,Cummins,Industrials,github:datasets/s-and-p-500-companies
+CVS,CVS Health,Health Care,github:datasets/s-and-p-500-companies
+DHR,Danaher Corporation,Health Care,github:datasets/s-and-p-500-companies
+DRI,Darden Restaurants,Consumer Discretionary,github:datasets/s-and-p-500-companies
+DDOG,Datadog,Information Technology,github:datasets/s-and-p-500-companies
+DVA,DaVita,Health Care,github:datasets/s-and-p-500-companies
+DECK,Deckers Brands,Consumer Discretionary,github:datasets/s-and-p-500-companies
+DE,Deere & Company,Industrials,github:datasets/s-and-p-500-companies
+DELL,Dell Technologies,Information Technology,github:datasets/s-and-p-500-companies
+DAL,Delta Air Lines,Industrials,github:datasets/s-and-p-500-companies
+DVN,Devon Energy,Energy,github:datasets/s-and-p-500-companies
+DXCM,Dexcom,Health Care,github:datasets/s-and-p-500-companies
+FANG,Diamondback Energy,Energy,github:datasets/s-and-p-500-companies
+DLR,Digital Realty,Real Estate,github:datasets/s-and-p-500-companies
+DG,Dollar General,Consumer Staples,github:datasets/s-and-p-500-companies
+DLTR,Dollar Tree,Consumer Staples,github:datasets/s-and-p-500-companies
+D,Dominion Energy,Utilities,github:datasets/s-and-p-500-companies
+DPZ,Domino's,Consumer Discretionary,github:datasets/s-and-p-500-companies
+DASH,DoorDash,Consumer Discretionary,github:datasets/s-and-p-500-companies
+DOV,Dover Corporation,Industrials,github:datasets/s-and-p-500-companies
+DOW,Dow Inc.,Materials,github:datasets/s-and-p-500-companies
+DHI,D. R. Horton,Consumer Discretionary,github:datasets/s-and-p-500-companies
+DTE,DTE Energy,Utilities,github:datasets/s-and-p-500-companies
+DUK,Duke Energy,Utilities,github:datasets/s-and-p-500-companies
+DD,DuPont,Industrials,github:datasets/s-and-p-500-companies
+ETN,Eaton Corporation,Industrials,github:datasets/s-and-p-500-companies
+EBAY,eBay Inc.,Consumer Discretionary,github:datasets/s-and-p-500-companies
+ECHO,EchoStar,Communication Services,github:datasets/s-and-p-500-companies
+ECL,Ecolab,Materials,github:datasets/s-and-p-500-companies
+EIX,Edison International,Utilities,github:datasets/s-and-p-500-companies
+EW,Edwards Lifesciences,Health Care,github:datasets/s-and-p-500-companies
+ELV,Elevance Health,Health Care,github:datasets/s-and-p-500-companies
+EME,Emcor,Industrials,github:datasets/s-and-p-500-companies
+EMR,Emerson Electric,Industrials,github:datasets/s-and-p-500-companies
+ETR,Entergy,Utilities,github:datasets/s-and-p-500-companies
+EOG,EOG Resources,Energy,github:datasets/s-and-p-500-companies
+EQT,EQT Corporation,Energy,github:datasets/s-and-p-500-companies
+EFX,Equifax,Industrials,github:datasets/s-and-p-500-companies
+EQIX,Equinix,Real Estate,github:datasets/s-and-p-500-companies
+ERIE,Erie Indemnity,Financials,github:datasets/s-and-p-500-companies
+ESS,Essex Property Trust,Real Estate,github:datasets/s-and-p-500-companies
+EL,Estée Lauder Companies (The),Consumer Staples,github:datasets/s-and-p-500-companies
+EG,Everest Group,Financials,github:datasets/s-and-p-500-companies
+EVRG,Evergy,Utilities,github:datasets/s-and-p-500-companies
+P,Everpure,Information Technology,github:datasets/s-and-p-500-companies
+ES,Eversource Energy,Utilities,github:datasets/s-and-p-500-companies
+EXC,Exelon,Utilities,github:datasets/s-and-p-500-companies
+EXE,Expand Energy,Energy,github:datasets/s-and-p-500-companies
+EXPE,Expedia Group,Consumer Discretionary,github:datasets/s-and-p-500-companies
+EXPD,Expeditors International,Industrials,github:datasets/s-and-p-500-companies
+EXR,Extra Space Storage,Real Estate,github:datasets/s-and-p-500-companies
+XOM,ExxonMobil,Energy,github:datasets/s-and-p-500-companies
+FFIV,"F5, Inc.",Information Technology,github:datasets/s-and-p-500-companies
+FDS,FactSet,Financials,github:datasets/s-and-p-500-companies
+FICO,Fair Isaac,Information Technology,github:datasets/s-and-p-500-companies
+FAST,Fastenal,Industrials,github:datasets/s-and-p-500-companies
+FRT,Federal Realty Investment Trust,Real Estate,github:datasets/s-and-p-500-companies
+FDX,FedEx,Industrials,github:datasets/s-and-p-500-companies
+FDXF,FedEx Freight,Industrials,github:datasets/s-and-p-500-companies
+FERG,Ferguson Enterprises,Industrials,github:datasets/s-and-p-500-companies
+FIS,Fidelity National Information Services,Financials,github:datasets/s-and-p-500-companies
+FITB,Fifth Third Bancorp,Financials,github:datasets/s-and-p-500-companies
+FSLR,First Solar,Information Technology,github:datasets/s-and-p-500-companies
+FE,FirstEnergy,Utilities,github:datasets/s-and-p-500-companies
+FISV,Fiserv,Financials,github:datasets/s-and-p-500-companies
+FLEX,Flex Ltd.,Information Technology,github:datasets/s-and-p-500-companies
+F,Ford Motor Company,Consumer Discretionary,github:datasets/s-and-p-500-companies
+FTNT,Fortinet,Information Technology,github:datasets/s-and-p-500-companies
+FTV,Fortive,Industrials,github:datasets/s-and-p-500-companies
+FOXA,Fox Corporation (Class A),Communication Services,github:datasets/s-and-p-500-companies
+FOX,Fox Corporation (Class B),Communication Services,github:datasets/s-and-p-500-companies
+BEN,Franklin Resources,Financials,github:datasets/s-and-p-500-companies
+FCX,Freeport-McMoRan,Materials,github:datasets/s-and-p-500-companies
+GRMN,Garmin,Consumer Discretionary,github:datasets/s-and-p-500-companies
+IT,Gartner,Information Technology,github:datasets/s-and-p-500-companies
+GE,GE Aerospace,Industrials,github:datasets/s-and-p-500-companies
+GEHC,GE HealthCare,Health Care,github:datasets/s-and-p-500-companies
+GEV,GE Vernova,Industrials,github:datasets/s-and-p-500-companies
+GEN,Gen Digital,Information Technology,github:datasets/s-and-p-500-companies
+GNRC,Generac,Industrials,github:datasets/s-and-p-500-companies
+GD,General Dynamics,Industrials,github:datasets/s-and-p-500-companies
+GIS,General Mills,Consumer Staples,github:datasets/s-and-p-500-companies
+GM,General Motors,Consumer Discretionary,github:datasets/s-and-p-500-companies
+GPC,Genuine Parts Company,Consumer Discretionary,github:datasets/s-and-p-500-companies
+GILD,Gilead Sciences,Health Care,github:datasets/s-and-p-500-companies
+GPN,Global Payments,Financials,github:datasets/s-and-p-500-companies
+GL,Globe Life,Financials,github:datasets/s-and-p-500-companies
+GDDY,GoDaddy,Information Technology,github:datasets/s-and-p-500-companies
+GS,Goldman Sachs,Financials,github:datasets/s-and-p-500-companies
+HAL,Halliburton,Energy,github:datasets/s-and-p-500-companies
+HIG,Hartford (The),Financials,github:datasets/s-and-p-500-companies
+HAS,Hasbro,Consumer Discretionary,github:datasets/s-and-p-500-companies
+HCA,HCA Healthcare,Health Care,github:datasets/s-and-p-500-companies
+DOC,Healthpeak Properties,Real Estate,github:datasets/s-and-p-500-companies
+HSIC,Henry Schein,Health Care,github:datasets/s-and-p-500-companies
+HSY,Hershey Company (The),Consumer Staples,github:datasets/s-and-p-500-companies
+HPE,Hewlett Packard Enterprise,Information Technology,github:datasets/s-and-p-500-companies
+HLT,Hilton Worldwide,Consumer Discretionary,github:datasets/s-and-p-500-companies
+HD,Home Depot (The),Consumer Discretionary,github:datasets/s-and-p-500-companies
+HONA,Honeywell Aerospace,Industrials,github:datasets/s-and-p-500-companies
+HON,Honeywell Technologies,Industrials,github:datasets/s-and-p-500-companies
+HRL,Hormel Foods,Consumer Staples,github:datasets/s-and-p-500-companies
+HST,Host Hotels & Resorts,Real Estate,github:datasets/s-and-p-500-companies
+HWM,Howmet Aerospace,Industrials,github:datasets/s-and-p-500-companies
+HPQ,HP Inc.,Information Technology,github:datasets/s-and-p-500-companies
+HUBB,Hubbell Incorporated,Industrials,github:datasets/s-and-p-500-companies
+HUM,Humana,Health Care,github:datasets/s-and-p-500-companies
+HBAN,Huntington Bancshares,Financials,github:datasets/s-and-p-500-companies
+HII,Huntington Ingalls Industries,Industrials,github:datasets/s-and-p-500-companies
+IBM,IBM,Information Technology,github:datasets/s-and-p-500-companies
+IEX,IDEX Corporation,Industrials,github:datasets/s-and-p-500-companies
+IDXX,Idexx Laboratories,Health Care,github:datasets/s-and-p-500-companies
+ITW,Illinois Tool Works,Industrials,github:datasets/s-and-p-500-companies
+ILMN,"Illumina, Inc.",Health Care,github:datasets/s-and-p-500-companies
+INCY,Incyte,Health Care,github:datasets/s-and-p-500-companies
+IR,Ingersoll Rand,Industrials,github:datasets/s-and-p-500-companies
+PODD,Insulet Corporation,Health Care,github:datasets/s-and-p-500-companies
+INTC,Intel,Information Technology,github:datasets/s-and-p-500-companies
+IBKR,Interactive Brokers,Financials,github:datasets/s-and-p-500-companies
+ICE,Intercontinental Exchange,Financials,github:datasets/s-and-p-500-companies
+IFF,International Flavors & Fragrances,Materials,github:datasets/s-and-p-500-companies
+IP,International Paper,Materials,github:datasets/s-and-p-500-companies
+INTU,Intuit,Information Technology,github:datasets/s-and-p-500-companies
+ISRG,Intuitive Surgical,Health Care,github:datasets/s-and-p-500-companies
+IVZ,Invesco,Financials,github:datasets/s-and-p-500-companies
+INVH,Invitation Homes,Real Estate,github:datasets/s-and-p-500-companies
+IQV,IQVIA,Health Care,github:datasets/s-and-p-500-companies
+IRM,Iron Mountain,Real Estate,github:datasets/s-and-p-500-companies
+JBHT,J.B. Hunt,Industrials,github:datasets/s-and-p-500-companies
+JBL,Jabil,Information Technology,github:datasets/s-and-p-500-companies
+JKHY,Jack Henry & Associates,Financials,github:datasets/s-and-p-500-companies
+J,Jacobs Solutions,Industrials,github:datasets/s-and-p-500-companies
+JNJ,Johnson & Johnson,Health Care,github:datasets/s-and-p-500-companies
+JCI,Johnson Controls,Industrials,github:datasets/s-and-p-500-companies
+JPM,JPMorgan Chase,Financials,github:datasets/s-and-p-500-companies
+KVUE,Kenvue,Consumer Staples,github:datasets/s-and-p-500-companies
+KDP,Keurig Dr Pepper,Consumer Staples,github:datasets/s-and-p-500-companies
+KEY,KeyCorp,Financials,github:datasets/s-and-p-500-companies
+KEYS,Keysight Technologies,Information Technology,github:datasets/s-and-p-500-companies
+KMB,Kimberly-Clark,Consumer Staples,github:datasets/s-and-p-500-companies
+KIM,Kimco Realty,Real Estate,github:datasets/s-and-p-500-companies
+KMI,Kinder Morgan,Energy,github:datasets/s-and-p-500-companies
+KKR,KKR & Co.,Financials,github:datasets/s-and-p-500-companies
+KLAC,KLA Corporation,Information Technology,github:datasets/s-and-p-500-companies
+KHC,Kraft Heinz,Consumer Staples,github:datasets/s-and-p-500-companies
+KR,Kroger,Consumer Staples,github:datasets/s-and-p-500-companies
+LHX,L3Harris,Industrials,github:datasets/s-and-p-500-companies
+LH,Labcorp,Health Care,github:datasets/s-and-p-500-companies
+LRCX,Lam Research,Information Technology,github:datasets/s-and-p-500-companies
+LVS,Las Vegas Sands,Consumer Discretionary,github:datasets/s-and-p-500-companies
+LDOS,Leidos,Industrials,github:datasets/s-and-p-500-companies
+LEN,Lennar,Consumer Discretionary,github:datasets/s-and-p-500-companies
+LII,Lennox International,Industrials,github:datasets/s-and-p-500-companies
+LLY,Lilly (Eli),Health Care,github:datasets/s-and-p-500-companies
+LIN,Linde plc,Materials,github:datasets/s-and-p-500-companies
+LYV,Live Nation Entertainment,Communication Services,github:datasets/s-and-p-500-companies
+LMT,Lockheed Martin,Industrials,github:datasets/s-and-p-500-companies
+L,Loews Corporation,Financials,github:datasets/s-and-p-500-companies
+LOW,Lowe's,Consumer Discretionary,github:datasets/s-and-p-500-companies
+LULU,Lululemon Athletica,Consumer Discretionary,github:datasets/s-and-p-500-companies
+LITE,Lumentum,Information Technology,github:datasets/s-and-p-500-companies
+LYB,LyondellBasell,Materials,github:datasets/s-and-p-500-companies
+MTB,M&T Bank,Financials,github:datasets/s-and-p-500-companies
+MPC,Marathon Petroleum,Energy,github:datasets/s-and-p-500-companies
+MAR,Marriott International,Consumer Discretionary,github:datasets/s-and-p-500-companies
+MRSH,Marsh McLennan,Financials,github:datasets/s-and-p-500-companies
+MLM,Martin Marietta Materials,Materials,github:datasets/s-and-p-500-companies
+MRVL,Marvell Technology,Information Technology,github:datasets/s-and-p-500-companies
+MAS,Masco,Industrials,github:datasets/s-and-p-500-companies
+MA,Mastercard,Financials,github:datasets/s-and-p-500-companies
+MKC,McCormick & Company,Consumer Staples,github:datasets/s-and-p-500-companies
+MCD,McDonald's,Consumer Discretionary,github:datasets/s-and-p-500-companies
+MCK,McKesson,Health Care,github:datasets/s-and-p-500-companies
+MDT,Medtronic,Health Care,github:datasets/s-and-p-500-companies
+MRK,Merck & Co.,Health Care,github:datasets/s-and-p-500-companies
+META,Meta Platforms,Communication Services,github:datasets/s-and-p-500-companies
+MET,MetLife,Financials,github:datasets/s-and-p-500-companies
+MTD,Mettler Toledo,Health Care,github:datasets/s-and-p-500-companies
+MGM,MGM Resorts,Consumer Discretionary,github:datasets/s-and-p-500-companies
+MCHP,Microchip Technology,Information Technology,github:datasets/s-and-p-500-companies
+MU,Micron Technology,Information Technology,github:datasets/s-and-p-500-companies
+MSFT,Microsoft,Information Technology,github:datasets/s-and-p-500-companies
+MAA,Mid-America Apartment Communities,Real Estate,github:datasets/s-and-p-500-companies
+MRNA,Moderna,Health Care,github:datasets/s-and-p-500-companies
+MDLZ,Mondelez International,Consumer Staples,github:datasets/s-and-p-500-companies
+MPWR,Monolithic Power Systems,Information Technology,github:datasets/s-and-p-500-companies
+MNST,Monster Beverage,Consumer Staples,github:datasets/s-and-p-500-companies
+MCO,Moody's Corporation,Financials,github:datasets/s-and-p-500-companies
+MS,Morgan Stanley,Financials,github:datasets/s-and-p-500-companies
+MOS,Mosaic Company (The),Materials,github:datasets/s-and-p-500-companies
+MSI,Motorola Solutions,Information Technology,github:datasets/s-and-p-500-companies
+MSCI,MSCI,Financials,github:datasets/s-and-p-500-companies
+NDAQ,"Nasdaq, Inc.",Financials,github:datasets/s-and-p-500-companies
+NTAP,NetApp,Information Technology,github:datasets/s-and-p-500-companies
+NFLX,Netflix,Communication Services,github:datasets/s-and-p-500-companies
+NEM,Newmont,Materials,github:datasets/s-and-p-500-companies
+NWSA,News Corp (Class A),Communication Services,github:datasets/s-and-p-500-companies
+NWS,News Corp (Class B),Communication Services,github:datasets/s-and-p-500-companies
+NEE,NextEra Energy,Utilities,github:datasets/s-and-p-500-companies
+NKE,"Nike, Inc.",Consumer Discretionary,github:datasets/s-and-p-500-companies
+NI,NiSource,Utilities,github:datasets/s-and-p-500-companies
+NDSN,Nordson Corporation,Industrials,github:datasets/s-and-p-500-companies
+NSC,Norfolk Southern,Industrials,github:datasets/s-and-p-500-companies
+NTRS,Northern Trust,Financials,github:datasets/s-and-p-500-companies
+NOC,Northrop Grumman,Industrials,github:datasets/s-and-p-500-companies
+NCLH,Norwegian Cruise Line Holdings,Consumer Discretionary,github:datasets/s-and-p-500-companies
+NRG,NRG Energy,Utilities,github:datasets/s-and-p-500-companies
+NUE,Nucor,Materials,github:datasets/s-and-p-500-companies
+NVDA,Nvidia,Information Technology,github:datasets/s-and-p-500-companies
+NVR,"NVR, Inc.",Consumer Discretionary,github:datasets/s-and-p-500-companies
+NXPI,NXP Semiconductors,Information Technology,github:datasets/s-and-p-500-companies
+ORLY,O'Reilly Automotive,Consumer Discretionary,github:datasets/s-and-p-500-companies
+OXY,Occidental Petroleum,Energy,github:datasets/s-and-p-500-companies
+ODFL,Old Dominion,Industrials,github:datasets/s-and-p-500-companies
+OMC,Omnicom Group,Communication Services,github:datasets/s-and-p-500-companies
+ON,ON Semiconductor,Information Technology,github:datasets/s-and-p-500-companies
+OKE,Oneok,Energy,github:datasets/s-and-p-500-companies
+ORCL,Oracle Corporation,Information Technology,github:datasets/s-and-p-500-companies
+OTIS,Otis Worldwide,Industrials,github:datasets/s-and-p-500-companies
+PCAR,Paccar,Industrials,github:datasets/s-and-p-500-companies
+PKG,Packaging Corporation of America,Materials,github:datasets/s-and-p-500-companies
+PLTR,Palantir Technologies,Information Technology,github:datasets/s-and-p-500-companies
+PANW,Palo Alto Networks,Information Technology,github:datasets/s-and-p-500-companies
+PH,Parker Hannifin,Industrials,github:datasets/s-and-p-500-companies
+PAYX,Paychex,Industrials,github:datasets/s-and-p-500-companies
+PYPL,PayPal,Financials,github:datasets/s-and-p-500-companies
+PNR,Pentair,Industrials,github:datasets/s-and-p-500-companies
+PEP,PepsiCo,Consumer Staples,github:datasets/s-and-p-500-companies
+PFE,Pfizer,Health Care,github:datasets/s-and-p-500-companies
+PCG,PG&E Corporation,Utilities,github:datasets/s-and-p-500-companies
+PM,Philip Morris International,Consumer Staples,github:datasets/s-and-p-500-companies
+PSX,Phillips 66,Energy,github:datasets/s-and-p-500-companies
+PNW,Pinnacle West Capital,Utilities,github:datasets/s-and-p-500-companies
+PNC,PNC Financial Services,Financials,github:datasets/s-and-p-500-companies
+PPG,PPG Industries,Materials,github:datasets/s-and-p-500-companies
+PPL,PPL Corporation,Utilities,github:datasets/s-and-p-500-companies
+PFG,Principal Financial Group,Financials,github:datasets/s-and-p-500-companies
+PG,Procter & Gamble,Consumer Staples,github:datasets/s-and-p-500-companies
+PGR,Progressive Corporation,Financials,github:datasets/s-and-p-500-companies
+PLD,Prologis,Real Estate,github:datasets/s-and-p-500-companies
+PRU,Prudential Financial,Financials,github:datasets/s-and-p-500-companies
+PEG,Public Service Enterprise Group,Utilities,github:datasets/s-and-p-500-companies
+PTC,PTC Inc.,Information Technology,github:datasets/s-and-p-500-companies
+PSA,Public Storage,Real Estate,github:datasets/s-and-p-500-companies
+PHM,PulteGroup,Consumer Discretionary,github:datasets/s-and-p-500-companies
+PWR,Quanta Services,Industrials,github:datasets/s-and-p-500-companies
+QCOM,Qualcomm,Information Technology,github:datasets/s-and-p-500-companies
+DGX,Quest Diagnostics,Health Care,github:datasets/s-and-p-500-companies
+Q,Qnity Electronics,Information Technology,github:datasets/s-and-p-500-companies
+RL,Ralph Lauren Corporation,Consumer Discretionary,github:datasets/s-and-p-500-companies
+RJF,Raymond James Financial,Financials,github:datasets/s-and-p-500-companies
+RDDT,Reddit,Communication Services,github:datasets/s-and-p-500-companies
+RTX,RTX Corporation,Industrials,github:datasets/s-and-p-500-companies
+O,Realty Income,Real Estate,github:datasets/s-and-p-500-companies
+REG,Regency Centers,Real Estate,github:datasets/s-and-p-500-companies
+REGN,Regeneron Pharmaceuticals,Health Care,github:datasets/s-and-p-500-companies
+RF,Regions Financial Corporation,Financials,github:datasets/s-and-p-500-companies
+RSG,Republic Services,Industrials,github:datasets/s-and-p-500-companies
+RMD,ResMed|,Health Care,github:datasets/s-and-p-500-companies
+RVTY,Revvity,Health Care,github:datasets/s-and-p-500-companies
+HOOD,Robinhood Markets,Financials,github:datasets/s-and-p-500-companies
+ROK,Rockwell Automation,Industrials,github:datasets/s-and-p-500-companies
+ROL,"Rollins, Inc.",Industrials,github:datasets/s-and-p-500-companies
+ROP,Roper Technologies,Information Technology,github:datasets/s-and-p-500-companies
+ROST,Ross Stores,Consumer Discretionary,github:datasets/s-and-p-500-companies
+RCL,Royal Caribbean Group,Consumer Discretionary,github:datasets/s-and-p-500-companies
+SPGI,S&P Global,Financials,github:datasets/s-and-p-500-companies
+CRM,Salesforce,Information Technology,github:datasets/s-and-p-500-companies
+SNDK,Sandisk,Information Technology,github:datasets/s-and-p-500-companies
+SBAC,SBA Communications,Real Estate,github:datasets/s-and-p-500-companies
+SLB,Schlumberger,Energy,github:datasets/s-and-p-500-companies
+STX,Seagate Technology,Information Technology,github:datasets/s-and-p-500-companies
+SRE,Sempra,Utilities,github:datasets/s-and-p-500-companies
+NOW,ServiceNow,Information Technology,github:datasets/s-and-p-500-companies
+SHW,Sherwin-Williams,Materials,github:datasets/s-and-p-500-companies
+SPG,Simon Property Group,Real Estate,github:datasets/s-and-p-500-companies
+SKYD,Skydance Corporation,Communication Services,github:datasets/s-and-p-500-companies
+SWKS,Skyworks Solutions,Information Technology,github:datasets/s-and-p-500-companies
+SJM,J.M. Smucker Company (The),Consumer Staples,github:datasets/s-and-p-500-companies
+SW,Smurfit Westrock,Materials,github:datasets/s-and-p-500-companies
+SNA,Snap-on,Industrials,github:datasets/s-and-p-500-companies
+SOLV,Solventum,Health Care,github:datasets/s-and-p-500-companies
+SO,Southern Company,Utilities,github:datasets/s-and-p-500-companies
+LUV,Southwest Airlines,Industrials,github:datasets/s-and-p-500-companies
+SWK,Stanley Black & Decker,Industrials,github:datasets/s-and-p-500-companies
+SBUX,Starbucks,Consumer Discretionary,github:datasets/s-and-p-500-companies
+STT,State Street Corporation,Financials,github:datasets/s-and-p-500-companies
+STLD,Steel Dynamics,Materials,github:datasets/s-and-p-500-companies
+STE,Steris,Health Care,github:datasets/s-and-p-500-companies
+SYK,Stryker Corporation,Health Care,github:datasets/s-and-p-500-companies
+SMCI,Supermicro,Information Technology,github:datasets/s-and-p-500-companies
+SYF,Synchrony Financial,Financials,github:datasets/s-and-p-500-companies
+SNPS,Synopsys,Information Technology,github:datasets/s-and-p-500-companies
+SYY,Sysco,Consumer Staples,github:datasets/s-and-p-500-companies
+TMUS,T-Mobile US,Communication Services,github:datasets/s-and-p-500-companies
+TROW,T. Rowe Price,Financials,github:datasets/s-and-p-500-companies
+TTWO,Take-Two Interactive,Communication Services,github:datasets/s-and-p-500-companies
+TPR,"Tapestry, Inc.",Consumer Discretionary,github:datasets/s-and-p-500-companies
+TRGP,Targa Resources,Energy,github:datasets/s-and-p-500-companies
+TGT,Target Corporation,Consumer Staples,github:datasets/s-and-p-500-companies
+TEL,TE Connectivity,Information Technology,github:datasets/s-and-p-500-companies
+TDY,Teledyne Technologies,Information Technology,github:datasets/s-and-p-500-companies
+TER,Teradyne,Information Technology,github:datasets/s-and-p-500-companies
+TSLA,"Tesla, Inc.",Consumer Discretionary,github:datasets/s-and-p-500-companies
+TXN,Texas Instruments,Information Technology,github:datasets/s-and-p-500-companies
+TPL,Texas Pacific Land Corporation,Energy,github:datasets/s-and-p-500-companies
+TXT,Textron,Industrials,github:datasets/s-and-p-500-companies
+TMO,Thermo Fisher Scientific,Health Care,github:datasets/s-and-p-500-companies
+TJX,TJX Companies,Consumer Discretionary,github:datasets/s-and-p-500-companies
+TKO,TKO Group Holdings,Communication Services,github:datasets/s-and-p-500-companies
+TSCO,Tractor Supply,Consumer Discretionary,github:datasets/s-and-p-500-companies
+TT,Trane Technologies,Industrials,github:datasets/s-and-p-500-companies
+TDG,TransDigm Group,Industrials,github:datasets/s-and-p-500-companies
+TRV,Travelers Companies (The),Financials,github:datasets/s-and-p-500-companies
+TRMB,Trimble Inc.,Information Technology,github:datasets/s-and-p-500-companies
+TFC,Truist Financial,Financials,github:datasets/s-and-p-500-companies
+TWLO,Twilio,Information Technology,github:datasets/s-and-p-500-companies
+TYL,Tyler Technologies,Information Technology,github:datasets/s-and-p-500-companies
+TSN,Tyson Foods,Consumer Staples,github:datasets/s-and-p-500-companies
+USB,U.S. Bancorp,Financials,github:datasets/s-and-p-500-companies
+UBER,Uber,Industrials,github:datasets/s-and-p-500-companies
+UDR,"UDR, Inc.",Real Estate,github:datasets/s-and-p-500-companies
+ULTA,Ulta Beauty,Consumer Discretionary,github:datasets/s-and-p-500-companies
+UNP,Union Pacific Corporation,Industrials,github:datasets/s-and-p-500-companies
+UAL,United Airlines Holdings,Industrials,github:datasets/s-and-p-500-companies
+UPS,United Parcel Service,Industrials,github:datasets/s-and-p-500-companies
+URI,United Rentals,Industrials,github:datasets/s-and-p-500-companies
+UNH,UnitedHealth Group,Health Care,github:datasets/s-and-p-500-companies
+UHS,Universal Health Services,Health Care,github:datasets/s-and-p-500-companies
+VLO,Valero Energy,Energy,github:datasets/s-and-p-500-companies
+VEEV,Veeva Systems,Health Care,github:datasets/s-and-p-500-companies
+VTR,Ventas,Real Estate,github:datasets/s-and-p-500-companies
+VLTO,Veralto,Industrials,github:datasets/s-and-p-500-companies
+VRSN,Verisign,Information Technology,github:datasets/s-and-p-500-companies
+VRSK,Verisk Analytics,Industrials,github:datasets/s-and-p-500-companies
+VZ,Verizon,Communication Services,github:datasets/s-and-p-500-companies
+VRTX,Vertex Pharmaceuticals,Health Care,github:datasets/s-and-p-500-companies
+VRT,Vertiv,Industrials,github:datasets/s-and-p-500-companies
+VTRS,Viatris,Health Care,github:datasets/s-and-p-500-companies
+VICI,Vici Properties,Real Estate,github:datasets/s-and-p-500-companies
+V,Visa Inc.,Financials,github:datasets/s-and-p-500-companies
+VST,Vistra Corp.,Utilities,github:datasets/s-and-p-500-companies
+VMRK,Vivmark Residential,Real Estate,github:datasets/s-and-p-500-companies
+VMC,Vulcan Materials Company,Materials,github:datasets/s-and-p-500-companies
+VYLR,Vylor,Consumer Staples,github:datasets/s-and-p-500-companies
+WRB,W. R. Berkley Corporation,Financials,github:datasets/s-and-p-500-companies
+GWW,W. W. Grainger,Industrials,github:datasets/s-and-p-500-companies
+WAB,Wabtec,Industrials,github:datasets/s-and-p-500-companies
+WMT,Walmart,Consumer Staples,github:datasets/s-and-p-500-companies
+DIS,Walt Disney Company (The),Communication Services,github:datasets/s-and-p-500-companies
+WM,Waste Management,Industrials,github:datasets/s-and-p-500-companies
+WAT,Waters Corporation,Health Care,github:datasets/s-and-p-500-companies
+WEC,WEC Energy Group,Utilities,github:datasets/s-and-p-500-companies
+WFC,Wells Fargo,Financials,github:datasets/s-and-p-500-companies
+WELL,Welltower,Real Estate,github:datasets/s-and-p-500-companies
+WST,West Pharmaceutical Services,Health Care,github:datasets/s-and-p-500-companies
+WDC,Western Digital,Information Technology,github:datasets/s-and-p-500-companies
+WY,Weyerhaeuser,Real Estate,github:datasets/s-and-p-500-companies
+WSM,"Williams-Sonoma, Inc.",Consumer Discretionary,github:datasets/s-and-p-500-companies
+WMB,Williams Companies,Energy,github:datasets/s-and-p-500-companies
+WTW,Willis Towers Watson,Financials,github:datasets/s-and-p-500-companies
+WDAY,"Workday, Inc.",Information Technology,github:datasets/s-and-p-500-companies
+WYNN,Wynn Resorts,Consumer Discretionary,github:datasets/s-and-p-500-companies
+XEL,Xcel Energy,Utilities,github:datasets/s-and-p-500-companies
+XYL,Xylem Inc.,Industrials,github:datasets/s-and-p-500-companies
+YUM,Yum! Brands,Consumer Discretionary,github:datasets/s-and-p-500-companies
+ZBRA,Zebra Technologies,Information Technology,github:datasets/s-and-p-500-companies
+ZBH,Zimmer Biomet,Health Care,github:datasets/s-and-p-500-companies
+ZTS,Zoetis,Health Care,github:datasets/s-and-p-500-companies

@@ -1,0 +1,68 @@
+{
+  "title": "Backtest Lab",
+  "version": "0.1.0",
+  "banner": "These results use the free Yahoo Finance source. The four stock-ranking books are SURVIVORSHIP-BIASED: the universe is today's S&P 500, not the members that existed at each year-end. A survivorship-bias-free universe requires Sharadar (SEP / SF1 / TICKERS). The TQQQ books are single funds, so that bias does not apply to them, but the prices are still free vendor data.",
+  "reports": [
+    {
+      "id": "best-returner",
+      "name": "Best Returner",
+      "group": "Prior-year return",
+      "file": "best-returner.json",
+      "csv": "best-returner.csv",
+      "png": "best-returner.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "top5-returners",
+      "name": "Top 5 Returners",
+      "group": "Prior-year return",
+      "file": "top5-returners.json",
+      "csv": "top5-returners.csv",
+      "png": "top5-returners.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "biggest",
+      "name": "Biggest",
+      "group": "Size",
+      "file": "biggest.json",
+      "csv": "biggest.csv",
+      "png": "biggest.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "top5-biggest",
+      "name": "Top 5 Biggest",
+      "group": "Size",
+      "file": "top5-biggest.json",
+      "csv": "top5-biggest.csv",
+      "png": "top5-biggest.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "tqqq-buy-hold",
+      "name": "TQQQ Buy and Hold",
+      "group": "TQQQ",
+      "file": "tqqq-buy-hold.json",
+      "csv": "tqqq-buy-hold.csv",
+      "png": "tqqq-buy-hold.png",
+      "free_source": true,
+      "survivorship_bias_free": true
+    },
+    {
+      "id": "tqqq-two-bullet",
+      "name": "TQQQ Two-Bullet 90/10",
+      "group": "TQQQ",
+      "file": "tqqq-two-bullet.json",
+      "csv": "tqqq-two-bullet.csv",
+      "png": "tqqq-two-bullet.png",
+      "free_source": true,
+      "survivorship_bias_free": true
+    }
+  ],
+  "generated_at": "2026-10-15T11:46:40+00:00"
+}

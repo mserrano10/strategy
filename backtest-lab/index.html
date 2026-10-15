@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backtest Lab — Atlas Wealth</title>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%230F172A'/></svg>">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap');
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #334155;
+            background-color: #FAF9F6;
+            line-height: 1.6;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 60px 24px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 56px 64px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .brand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .brand-logo, .brand-logo:visited, .brand-logo:hover, .brand-logo:active {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none !important;
+            color: #0F172A;
+        }
+
+        .brand-mark { width: 36px; height: 36px; }
+
+        .brand-name {
+            font-size: 14pt;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: #0F172A;
+        }
+
+        .brand-name-atlas { font-weight: 800; }
+        .brand-name-wealth { font-weight: 300; opacity: 0.65; }
+
+        .brand-slash {
+            font-weight: 700;
+            color: #0F172A;
+            display: inline-block;
+            transform: scaleY(0.88) translateY(-1px);
+            margin: 0 -1px;
+        }
+
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #E2E8F0;
+        }
+
+        .back-link {
+            color: #0F172A;
+            text-decoration: none;
+            font-size: 9pt;
+            font-weight: 600;
+            transition: opacity 0.2s ease;
+        }
+        .back-link:hover { opacity: 0.6; }
+
+        .pdf-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #FAF9F6;
+            color: #0F172A;
+            border: 1px solid #CBD5E1;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 8.5pt;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            text-decoration: none;
+        }
+        .pdf-btn:hover, .pdf-btn.active {
+            background-color: #F1F5F9;
+            border-color: #0F172A;
+        }
+
+        .header-bar {
+            border-bottom: 2px solid #0F172A;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .brand-sub {
+            font-size: 8.5pt;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #64748B;
+            text-transform: uppercase;
+        }
+
+        .doc-title {
+            font-size: 24pt;
+            font-weight: 800;
+            color: #0F172A;
+            margin-top: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 24px;
+            background-color: #FAF9F6;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-size: 8.5pt;
+            color: #64748B;
+            margin-bottom: 32px;
+        }
+
+        .meta-grid.metrics {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .meta-item strong {
+            color: #0F172A;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            display: block;
+            margin-top: 2px;
+            font-size: 14pt;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: -0.3px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        h2 {
+            font-size: 13pt;
+            font-weight: 800;
+            color: #0F172A;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 6px;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #334155;
+        }
+
+        .callout {
+            background-color: #FAF9F6;
+            border: 1px solid #E2E8F0;
+            border-left: 4px solid #DC2626;
+            padding: 18px 22px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 10pt;
+        }
+
+        .callout.ink { border-left-color: #0F172A; }
+
+        .callout-title {
+            font-weight: 800;
+            color: #0F172A;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 8.5pt;
+            letter-spacing: 1px;
+        }
+
+        .callout ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .callout li { margin-bottom: 6px; color: #334155; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px 0;
+            font-size: 8.5pt;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #0F172A;
+            color: #FFFFFF;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 12px;
+            font-size: 8pt;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #E2E8F0;
+            color: #334155;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) td { background-color: #FAF9F6; }
+
+        td.num, th.num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        tr.clickable { cursor: pointer; }
+        tr.clickable:hover td { background-color: #F1F5F9; }
+        tr.selected td { background-color: #F1F5F9 !important; box-shadow: inset 3px 0 0 #0F172A; }
+
+        .status-badge {
+            display: inline-block;
+            background-color: #059669;
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 7.5pt;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+        }
+
+        .status-badge.bad { background-color: #DC2626; }
+        .status-badge.ink { background-color: #0F172A; }
+
+        .pos { color: #059669; font-weight: 700; }
+        .neg { color: #DC2626; font-weight: 700; }
+
+        .chart-wrap {
+            background: #FAF9F6;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 12px 12px 8px;
+            margin: 8px 0 12px;
+        }
+
+        .chart-wrap svg { width: 100%; height: auto; display: block; }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            margin: 4px 0 8px;
+            font-size: 8pt;
+            color: #334155;
+        }
+
+        .legend button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 8pt;
+            color: #334155;
+            cursor: pointer;
+            padding: 0;
+            font-weight: 600;
+        }
+
+        .swatch {
+            width: 18px;
+            height: 3px;
+            border-radius: 2px;
+            background: #0F172A;
+            display: inline-block;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .readout {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 8pt;
+            color: #64748B;
+            min-height: 1.2em;
+        }
+
+        .footer {
+            margin-top: 48px;
+            border-top: 1px solid #E2E8F0;
+            padding-top: 20px;
+            font-size: 8pt;
+            color: #94A3B8;
+            text-align: center;
+        }
+
+        .table-scroll {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .hidden { display: none; }
+
+        @media print {
+            body { background: none; padding: 0; }
+            .container { width: 100%; max-width: none; padding: 0; border: none; box-shadow: none; }
+            .brand-header, .nav-header, .toolbar { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 24px 12px; }
+            .container { padding: 32px 20px; }
+            .doc-title { font-size: 18pt; }
+            .brand-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .meta-grid, .meta-grid.metrics { grid-template-columns: 1fr; }
+            .header-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="brand-header">
+        <a href="https://strategy.atlaswealth.cc" class="brand-logo">
+            <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="4" y1="32" x2="36" y2="32" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M20 6L32 32H8L20 6Z" stroke="#0F172A" stroke-width="2.5" stroke-linejoin="round"/>
+                <circle cx="20" cy="22" r="2.5" fill="#0F172A"/>
+            </svg>
+            <span class="brand-name">
+                <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEA<span class="brand-slash">\</span>TH</span>
+            </span>
+        </a>
+    </div>
+
+    <div class="nav-header">
+        <a href="https://strategy.atlaswealth.cc" class="back-link">← Back to Strategy Portal</a>
+        <button type="button" class="pdf-btn" onclick="window.print()">Print</button>
+    </div>
+
+    <div class="header-bar">
+        <div>
+            <div class="brand-sub">Private Research · Unlisted Page</div>
+            <div class="doc-title">Backtest Lab</div>
+        </div>
+        <div style="text-align: right;">
+            <div class="brand-sub">v0</div>
+            <div style="font-size: 8pt; color: #64748B; margin-top: 4px;">Pre-computed results. The engine runs offline.</div>
+        </div>
+    </div>
+
+    <div id="file-warning" class="callout hidden">
+        <div class="callout-title">Open this page over HTTP</div>
+        <p style="margin:0;">The report loads <code>results/*.json</code>. A <code>file://</code> URL blocks that fetch. Use the GitHub Pages address, or run <code>python3 -m http.server</code> inside <code>backtest-lab/</code>.</p>
+    </div>
+
+    <div id="load-error" class="callout hidden"></div>
+
+    <div id="app" class="hidden">
+        <div class="meta-grid" id="lab-meta"></div>
+
+        <div class="callout" id="page-banner">
+            <div class="callout-title">Free source</div>
+            <p id="banner-text" style="margin:0;"></p>
+        </div>
+
+        <h2>1. Summary</h2>
+        <p>Click a row for the equity curve, the yearly ledger, and the holdings. No benchmark is plotted. Sharpe uses daily returns, a 252-day year, and a risk-free rate of zero.</p>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Strategy</th>
+                        <th class="num">Total return</th>
+                        <th class="num">CAGR</th>
+                        <th class="num">Max DD</th>
+                        <th class="num">Volatility</th>
+                        <th class="num">Sharpe</th>
+                        <th class="num">Final equity</th>
+                    </tr>
+                </thead>
+                <tbody id="summary-body"></tbody>
+            </table>
+        </div>
+
+        <h2>2. Equity Curves</h2>
+        <div class="toolbar">
+            <div class="readout" id="compare-readout">Rebased to 100 at each book’s first mark.</div>
+            <div>
+                <button type="button" class="pdf-btn active" id="scale-log">Log</button>
+                <button type="button" class="pdf-btn" id="scale-linear">Linear</button>
+            </div>
+        </div>
+        <div class="legend" id="legend"></div>
+        <div class="chart-wrap"><svg id="compare-chart" viewBox="0 0 880 320" role="img" aria-label="Equity curves of every book"></svg></div>
+
+        <h2>3. <span id="detail-title">Book</span></h2>
+        <p id="detail-desc"></p>
+        <div id="detail-flag"></div>
+        <div class="meta-grid metrics" id="detail-metrics"></div>
+        <div class="toolbar">
+            <div class="readout" id="detail-readout"></div>
+            <a id="png-link" class="pdf-btn" href="#">PNG</a>
+        </div>
+        <div class="chart-wrap"><svg id="detail-chart" viewBox="0 0 880 280" role="img" aria-label="Selected equity curve"></svg></div>
+        <div class="chart-wrap"><svg id="dd-chart" viewBox="0 0 880 120" role="img" aria-label="Drawdown"></svg></div>
+
+        <h2>4. Yearly Returns</h2>
+        <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th class="num">Return</th>
+                    <th class="num">Equity</th>
+                    <th>Window</th>
+                </tr>
+            </thead>
+            <tbody id="yearly-body"></tbody>
+        </table>
+        </div>
+
+        <h2>5. Holdings</h2>
+        <div id="holdings"></div>
+
+        <h2 id="events-heading">6. Rule Log</h2>
+        <div id="events"></div>
+
+        <h2>7. Caveats</h2>
+        <div class="callout ink" id="caveats"></div>
+    </div>
+
+    <div class="footer">
+        CONFIDENTIAL — FOR INTERNAL RESEARCH USE — NOT FOR PUBLIC DISTRIBUTION<br>
+        Unlisted. This page is not linked from the portal index.
+    </div>
+</div>
+
+<script>
+const COLORS = ["#0F172A", "#334155", "#64748B", "#059669", "#DC2626", "#1E3A5F"];
+
+const state = {
+    reports: [],
+    selected: null,
+    log: true,
+};
+
+function pct(value, signed) {
+    if (value === null || value === undefined || Number.isNaN(value)) return "—";
+    const n = value * 100;
+    const body = Math.abs(n).toFixed(1) + "%";
+    if (n < 0) return "-" + body;
+    if (signed && n > 0) return "+" + body;
+    return n === 0 ? "0.0%" : body;
+}
+
+function money(value) {
+    if (value === null || value === undefined || Number.isNaN(value)) return "—";
+    return "$" + Math.round(value).toLocaleString("en-US");
+}
+
+function cap(value) {
+    if (value === null || value === undefined || Number.isNaN(value)) return "—";
+    const abs = Math.abs(value);
+    if (abs >= 1e12) return "$" + (value / 1e12).toFixed(2) + "T";
+    if (abs >= 1e9) return "$" + (value / 1e9).toFixed(1) + "B";
+    if (abs >= 1e6) return "$" + (value / 1e6).toFixed(1) + "M";
+    return money(value);
+}
+
+function num(value) {
+    if (value === null || value === undefined || Number.isNaN(value)) return "—";
+    return value.toFixed(2);
+}
+
+function signedClass(value) {
+    if (value > 0) return "pos";
+    if (value < 0) return "neg";
+    return "";
+}
+
+function badge(report) {
+    if (!report.data_source.survivorship_bias_free) {
+        return '<span class="status-badge bad">Survivorship-biased</span>';
+    }
+    if (report.data_source.free_source) {
+        return '<span class="status-badge ink">Free source</span>';
+    }
+    return "";
+}
+
+function el(id) { return document.getElementById(id); }
+
+function niceTicks(min, max, count) {
+    if (!(max > min)) return [min];
+    const span = max - min;
+    const step0 = span / count;
+    const mag = Math.pow(10, Math.floor(Math.log10(step0)));
+    const err = step0 / mag;
+    const step = err >= 7.5 ? 10 * mag : err >= 3.5 ? 5 * mag : err >= 1.5 ? 2 * mag : mag;
+    const start = Math.ceil(min / step) * step;
+    const ticks = [];
+    for (let v = start; v <= max + step * 0.01; v += step) ticks.push(v);
+    return ticks.length ? ticks : [min, max];
+}
+
+function logTicks(min, max) {
+    const lo = Math.floor(Math.log10(Math.max(min, 1e-6)));
+    const hi = Math.ceil(Math.log10(Math.max(max, min * 1.01)));
+    const ticks = [];
+    for (let p = lo; p <= hi; p++) ticks.push(Math.pow(10, p));
+    return ticks.filter((v) => v >= min * 0.99 && v <= max * 1.01);
+}
+
+function drawChart(svg, series, options) {
+    const width = 880;
+    const height = options.height || 320;
+    const pad = { l: 64, r: 16, t: 16, b: 28 };
+    const log = !!options.log;
+    const values = [];
+    series.forEach((s) => s.points.forEach((p) => { if (p.value > 0) values.push(p.value); }));
+    svg.innerHTML = "";
+    if (!values.length) return;
+    let min = Math.min(...values);
+    let max = Math.max(...values);
+    if (log) {
+        min = Math.max(min, 1e-6);
+        if (max <= min) max = min * 10;
+    } else {
+        const padY = (max - min) * 0.06 || Math.abs(max) * 0.05 || 1;
+        min -= padY;
+        max += padY;
+    }
+    const yOf = (v) => {
+        const yv = log ? Math.log(v) / Math.log(10) : v;
+        const y0 = log ? Math.log(min) / Math.log(10) : min;
+        const y1 = log ? Math.log(max) / Math.log(10) : max;
+        const t = (yv - y0) / (y1 - y0 || 1);
+        return pad.t + (1 - t) * (height - pad.t - pad.b);
+    };
+    const axisSeries = series.reduce((best, item) => item.points.length > best.points.length ? item : best, series[0]);
+    const allDates = axisSeries.points.map((p) => p.date);
+    const xOf = (i) => {
+        const n = Math.max(allDates.length - 1, 1);
+        return pad.l + (i / n) * (width - pad.l - pad.r);
+    };
+    const ticks = log ? logTicks(min, max) : niceTicks(min, max, 4);
+    const ns = "http://www.w3.org/2000/svg";
+    function node(name, attrs) {
+        const item = document.createElementNS(ns, name);
+        Object.entries(attrs).forEach(([k, v]) => item.setAttribute(k, v));
+        return item;
+    }
+    ticks.forEach((tick) => {
+        const y = yOf(tick);
+        svg.appendChild(node("line", { x1: pad.l, x2: width - pad.r, y1: y, y2: y, stroke: "#E2E8F0", "stroke-width": "1" }));
+        const label = log ? (tick >= 1000 ? Math.round(tick).toLocaleString("en-US") : String(Math.round(tick))) : money(tick);
+        const text = node("text", { x: pad.l - 8, y: y + 3, "text-anchor": "end", fill: "#64748B", "font-size": "10", "font-family": "Inter, sans-serif" });
+        text.textContent = label;
+        svg.appendChild(text);
+    });
+    const labelIdx = [0, Math.floor(allDates.length / 2), allDates.length - 1];
+    labelIdx.forEach((i) => {
+        const text = node("text", { x: xOf(i), y: height - 8, "text-anchor": i === 0 ? "start" : i === allDates.length - 1 ? "end" : "middle", fill: "#64748B", "font-size": "10", "font-family": "Inter, sans-serif" });
+        text.textContent = allDates[i];
+        svg.appendChild(text);
+    });
+    const drawn = [];
+    series.forEach((s) => {
+        const byDate = new Map(s.points.map((p) => [p.date, p.value]));
+        let d = "";
+        let started = false;
+        const aligned = [];
+        allDates.forEach((date, i) => {
+            if (!byDate.has(date)) return;
+            const value = byDate.get(date);
+            aligned.push({ date, value });
+            d += (started ? "L" : "M") + xOf(i).toFixed(2) + " " + yOf(value).toFixed(2);
+            started = true;
+        });
+        const attrs = { d, fill: "none", stroke: s.color, "stroke-width": "1.8", "stroke-linejoin": "round", "stroke-linecap": "round" };
+        if (s.dash) attrs["stroke-dasharray"] = s.dash;
+        svg.appendChild(node("path", attrs));
+        drawn.push({ name: s.name, color: s.color, points: aligned });
+    });
+    svg._xOf = xOf;
+    svg._dates = allDates;
+    svg._series = drawn;
+}
+
+function drawDrawdown(svg, points) {
+    const width = 880;
+    const height = 120;
+    const pad = { l: 64, r: 16, t: 10, b: 22 };
+    svg.innerHTML = "";
+    const min = Math.min(...points.map((p) => p.drawdown), 0);
+    const ns = "http://www.w3.org/2000/svg";
+    function node(name, attrs) {
+        const item = document.createElementNS(ns, name);
+        Object.entries(attrs).forEach(([k, v]) => item.setAttribute(k, v));
+        return item;
+    }
+    const xOf = (i) => pad.l + (i / Math.max(points.length - 1, 1)) * (width - pad.l - pad.r);
+    const yOf = (v) => pad.t + (1 - (v - min) / (0 - min || 1)) * (height - pad.t - pad.b);
+    svg.appendChild(node("line", { x1: pad.l, x2: width - pad.r, y1: yOf(0), y2: yOf(0), stroke: "#E2E8F0" }));
+    const coords = points.map((p, i) => xOf(i).toFixed(2) + "," + yOf(p.drawdown).toFixed(2)).join(" ");
+    const base = xOf(points.length - 1).toFixed(2) + "," + yOf(0).toFixed(2) + " " + xOf(0).toFixed(2) + "," + yOf(0).toFixed(2);
+    svg.appendChild(node("polygon", { points: coords + " " + base, fill: "#DC2626", "fill-opacity": "0.12", stroke: "none" }));
+    svg.appendChild(node("polyline", { points: coords, fill: "none", stroke: "#DC2626", "stroke-width": "1.4" }));
+    const text = node("text", { x: pad.l - 8, y: yOf(min) + 3, "text-anchor": "end", fill: "#64748B", "font-size": "10", "font-family": "Inter, sans-serif" });
+    text.textContent = pct(min, false);
+    svg.appendChild(text);
+    const cap = node("text", { x: pad.l, y: height - 6, fill: "#64748B", "font-size": "10", "font-family": "Inter, sans-serif" });
+    cap.textContent = "Drawdown from peak";
+    svg.appendChild(cap);
+}
+
+function renderSummary() {
+    const body = el("summary-body");
+    body.innerHTML = "";
+    state.reports.forEach((report, index) => {
+        const m = report.metrics;
+        const tr = document.createElement("tr");
+        tr.className = "clickable" + (report.id === state.selected ? " selected" : "");
+        tr.tabIndex = 0;
+        tr.innerHTML =
+            "<td><strong>" + report.name + "</strong><br>" + badge(report) + "</td>" +
+            '<td class="num ' + signedClass(m.total_return) + '">' + pct(m.total_return, true) + "</td>" +
+            '<td class="num ' + signedClass(m.cagr) + '">' + pct(m.cagr, true) + "</td>" +
+            '<td class="num neg">' + pct(m.max_drawdown, false) + "</td>" +
+            '<td class="num">' + pct(m.volatility, false) + "</td>" +
+            '<td class="num">' + num(m.sharpe) + "</td>" +
+            '<td class="num">' + money(m.final_equity) + "</td>";
+        tr.addEventListener("click", () => select(report.id));
+        tr.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") { event.preventDefault(); select(report.id); }
+        });
+        body.appendChild(tr);
+        report._color = COLORS[index % COLORS.length];
+    });
+}
+
+function renderLegend() {
+    const legend = el("legend");
+    legend.innerHTML = "";
+    state.reports.forEach((report) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.innerHTML = '<span class="swatch" style="background:' + report._color + '"></span>' + report.name;
+        button.addEventListener("click", () => select(report.id));
+        legend.appendChild(button);
+    });
+}
+
+function renderCompare() {
+    const series = state.reports.map((report) => ({
+        color: report._color,
+        name: report.name,
+        points: report.equity.map((row) => ({
+            date: row.date,
+            value: state.log ? (row.equity / report.equity[0].equity) * 100 : row.equity / report.equity[0].equity * 100,
+        })),
+    }));
+    // Shared calendar: each series keeps its own dates; drawChart uses the first
+    // series for the x labels. Rebase already makes levels comparable.
+    // Align by padding shorter series is unnecessary if windows match.
+    // Use the longest series as the x axis and carry the others forward.
+    const longest = series.reduce((a, b) => (a.points.length >= b.points.length ? a : b));
+    const aligned = series.map((s) => {
+        const byDate = new Map(s.points.map((p) => [p.date, p.value]));
+        let last = s.points[0].value;
+        const points = longest.points.map((p) => {
+            if (byDate.has(p.date)) last = byDate.get(p.date);
+            return { date: p.date, value: byDate.has(p.date) ? byDate.get(p.date) : (s.points[0].date > p.date ? null : last) };
+        }).filter((p) => p.value !== null);
+        return { color: s.color, name: s.name, points };
+    });
+    drawChart(el("compare-chart"), aligned, { log: state.log, height: 320 });
+    el("scale-log").classList.toggle("active", state.log);
+    el("scale-linear").classList.toggle("active", !state.log);
+}
+
+function renderDetail() {
+    const report = state.reports.find((item) => item.id === state.selected) || state.reports[0];
+    if (!report) return;
+    state.selected = report.id;
+    el("detail-title").textContent = report.name;
+    el("detail-desc").textContent = report.description;
+    el("detail-flag").innerHTML =
+        '<div class="callout' + (report.data_source.survivorship_bias_free ? " ink" : "") + '">' +
+        '<div class="callout-title">' + (report.data_source.survivorship_bias_free ? "Free source" : "Survivorship-biased") + "</div>" +
+        "<p style=\"margin:0;\">" + report.data_source.banner + "</p></div>";
+    const m = report.metrics;
+    const cells = [
+        ["Total return", pct(m.total_return, true)],
+        ["CAGR", pct(m.cagr, true)],
+        ["Max drawdown", pct(m.max_drawdown, false)],
+        ["Volatility", pct(m.volatility, false)],
+        ["Sharpe (rf=0)", num(m.sharpe)],
+        ["Final equity", money(m.final_equity)],
+    ];
+    el("detail-metrics").innerHTML = cells.map(([label, value]) =>
+        '<div class="meta-item"><strong>' + label + '</strong><span class="metric-value">' + value + "</span></div>"
+    ).join("");
+    el("png-link").href = "results/" + report.id + ".png";
+    el("detail-readout").textContent = report.start + " → " + report.end + " · " + report.rebalance + " · cost " + report.cost_bps + " bps";
+    drawChart(el("detail-chart"), [{
+        color: "#0F172A",
+        points: report.equity.map((row) => ({ date: row.date, value: row.equity })),
+    }], { log: false, height: 280 });
+    drawDrawdown(el("dd-chart"), report.equity);
+    renderYearly(report);
+    renderHoldings(report);
+    renderEvents(report);
+    renderCaveats(report);
+    document.querySelectorAll("#summary-body tr").forEach((row, index) => {
+        row.classList.toggle("selected", state.reports[index].id === report.id);
+    });
+}
+
+function renderYearly(report) {
+    el("yearly-body").innerHTML = report.yearly_returns.map((row) =>
+        "<tr><td><strong>" + row.year + "</strong></td>" +
+        '<td class="num ' + signedClass(row.return) + '">' + pct(row.return, true) + "</td>" +
+        '<td class="num">' + money(row.equity) + "</td>" +
+        "<td>" + (row.partial ? "Partial / YTD" : "Full year") + "</td></tr>"
+    ).join("");
+}
+
+function renderHoldings(report) {
+    const root = el("holdings");
+    if (!report.cohorts || !report.cohorts.length) {
+        root.innerHTML = "<p>Buy-and-hold has a single position for the whole window. There is no rebalance cohort.</p>";
+        return;
+    }
+    const sleeves = report.kind === "tqqq-two-bullet";
+    const intro = sleeves
+        ? "<p>Year-end mark-to-market of the sleeves. The 90/10 split is never rebalanced. The two TQQQ rows are the two bullets; the two BIL rows are their dry powder.</p>"
+        : "";
+    root.innerHTML = intro + report.cohorts.map((cohort) => {
+        const head = sleeves
+            ? (cohort.year || "") + " sleeve snapshot · " + (cohort.period_end || "—")
+            : cohort.rebalance_date
+                ? cohort.year + " book · rebalanced " + cohort.rebalance_date + " · held through " + (cohort.period_end || "—")
+                : "Snapshot " + (cohort.period_end || "");
+        const ret = cohort.period_return === null || cohort.period_return === undefined
+            ? ""
+            : ' · <span class="' + signedClass(cohort.period_return) + '">' + pct(cohort.period_return, true) + "</span>";
+        const rows = (cohort.holdings || []).map((h) => {
+            if (sleeves) {
+                return "<tr><td><strong>" + h.ticker + "</strong></td><td>" + (h.name || "") + "</td>" +
+                    '<td class="num">' + pct(h.weight, false) + "</td>" +
+                    '<td class="num">' + money(h.value) + "</td></tr>";
+            }
+            const signal = h.prior_year_return !== undefined && h.prior_year_return !== null
+                ? pct(h.prior_year_return, true)
+                : "—";
+            return "<tr><td><strong>" + h.ticker + "</strong></td><td>" + (h.name || "") + "</td>" +
+                '<td class="num">' + pct(h.weight, false) + "</td>" +
+                '<td class="num">' + signal + "</td>" +
+                '<td class="num">' + cap(h.market_cap) + "</td></tr>";
+        }).join("");
+        const extra = cohort.eligible ? "<div style=\"font-size:8pt;color:#64748B;margin-top:4px;\">" + cohort.eligible + " names were eligible out of " + cohort.universe_size + ".</div>" : "";
+        const header = sleeves
+            ? "<th>Ticker</th><th>Sleeve</th><th class=\"num\">Weight</th><th class=\"num\">Value</th>"
+            : "<th>Ticker</th><th>Name</th><th class=\"num\">Weight</th><th class=\"num\">Prior-year return</th><th class=\"num\">Market cap</th>";
+        return "<div style=\"font-size:8pt;font-weight:700;color:#475569;margin-top:14px;text-transform:uppercase;\">" + head + ret + "</div>" +
+            "<div class=\"table-scroll\"><table><thead><tr>" + header + "</tr></thead><tbody>" +
+            rows + "</tbody></table></div>" + extra;
+    }).join("");
+}
+
+function renderEvents(report) {
+    const heading = el("events-heading");
+    const root = el("events");
+    if (!report.events || !report.events.length) {
+        heading.classList.add("hidden");
+        root.innerHTML = "";
+        return;
+    }
+    heading.classList.remove("hidden");
+    root.innerHTML = "<div class=\"table-scroll\"><table><thead><tr><th>Date</th><th>Event</th><th>Detail</th></tr></thead><tbody>" +
+        report.events.map((event) =>
+            "<tr><td>" + event.date + "</td><td>" + event.type + (event.bullet ? " · " + event.bullet : "") + "</td><td>" + event.detail + "</td></tr>"
+        ).join("") + "</tbody></table></div>";
+}
+
+function renderCaveats(report) {
+    const items = (report.caveats || []).map((line) => "<li>" + line + "</li>").join("");
+    const warnings = (report.warnings || []).map((line) => "<li>" + line + "</li>").join("");
+    el("caveats").innerHTML =
+        '<div class="callout-title">How this number was made</div><ul>' + items + "</ul>" +
+        (warnings ? '<div class="callout-title" style="margin-top:14px;">Warnings</div><ul>' + warnings + "</ul>" : "");
+}
+
+function select(id) {
+    state.selected = id;
+    history.replaceState(null, "", "#" + id);
+    renderDetail();
+    const node = el("detail-title");
+    if (node && node.scrollIntoView) node.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function wireScale() {
+    el("scale-log").addEventListener("click", () => { state.log = true; renderCompare(); });
+    el("scale-linear").addEventListener("click", () => { state.log = false; renderCompare(); });
+}
+
+function wireHover() {
+    const svg = el("compare-chart");
+    svg.addEventListener("mousemove", (event) => {
+        if (!svg._dates) return;
+        const rect = svg.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width * 880;
+        let best = 0;
+        let bestDist = Infinity;
+        svg._dates.forEach((date, i) => {
+            const dist = Math.abs(svg._xOf(i) - x);
+            if (dist < bestDist) { bestDist = dist; best = i; }
+        });
+        const date = svg._dates[best];
+        const parts = svg._series.map((s) => {
+            const point = s.points.find((p) => p.date === date);
+            return point ? s.name + " " + point.value.toFixed(0) : null;
+        }).filter(Boolean);
+        el("compare-readout").textContent = date + " · rebased · " + parts.join(" · ");
+    });
+}
+
+async function main() {
+    if (location.protocol === "file:") el("file-warning").classList.remove("hidden");
+    try {
+        const manifest = await fetch("results/manifest.json").then((response) => {
+            if (!response.ok) throw new Error("results/manifest.json returned " + response.status);
+            return response.json();
+        });
+        const reports = await Promise.all(manifest.reports.map((item) =>
+            fetch("results/" + item.file).then((response) => {
+                if (!response.ok) throw new Error(item.file + " returned " + response.status);
+                return response.json();
+            })
+        ));
+        state.reports = reports;
+        const first = reports[0];
+        el("banner-text").textContent = manifest.banner || (first && first.data_source.banner) || "";
+        const windows = reports.map((r) => r.start + " → " + r.end);
+        const sameWindow = windows.every((w) => w === windows[0]);
+        el("lab-meta").innerHTML =
+            '<div class="meta-item"><strong>WINDOW</strong><br>' + (sameWindow ? windows[0] : "See each book") + "</div>" +
+            '<div class="meta-item"><strong>STARTING CAPITAL</strong><br>' + money(first.initial_capital) + "</div>" +
+            '<div class="meta-item"><strong>REBALANCE</strong><br>Annual, year-end close (rank books)</div>' +
+            '<div class="meta-item"><strong>GENERATED</strong><br>' + (manifest.generated_at || first.generated_at) + "</div>";
+        const hash = decodeURIComponent(location.hash.replace("#", ""));
+        state.selected = reports.some((r) => r.id === hash) ? hash : reports[0].id;
+        el("app").classList.remove("hidden");
+        renderSummary();
+        renderLegend();
+        renderCompare();
+        renderDetail();
+        wireScale();
+        wireHover();
+        window.addEventListener("hashchange", () => {
+            const next = decodeURIComponent(location.hash.replace("#", ""));
+            if (state.reports.some((report) => report.id === next)) select(next);
+        });
+    } catch (error) {
+        const box = el("load-error");
+        box.classList.remove("hidden");
+        box.innerHTML = '<div class="callout-title">Results not loaded</div><p style="margin:0;">' + error.message + "</p>";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", main);
+</script>
+
+</body>
+</html>
