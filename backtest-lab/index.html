@@ -110,6 +110,35 @@
             border-color: #0F172A;
         }
 
+        .tabbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 0 0 8px;
+        }
+
+        .tabbar .pdf-btn { white-space: nowrap; }
+
+        details.fold {
+            margin: 8px 0 24px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            background: #FFFFFF;
+            padding: 0 16px;
+        }
+
+        details.fold > summary {
+            cursor: pointer;
+            font-weight: 700;
+            color: #0F172A;
+            font-size: 9pt;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            padding: 12px 0;
+        }
+
+        details.fold[open] { padding-bottom: 8px; }
+
         .header-bar {
             border-bottom: 2px solid #0F172A;
             padding-bottom: 16px;
@@ -255,7 +284,7 @@
 
         .status-badge {
             display: inline-block;
-            background-color: #059669;
+            background-color: #0F172A;
             color: #FFFFFF;
             font-weight: 700;
             font-size: 7.5pt;
@@ -269,7 +298,7 @@
         .status-badge.bad { background-color: #DC2626; }
         .status-badge.ink { background-color: #0F172A; }
 
-        .pos { color: #059669; font-weight: 700; }
+        .pos { color: #0F172A; font-weight: 700; }
         .neg { color: #DC2626; font-weight: 700; }
 
         .chart-wrap {
@@ -367,7 +396,7 @@
         @media print {
             body { background: none; padding: 0; }
             .container { width: 100%; max-width: none; padding: 0; border: none; box-shadow: none; }
-            .brand-header, .nav-header, .toolbar { display: none; }
+            .brand-header, .nav-header, .toolbar, .tabbar { display: none; }
         }
 
         @media (max-width: 768px) {
@@ -428,86 +457,8 @@
             <p id="banner-text" style="margin:0;"></p>
         </div>
 
-        <h2>1. Summary</h2>
-        <p>Click a row for the equity curve, the yearly ledger, and the holdings. The dashed line on every chart is SPY total return, started from the same capital. Sharpe uses daily returns, a 252-day year, and a risk-free rate of zero.</p>
-        <div class="table-scroll">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Strategy</th>
-                        <th class="num">Total return</th>
-                        <th class="num">CAGR</th>
-                        <th class="num">Max DD</th>
-                        <th class="num">Volatility</th>
-                        <th class="num">Sharpe</th>
-                        <th class="num">Final equity</th>
-                    </tr>
-                </thead>
-                <tbody id="summary-body"></tbody>
-            </table>
-        </div>
-
-        <h2>2. Current list vs point-in-time</h2>
-        <p>Same rules, two universes. “Current” ranks today’s S&amp;P 500 every year. “Point-in-time” walks Wikipedia’s selected changes backward. SPY is the reference on the same window as the current-list book.</p>
-        <div class="table-scroll" id="pit-compare"></div>
-
-        <h2>3. Size floor</h2>
-        <p>Prior-year winners among today’s US common stocks that cleared the cap floor at the prior year-end. Delisted names are not in the listing file.</p>
-        <div class="table-scroll" id="size-compare"></div>
-
-        <h2>4. Equity Curves</h2>
-        <div class="toolbar">
-            <div id="chart-filters"></div>
-            <div class="readout" id="compare-readout">Rebased to 100 at each book’s first mark. SPY is the dashed line.</div>
-            <div>
-                <button type="button" class="pdf-btn active" id="scale-log">Log</button>
-                <button type="button" class="pdf-btn" id="scale-linear">Linear</button>
-            </div>
-        </div>
-        <div class="legend" id="legend"></div>
-        <div class="chart-wrap"><svg id="compare-chart" viewBox="0 0 880 320" role="img" aria-label="Equity curves of every book"></svg></div>
-
-        <h2>5. <span id="detail-title">Book</span></h2>
-        <p id="detail-desc"></p>
-        <div id="detail-flag"></div>
-        <div class="meta-grid metrics" id="detail-metrics"></div>
-        <div class="toolbar">
-            <div class="readout" id="detail-readout"></div>
-            <a id="png-link" class="pdf-btn" href="#">PNG</a>
-        </div>
-        <div class="chart-wrap"><svg id="detail-chart" viewBox="0 0 880 280" role="img" aria-label="Selected equity curve"></svg></div>
-        <div class="chart-wrap"><svg id="dd-chart" viewBox="0 0 880 120" role="img" aria-label="Drawdown"></svg></div>
-
-        <h2>6. Yearly Returns</h2>
-        <div class="table-scroll">
-        <table>
-            <thead>
-                <tr>
-                    <th>Year</th>
-                    <th class="num">Return</th>
-                    <th class="num">Equity</th>
-                    <th>Window</th>
-                </tr>
-            </thead>
-            <tbody id="yearly-body"></tbody>
-        </table>
-        </div>
-
-        <h2>7. Holdings</h2>
-        <div id="holdings"></div>
-
-        <h2 id="events-heading">8. Rule Log</h2>
-        <div id="events"></div>
-
-        <h2>9. Caveats</h2>
-        <div class="callout ink" id="caveats"></div>
-
-        <h2 id="study-heading" class="hidden">10. Event study</h2>
-        <div id="study"></div>
-
-        <h2 id="forward-heading">11. Forward test, live since Oct 15, 2026</h2>
-        <p>Separate from the backtests above. Each stock book is the strategy's current-year cohort, marked from the Oct 15, 2026 close. Top 5 Biggest counts a company once. The two-bullet book keeps running its rules. The dashed line is SPY, started from the same $10,000.</p>
-        <div id="forward"></div>
+        <div class="tabbar" id="tabbar" role="tablist" aria-label="Strategy ideas"></div>
+        <div id="panel" role="tabpanel"></div>
     </div>
 
     <div class="footer">
@@ -517,32 +468,53 @@
 </div>
 
 <script>
-const COLORS = ["#0F172A", "#334155", "#64748B", "#059669", "#DC2626", "#1E3A5F"];
+const COLORS = ["#0F172A", "#334155", "#64748B", "#94A3B8", "#1E3A5F", "#475569"];
+
+const TABS = [
+    { id: "summary", label: "Summary" },
+    {
+        id: "best-returner",
+        label: "Best Returner",
+        ids: ["best-returner", "best-returner-pit", "best-returner-10b", "best-returner-2b"],
+        intro: "The single best total return in the prior year. The rows are today’s S&P 500, the point-in-time list, and the $10 billion and $2 billion size floors.",
+    },
+    {
+        id: "top5-returners",
+        label: "Top 5 Returners",
+        ids: ["top5-returners", "top5-returners-pit", "top5-returners-10b", "top5-returners-2b"],
+        intro: "The five best prior-year returns, equal weight, on the same four universes.",
+    },
+    {
+        id: "biggest",
+        label: "Biggest",
+        ids: ["biggest", "biggest-pit"],
+        intro: "The largest approximated market cap at the prior year-end. One row is today’s S&P 500. The other walks the point-in-time list.",
+    },
+    {
+        id: "top5-biggest",
+        label: "Top 5 Biggest",
+        ids: ["top5-biggest", "top5-biggest-pit"],
+        intro: "The five largest, equal weight. Current list and point-in-time.",
+    },
+    {
+        id: "tqqq-two-bullet",
+        label: "TQQQ Two-Bullet",
+        ids: ["tqqq-two-bullet", "tqqq-buy-hold"],
+        intro: "The two-bullet 90/10 rule, and TQQQ bought and held on the same window. Buy-and-hold is a backtest row only.",
+    },
+];
 
 const state = {
     reports: [],
+    tab: "summary",
     selected: null,
     log: true,
-    chartFilter: "pit",
     study: null,
+    forward: null,
+    forwardError: null,
 };
 
 const SPY_COLOR = "#0369A1";
-
-function family(report) {
-    if (report.id.indexOf("tqqq") === 0) return "tqqq";
-    if (/-1?\d+b$/.test(report.id) || (report.universe && report.universe.id === "us-listed")) return "size";
-    if (report.id.endsWith("-pit") || (report.universe && report.universe.point_in_time)) return "pit";
-    return "current";
-}
-
-function visibleReports() {
-    if (state.chartFilter === "all") return state.reports.filter((report) => report.kind !== "event-study");
-    if (state.chartFilter === "pit") {
-        return state.reports.filter((report) => family(report) === "current" || family(report) === "pit");
-    }
-    return state.reports.filter((report) => family(report) === state.chartFilter);
-}
 
 function spySeries(report) {
     const bench = report && report.benchmark;
@@ -723,251 +695,80 @@ function drawDrawdown(svg, points) {
     svg.appendChild(cap);
 }
 
-function renderSummary() {
-    const body = el("summary-body");
-    body.innerHTML = "";
-    state.reports.forEach((report, index) => {
-        const m = report.metrics;
-        const tr = document.createElement("tr");
-        tr.className = "clickable" + (report.id === state.selected ? " selected" : "");
-        tr.tabIndex = 0;
-        tr.innerHTML =
-            "<td><strong>" + report.name + "</strong><br>" + badge(report) + "</td>" +
-            '<td class="num ' + signedClass(m.total_return) + '">' + pct(m.total_return, true) + "</td>" +
-            '<td class="num ' + signedClass(m.cagr) + '">' + pct(m.cagr, true) + "</td>" +
-            '<td class="num neg">' + pct(m.max_drawdown, false) + "</td>" +
-            '<td class="num">' + pct(m.volatility, false) + "</td>" +
-            '<td class="num">' + num(m.sharpe) + "</td>" +
-            '<td class="num">' + money(m.final_equity) + "</td>";
-        tr.addEventListener("click", () => select(report.id));
-        tr.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" || event.key === " ") { event.preventDefault(); select(report.id); }
-        });
-        body.appendChild(tr);
-        report._color = COLORS[index % COLORS.length];
-    });
-    const anchor = state.reports.find((report) => report.id === "best-returner" && spySeries(report))
-        || state.reports.find((report) => spySeries(report));
+const TABLE_HEAD = "<thead><tr><th>Strategy</th><th class=\"num\">Total return</th><th class=\"num\">CAGR</th>" +
+    "<th class=\"num\">Max DD</th><th class=\"num\">Volatility</th><th class=\"num\">Sharpe</th>" +
+    "<th class=\"num\">Final equity</th></tr></thead>";
+
+function tabById(id) {
+    return TABS.find((tab) => tab.id === id) || TABS[0];
+}
+
+function tabForReport(id) {
+    if (!id || id === "summary") return TABS[0];
+    return TABS.find((tab) => tab.ids && tab.ids.indexOf(id) !== -1) || tabById(id);
+}
+
+function currentTab() {
+    return tabById(state.tab);
+}
+
+function tabReports(tab) {
+    return (tab.ids || []).map((id) => state.reports.find((report) => report.id === id)).filter(Boolean);
+}
+
+function selectedReport(tab) {
+    const reports = tabReports(tab);
+    return reports.find((report) => report.id === state.selected) || reports[0] || null;
+}
+
+function summaryAnchor() {
+    return state.reports.find((report) => report.id === "best-returner" && spySeries(report))
+        || state.reports.find((report) => spySeries(report))
+        || null;
+}
+
+function metricTds(metrics) {
+    if (!metrics) {
+        return '<td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td>';
+    }
+    return '<td class="num ' + signedClass(metrics.total_return) + '">' + pct(metrics.total_return, true) + "</td>" +
+        '<td class="num ' + signedClass(metrics.cagr) + '">' + pct(metrics.cagr, true) + "</td>" +
+        '<td class="num neg">' + pct(metrics.max_drawdown, false) + "</td>" +
+        '<td class="num">' + pct(metrics.volatility, false) + "</td>" +
+        '<td class="num">' + num(metrics.sharpe) + "</td>" +
+        '<td class="num">' + money(metrics.final_equity) + "</td>";
+}
+
+function spyLabel() {
+    return "<strong>S&amp;P 500 (SPY)</strong><br><span class=\"status-badge ink\">Reference</span>";
+}
+
+function reportCells(report) {
+    return "<td><strong>" + report.name + "</strong><br>" + badge(report) + "</td>" + metricTds(report.metrics);
+}
+
+function summaryMarkup() {
+    const anchor = summaryAnchor();
     const bench = spySeries(anchor);
-    if (bench) {
-        const m = bench.metrics;
-        const tr = document.createElement("tr");
-        tr.innerHTML =
-            "<td><strong>S&amp;P 500 (SPY)</strong><br><span class=\"status-badge ink\">Reference</span></td>" +
-            '<td class="num ' + signedClass(m.total_return) + '">' + pct(m.total_return, true) + "</td>" +
-            '<td class="num ' + signedClass(m.cagr) + '">' + pct(m.cagr, true) + "</td>" +
-            '<td class="num neg">' + pct(m.max_drawdown, false) + "</td>" +
-            '<td class="num">' + pct(m.volatility, false) + "</td>" +
-            '<td class="num">' + num(m.sharpe) + "</td>" +
-            '<td class="num">' + money(m.final_equity) + "</td>";
-        body.appendChild(tr);
-    }
-    renderPitCompare();
-    renderSizeCompare();
-}
-
-function renderLegend() {
-    const legend = el("legend");
-    legend.innerHTML = "";
-    visibleReports().forEach((report) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.innerHTML = '<span class="swatch" style="background:' + report._color + '"></span>' + report.name;
-        button.addEventListener("click", () => select(report.id));
-        legend.appendChild(button);
-    });
-    const spy = document.createElement("span");
-    spy.style.cssText = "display:inline-flex;align-items:center;gap:6px;font-weight:600;";
-    spy.innerHTML = '<span class="swatch" style="background:' + SPY_COLOR + ';height:0;border-top:2px dashed ' + SPY_COLOR + '"></span>S&amp;P 500 (SPY)';
-    legend.appendChild(spy);
-}
-
-function renderFilters() {
-    const root = el("chart-filters");
-    const filters = [
-        ["pit", "Current vs point-in-time"],
-        ["size", "Size floor"],
-        ["tqqq", "TQQQ"],
-        ["all", "All books"],
-    ];
-    root.innerHTML = "";
-    filters.forEach(([id, label]) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "pdf-btn" + (state.chartFilter === id ? " active" : "");
-        button.textContent = label;
-        button.addEventListener("click", () => {
-            state.chartFilter = id;
-            renderFilters();
-            renderLegend();
-            renderCompare();
-        });
-        root.appendChild(button);
-    });
-}
-
-function renderCompare() {
-    const shown = visibleReports();
-    if (!shown.length) {
-        el("compare-chart").innerHTML = "";
-        return;
-    }
-    const series = shown.map((report) => ({
-        color: report._color,
-        name: report.name,
-        points: report.equity.map((row) => ({
-            date: row.date,
-            value: state.log ? (row.equity / report.equity[0].equity) * 100 : row.equity / report.equity[0].equity * 100,
-        })),
-    }));
-    // Shared calendar: each series keeps its own dates; drawChart uses the first
-    // series for the x labels. Rebase already makes levels comparable.
-    // Align by padding shorter series is unnecessary if windows match.
-    // Use the longest series as the x axis and carry the others forward.
-    const spyAnchor = shown.find((report) => spySeries(report));
-    const spy = spySeries(spyAnchor);
-    if (spy && spy.equity.length && shown.length) {
-        const base = spy.equity[0].equity;
-        series.push({
-            color: SPY_COLOR,
-            name: "S&P 500 (SPY)",
-            dash: "5 4",
-            points: spy.equity.map((row) => ({ date: row.date, value: (row.equity / base) * 100 })),
-        });
-    }
-    const longest = series.reduce((a, b) => (a.points.length >= b.points.length ? a : b));
-    const aligned = series.map((s) => {
-        const byDate = new Map(s.points.map((p) => [p.date, p.value]));
-        let last = s.points[0].value;
-        const points = longest.points.map((p) => {
-            if (byDate.has(p.date)) last = byDate.get(p.date);
-            return { date: p.date, value: byDate.has(p.date) ? byDate.get(p.date) : (s.points[0].date > p.date ? null : last) };
-        }).filter((p) => p.value !== null);
-        return { color: s.color, name: s.name, dash: s.dash, points };
-    });
-    drawChart(el("compare-chart"), aligned, { log: state.log, height: 320 });
-    el("scale-log").classList.toggle("active", state.log);
-    el("scale-linear").classList.toggle("active", !state.log);
-}
-
-function renderDetail() {
-    const report = state.reports.find((item) => item.id === state.selected) || state.reports[0];
-    if (!report) return;
-    state.selected = report.id;
-    el("detail-title").textContent = report.name;
-    el("detail-desc").textContent = report.description;
-    const pit = report.universe && report.universe.point_in_time;
-    const flagTitle = report.data_source.survivorship_bias_free ? "Free source" : (pit ? "Point-in-time attempt" : "Survivorship-biased");
-    el("detail-flag").innerHTML =
-        '<div class="callout' + (report.data_source.survivorship_bias_free || pit ? " ink" : "") + '">' +
-        '<div class="callout-title">' + flagTitle + "</div>" +
-        "<p style=\"margin:0;\">" + report.data_source.banner + "</p></div>";
-    const m = report.metrics;
-    const bench = spySeries(report);
-    const cells = [
-        ["Total return", pct(m.total_return, true)],
-        ["CAGR", pct(m.cagr, true)],
-        ["Max drawdown", pct(m.max_drawdown, false)],
-        ["Volatility", pct(m.volatility, false)],
-        ["Sharpe (rf=0)", num(m.sharpe)],
-        ["Final equity", money(m.final_equity)],
-    ];
-    if (bench) {
-        const b = bench.metrics;
-        cells.push(
-            ["SPY total return", pct(b.total_return, true)],
-            ["SPY CAGR", pct(b.cagr, true)],
-            ["SPY max drawdown", pct(b.max_drawdown, false)]
-        );
-    }
-    el("detail-metrics").innerHTML = cells.map(([label, value]) =>
-        '<div class="meta-item"><strong>' + label + '</strong><span class="metric-value">' + value + "</span></div>"
+    const rows = state.reports.map((report) =>
+        '<tr class="clickable" tabindex="0" data-open="' + report.id + '">' + reportCells(report) + "</tr>"
     ).join("");
-    el("png-link").href = "results/" + report.id + ".png";
-    el("detail-readout").textContent = report.start + " → " + report.end + " · " + report.rebalance + " · cost " + report.cost_bps + " bps";
-    const detailSeries = [{
-        color: "#0F172A",
-        name: report.name,
-        points: report.equity.map((row) => ({ date: row.date, value: row.equity })),
-    }];
-    if (bench) {
-        detailSeries.push({
-            color: SPY_COLOR,
-            name: "S&P 500 (SPY)",
-            dash: "5 4",
-            points: bench.equity.map((row) => ({ date: row.date, value: row.equity })),
-        });
-    }
-    drawChart(el("detail-chart"), detailSeries, { log: false, height: 280 });
-    drawDrawdown(el("dd-chart"), report.equity);
-    renderYearly(report);
-    renderHoldings(report);
-    renderEvents(report);
-    renderCaveats(report);
-    document.querySelectorAll("#summary-body tr").forEach((row, index) => {
-        const item = state.reports[index];
-        row.classList.toggle("selected", !!(item && item.id === report.id));
-    });
+    const spy = bench
+        ? "<tr><td>" + spyLabel() + "</td>" + metricTds(bench.metrics) + "</tr>"
+        : "";
+    const windowNote = bench && bench.metrics
+        ? "<p>SPY is the current-list window, " + bench.metrics.start + " → " + bench.metrics.end + ".</p>"
+        : "";
+    return "<h2>Summary</h2>" +
+        "<p>All books in one table, plus SPY. Open a row for that idea’s variants, chart, and forward test. Sharpe uses daily returns, a 252-day year, and a risk-free rate of zero.</p>" +
+        '<div class="table-scroll"><table>' + TABLE_HEAD + "<tbody>" + rows + spy + "</tbody></table></div>" +
+        windowNote +
+        studyMarkup();
 }
 
-function renderPitCompare() {
-    const root = el("pit-compare");
-    const bases = ["best-returner", "top5-returners", "biggest", "top5-biggest"];
-    const rows = bases.map((id) => {
-        const current = state.reports.find((report) => report.id === id);
-        const pit = state.reports.find((report) => report.id === id + "-pit");
-        if (!current && !pit) return "";
-        const label = (current || pit).name.replace(" (point-in-time)", "");
-        const spy = spySeries(current || pit);
-        return "<tr><td><strong>" + label + "</strong></td>" +
-            metricCells(current) + metricCells(pit) + metricCells(spy && { metrics: spy.metrics }) + "</tr>";
-    }).join("");
-    if (!rows) {
-        root.innerHTML = "<p>Point-in-time books are not in this results folder yet.</p>";
-        return;
-    }
-    root.innerHTML = "<table><thead><tr><th>Book</th><th class=\"num\">Current total</th><th class=\"num\">Current CAGR</th><th class=\"num\">Current max DD</th>" +
-        "<th class=\"num\">PIT total</th><th class=\"num\">PIT CAGR</th><th class=\"num\">PIT max DD</th>" +
-        "<th class=\"num\">SPY total</th><th class=\"num\">SPY CAGR</th><th class=\"num\">SPY max DD</th></tr></thead><tbody>" +
-        rows + "</tbody></table>";
-}
-
-function renderSizeCompare() {
-    const root = el("size-compare");
-    const bases = [["best-returner", "Best returner"], ["top5-returners", "Top 5 returners"]];
-    const rows = bases.map(([id, label]) => {
-        const ten = state.reports.find((report) => report.id === id + "-10b");
-        const two = state.reports.find((report) => report.id === id + "-2b");
-        if (!ten && !two) return "";
-        return "<tr><td><strong>" + label + "</strong></td>" + metricCells(ten) + metricCells(two) + "</tr>";
-    }).join("");
-    if (!rows) {
-        root.innerHTML = "<p>Size-floor books are not in this results folder yet.</p>";
-        return;
-    }
-    root.innerHTML = "<table><thead><tr><th>Book</th><th class=\"num\">≥$10B total</th><th class=\"num\">≥$10B CAGR</th><th class=\"num\">≥$10B max DD</th>" +
-        "<th class=\"num\">≥$2B total</th><th class=\"num\">≥$2B CAGR</th><th class=\"num\">≥$2B max DD</th></tr></thead><tbody>" +
-        rows + "</tbody></table>";
-}
-
-function metricCells(report) {
-    if (!report || !report.metrics) return '<td class="num">—</td><td class="num">—</td><td class="num">—</td>';
-    const m = report.metrics;
-    return '<td class="num ' + signedClass(m.total_return) + '">' + pct(m.total_return, true) + "</td>" +
-        '<td class="num ' + signedClass(m.cagr) + '">' + pct(m.cagr, true) + "</td>" +
-        '<td class="num neg">' + pct(m.max_drawdown, false) + "</td>";
-}
-
-function renderStudy() {
-    const heading = el("study-heading");
-    const root = el("study");
+function studyMarkup() {
     const study = state.study;
-    if (!study || !study.summary) {
-        heading.classList.add("hidden");
-        root.innerHTML = "";
-        return;
-    }
-    heading.classList.remove("hidden");
+    if (!study || !study.summary) return "";
     const s = study.summary;
     const rate = (count, total) => total ? (count + " / " + total + " (" + (100 * count / total).toFixed(0) + "%)") : "—";
     const worst = (items) => (items || []).map((item) =>
@@ -982,7 +783,7 @@ function renderStudy() {
             '<td class="num ' + signedClass(winner.next_return) + '">' + pct(winner.next_return, true) + "</td>" +
             "<td>" + names + (row.partial_next_year ? " · partial" : "") + "</td></tr>";
     }).join("");
-    root.innerHTML =
+    return '<details class="fold"><summary>Event study · next-year returns since 2000</summary>' +
         "<p>Signal years with a finished next year: " + s.completed_years + ". " +
         "The #1 returner fell more than 30% the next year in " + rate(s.winner_down_30, s.winner_observed) +
         " and more than 50% in " + rate(s.winner_down_50, s.winner_observed) + ". " +
@@ -992,7 +793,7 @@ function renderStudy() {
         '<div class="callout"><div class="callout-title">Worst next years, #1</div><ul>' + worst(s.worst_winners) + "</ul>" +
         '<div class="callout-title" style="margin-top:12px;">Worst next years, top 5</div><ul>' + worst(s.worst_top5) + "</ul></div>" +
         '<div class="table-scroll"><table><thead><tr><th>Year</th><th>#1</th><th class="num">Year return</th><th class="num">Next year</th><th>Top 5 next-year returns</th></tr></thead><tbody>' +
-        years + "</tbody></table></div>";
+        years + "</tbody></table></div></details>";
 }
 
 function distTable(distribution) {
@@ -1000,14 +801,14 @@ function distTable(distribution) {
     const line = (group, scenario, label) => {
         const block = (distribution[group] || {})[scenario];
         if (!block) return "";
-        const num = (value) => value === null || value === undefined ? "—" : pct(value, true);
+        const shown = (value) => value === null || value === undefined ? "—" : pct(value, true);
         const hit = block.hit_rate_vs_spy === null || block.hit_rate_vs_spy === undefined ? "—" : pct(block.hit_rate_vs_spy, false);
         return "<tr><td>" + label + "</td><td class=\"num\">" + block.n + "</td>" +
-            "<td class=\"num " + signedClass(block.median) + "\">" + num(block.median) + "</td>" +
-            "<td class=\"num " + signedClass(block.mean) + "\">" + num(block.mean) + "</td>" +
+            "<td class=\"num " + signedClass(block.median) + "\">" + shown(block.median) + "</td>" +
+            "<td class=\"num " + signedClass(block.mean) + "\">" + shown(block.mean) + "</td>" +
             "<td class=\"num\">" + hit + "</td>" +
-            "<td class=\"num\">" + num(block.pct_below_neg_30) + "</td>" +
-            "<td class=\"num\">" + num(block.pct_below_neg_50) + "</td></tr>";
+            "<td class=\"num\">" + shown(block.pct_below_neg_30) + "</td>" +
+            "<td class=\"num\">" + shown(block.pct_below_neg_50) + "</td></tr>";
     };
     return "<p>Next-year distribution versus SPY, finished years only. " +
         "Excluded drops a missing next return. Worst fills it with −100%. Neutral fills it with that year's SPY return.</p>" +
@@ -1022,26 +823,28 @@ function distTable(distribution) {
         "</tbody></table></div>";
 }
 
-function renderYearly(report) {
-    el("yearly-body").innerHTML = report.yearly_returns.map((row) =>
+function yearlyHtml(report) {
+    const rows = (report.yearly_returns || []).map((row) =>
         "<tr><td><strong>" + row.year + "</strong></td>" +
         '<td class="num ' + signedClass(row.return) + '">' + pct(row.return, true) + "</td>" +
         '<td class="num">' + money(row.equity) + "</td>" +
         "<td>" + (row.partial ? "Partial / YTD" : "Full year") + "</td></tr>"
     ).join("");
+    return '<div style="font-size:8pt;font-weight:700;color:#475569;margin-top:14px;text-transform:uppercase;">Yearly returns</div>' +
+        '<div class="table-scroll"><table><thead><tr><th>Year</th><th class="num">Return</th><th class="num">Equity</th><th>Window</th></tr></thead><tbody>' +
+        rows + "</tbody></table></div>";
 }
 
-function renderHoldings(report) {
-    const root = el("holdings");
+function holdingsHtml(report) {
+    const title = '<div style="font-size:8pt;font-weight:700;color:#475569;margin-top:14px;text-transform:uppercase;">Holdings</div>';
     if (!report.cohorts || !report.cohorts.length) {
-        root.innerHTML = "<p>Buy-and-hold has a single position for the whole window. There is no rebalance cohort.</p>";
-        return;
+        return title + "<p>Buy-and-hold has a single position for the whole window. There is no rebalance cohort.</p>";
     }
     const sleeves = report.kind === "tqqq-two-bullet";
     const intro = sleeves
         ? "<p>Year-end mark-to-market of the sleeves. The 90/10 split is never rebalanced. The two TQQQ rows are the two bullets; the two BIL rows are their dry powder.</p>"
         : "";
-    root.innerHTML = intro + report.cohorts.map((cohort) => {
+    const body = report.cohorts.map((cohort) => {
         const head = sleeves
             ? (cohort.year || "") + " sleeve snapshot · " + (cohort.period_end || "—")
             : cohort.rebalance_date
@@ -1073,101 +876,165 @@ function renderHoldings(report) {
             "<div class=\"table-scroll\"><table><thead><tr>" + header + "</tr></thead><tbody>" +
             rows + "</tbody></table></div>" + extra;
     }).join("");
+    return title + intro + body;
 }
 
-function renderEvents(report) {
-    const heading = el("events-heading");
-    const root = el("events");
-    if (!report.events || !report.events.length) {
-        heading.classList.add("hidden");
-        root.innerHTML = "";
-        return;
-    }
-    heading.classList.remove("hidden");
-    root.innerHTML = "<div class=\"table-scroll\"><table><thead><tr><th>Date</th><th>Event</th><th>Detail</th></tr></thead><tbody>" +
+function eventsHtml(report) {
+    if (!report.events || !report.events.length) return "";
+    return '<div style="font-size:8pt;font-weight:700;color:#475569;margin-top:14px;text-transform:uppercase;">Rule log</div>' +
+        "<div class=\"table-scroll\"><table><thead><tr><th>Date</th><th>Event</th><th>Detail</th></tr></thead><tbody>" +
         report.events.map((event) =>
             "<tr><td>" + event.date + "</td><td>" + event.type + (event.bullet ? " · " + event.bullet : "") + "</td><td>" + event.detail + "</td></tr>"
         ).join("") + "</tbody></table></div>";
 }
 
-function renderCaveats(report) {
+function caveatsHtml(report) {
     const items = (report.caveats || []).map((line) => "<li>" + line + "</li>").join("");
     const warnings = (report.warnings || []).map((line) => "<li>" + line + "</li>").join("");
-    el("caveats").innerHTML =
-        '<div class="callout-title">How this number was made</div><ul>' + items + "</ul>" +
-        (warnings ? '<div class="callout-title" style="margin-top:14px;">Warnings</div><ul>' + warnings + "</ul>" : "");
+    return '<div class="callout ink"><div class="callout-title">How this number was made</div><ul>' + items + "</ul>" +
+        (warnings ? '<div class="callout-title" style="margin-top:14px;">Warnings</div><ul>' + warnings + "</ul>" : "") +
+        "</div>";
 }
 
-function select(id) {
-    state.selected = id;
-    const report = state.reports.find((item) => item.id === id);
-    if (report) {
-        const group = family(report);
-        state.chartFilter = group === "current" || group === "pit" ? "pit" : group;
-    }
-    history.replaceState(null, "", "#" + id);
-    renderFilters();
-    renderLegend();
-    renderCompare();
-    renderDetail();
-    const node = el("detail-title");
-    if (node && node.scrollIntoView) node.scrollIntoView({ behavior: "smooth", block: "start" });
+function flagHtml(report) {
+    const pit = report.universe && report.universe.point_in_time;
+    const flagTitle = report.data_source.survivorship_bias_free ? "Free source" : (pit ? "Point-in-time attempt" : "Survivorship-biased");
+    return '<div class="callout' + (report.data_source.survivorship_bias_free || pit ? " ink" : "") + '">' +
+        '<div class="callout-title">' + flagTitle + "</div>" +
+        '<p style="margin:0;">' + report.data_source.banner + "</p></div>";
 }
 
-function wireScale() {
-    el("scale-log").addEventListener("click", () => { state.log = true; renderCompare(); });
-    el("scale-linear").addEventListener("click", () => { state.log = false; renderCompare(); });
+function spyLine(report) {
+    const bench = spySeries(report);
+    if (!bench || !bench.metrics) return "";
+    const metrics = bench.metrics;
+    return "<p>SPY on this book, " + metrics.start + " → " + metrics.end + ": " +
+        pct(metrics.total_return, true) + " total, " + pct(metrics.cagr, true) + " CAGR, " +
+        pct(metrics.max_drawdown, false) + " max drawdown.</p>";
 }
 
-function wireHover() {
-    const svg = el("compare-chart");
-    svg.addEventListener("mousemove", (event) => {
-        if (!svg._dates) return;
-        const rect = svg.getBoundingClientRect();
-        const x = (event.clientX - rect.left) / rect.width * 880;
-        let best = 0;
-        let bestDist = Infinity;
-        svg._dates.forEach((date, i) => {
-            const dist = Math.abs(svg._xOf(i) - x);
-            if (dist < bestDist) { bestDist = dist; best = i; }
-        });
-        const date = svg._dates[best];
-        const parts = svg._series.map((s) => {
-            const point = s.points.find((p) => p.date === date);
-            return point ? s.name + " " + point.value.toFixed(0) : null;
-        }).filter(Boolean);
-        el("compare-readout").textContent = date + " · rebased · " + parts.join(" · ");
+function ledgerHtml(report) {
+    if (!report) return "";
+    return '<details class="fold"><summary>Ledger · ' + report.name + " · yearly returns, holdings, drawdown, caveats</summary>" +
+        "<p>" + report.description + "</p>" +
+        spyLine(report) +
+        '<p><a class="pdf-btn" href="results/' + report.id + '.png">PNG</a></p>' +
+        yearlyHtml(report) +
+        holdingsHtml(report) +
+        eventsHtml(report) +
+        '<div class="chart-wrap"><svg id="dd-chart" viewBox="0 0 880 120" role="img" aria-label="Drawdown"></svg></div>' +
+        caveatsHtml(report) +
+        "</details>";
+}
+
+function legendMarkup(reports) {
+    const items = reports.map((report) =>
+        '<button type="button" data-variant="' + report.id + '"><span class="swatch" style="background:' + report._color + '"></span>' + report.name + "</button>"
+    ).join("");
+    const spy = '<span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;"><span class="swatch" style="background:' +
+        SPY_COLOR + ";height:0;border-top:2px dashed " + SPY_COLOR + '"></span>S&amp;P 500 (SPY)</span>';
+    return '<div class="legend">' + items + spy + "</div>";
+}
+
+function strategyMarkup() {
+    const tab = currentTab();
+    const reports = tabReports(tab);
+    reports.forEach((report, index) => { report._color = COLORS[index % COLORS.length]; });
+    const picked = selectedReport(tab);
+    const benchReport = reports.find((report) => spySeries(report)) || null;
+    const bench = spySeries(benchReport);
+    const rows = reports.map((report) =>
+        '<tr class="clickable' + (picked && report.id === picked.id ? " selected" : "") + '" tabindex="0" data-variant="' + report.id + '">' +
+        reportCells(report) + "</tr>"
+    ).join("");
+    const spy = bench ? "<tr><td>" + spyLabel() + "</td>" + metricTds(bench.metrics) + "</tr>" : "";
+    const sameWindow = reports.every((report) => report.start === reports[0].start && report.end === reports[0].end);
+    const spyNote = bench && benchReport
+        ? (sameWindow
+            ? "<p>SPY is on this window, " + benchReport.start + " → " + benchReport.end + ".</p>"
+            : "<p>The SPY row matches " + benchReport.name + ", " + benchReport.start + " → " + benchReport.end + ". Each book's own SPY line is in its ledger.</p>")
+        : "";
+    const scaleLog = state.log ? " active" : "";
+    const scaleLinear = state.log ? "" : " active";
+    return "<h2>" + tab.label + "</h2>" +
+        "<p>" + tab.intro + "</p>" +
+        '<div class="table-scroll"><table>' + TABLE_HEAD + "<tbody>" + rows + spy + "</tbody></table></div>" +
+        spyNote +
+        '<div class="toolbar">' +
+        '<div class="readout" id="chart-readout">Rebased to 100 at each book’s first mark. SPY is the dashed line.</div>' +
+        "<div>" +
+        '<a class="pdf-btn" href="results/' + (picked ? picked.id : "") + '.png">PNG</a> ' +
+        '<button type="button" class="pdf-btn' + scaleLog + '" id="scale-log">Log</button> ' +
+        '<button type="button" class="pdf-btn' + scaleLinear + '" id="scale-linear">Linear</button>' +
+        "</div></div>" +
+        legendMarkup(reports) +
+        '<div class="chart-wrap"><svg id="strategy-chart" viewBox="0 0 880 320" role="img" aria-label="' + tab.label + ' equity curves"></svg></div>' +
+        (picked ? flagHtml(picked) + ledgerHtml(picked) : "") +
+        forwardMarkup(tab);
+}
+
+function alignSeries(series) {
+    if (!series.length) return [];
+    const longest = series.reduce((a, b) => (a.points.length >= b.points.length ? a : b));
+    return series.map((item) => {
+        const byDate = new Map(item.points.map((point) => [point.date, point.value]));
+        let last = item.points.length ? item.points[0].value : null;
+        const points = longest.points.map((point) => {
+            if (byDate.has(point.date)) last = byDate.get(point.date);
+            const beforeStart = item.points.length && item.points[0].date > point.date;
+            const value = byDate.has(point.date) ? byDate.get(point.date) : (beforeStart ? null : last);
+            return { date: point.date, value: value };
+        }).filter((point) => point.value !== null);
+        return { color: item.color, name: item.name, dash: item.dash, points: points };
     });
 }
 
-function esc(value) {
-    return String(value == null ? "" : value).replace(/[&<>"']/g, (ch) => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
-    }[ch]));
+function paintStrategyChart() {
+    const svg = el("strategy-chart");
+    if (!svg) return;
+    const reports = tabReports(currentTab());
+    const series = reports.filter((report) => report.equity && report.equity.length).map((report) => ({
+        color: report._color,
+        name: report.name,
+        points: report.equity.map((row) => ({
+            date: row.date,
+            value: (row.equity / report.equity[0].equity) * 100,
+        })),
+    }));
+    const spyAnchor = reports.find((report) => spySeries(report));
+    const spy = spySeries(spyAnchor);
+    if (spy && spy.equity && spy.equity.length) {
+        const base = spy.equity[0].equity;
+        series.push({
+            color: SPY_COLOR,
+            name: "S&P 500 (SPY)",
+            dash: "5 4",
+            points: spy.equity.map((row) => ({ date: row.date, value: (row.equity / base) * 100 })),
+        });
+    }
+    drawChart(svg, alignSeries(series), { log: state.log, height: 320 });
+    const picked = selectedReport(currentTab());
+    const dd = el("dd-chart");
+    if (dd && picked && picked.equity && picked.equity.length) drawDrawdown(dd, picked.equity);
 }
 
-function forwardCell(metrics, field, kind) {
-    if (!metrics) return '<td class="num">—</td>';
-    const value = metrics[field];
-    if (kind === "signed") return '<td class="num ' + signedClass(value) + '">' + pct(value, true) + "</td>";
-    if (kind === "dd") return '<td class="num neg">' + pct(value, false) + "</td>";
-    if (kind === "plain") return '<td class="num">' + pct(value, false) + "</td>";
-    if (kind === "sharpe") return '<td class="num">' + num(value) + "</td>";
-    return '<td class="num">' + money(value) + "</td>";
+function forwardBooks(tab) {
+    const ids = tab.ids || [];
+    const books = (state.forward && state.forward.books) || [];
+    return ids.map((id) => books.find((book) => book.id === id)).filter(Boolean);
 }
 
-function renderForward(payload) {
-    const root = el("forward");
-    const books = payload.books || [];
+function forwardMarkup(tab) {
+    const label = "Forward test, live since Oct 15, 2026";
+    if (state.forwardError) {
+        return "<h2>" + label + "</h2>" +
+            '<div class="callout"><div class="callout-title">' + label + '</div><p style="margin:0;">' + esc(state.forwardError) + "</p></div>";
+    }
+    if (!state.forward) return "";
+    const payload = state.forward;
+    const books = forwardBooks(tab);
     const spy = payload.spy || null;
     const ambiguities = (payload.ambiguities || []).map((line) => "<li>" + esc(line) + "</li>").join("");
-    const header =
-        '<div class="callout ink">' +
-        '<div class="callout-title">' + esc(payload.label || "Forward test, live since Oct 15, 2026") + "</div>" +
-        "<p style=\"margin:0 0 8px;\">" + esc(payload.status_detail || "") + "</p>" +
-        "<p style=\"margin:0;\">" + esc(payload.entry_rule || "") + "</p>" +
-        (ambiguities ? "<ul>" + ambiguities + "</ul>" : "") +
-        "</div>";
     const rows = books.map((book) =>
         "<tr><td><strong>" + esc(book.name) + "</strong></td>" +
         forwardCell(book.metrics, "total_return", "signed") +
@@ -1179,7 +1046,7 @@ function renderForward(payload) {
         "</tr>"
     ).join("");
     const spyRow = spy
-        ? "<tr><td><strong>S&amp;P 500 (SPY)</strong><br><span class=\"status-badge ink\">Reference</span></td>" +
+        ? "<tr><td>" + spyLabel() + "</td>" +
           forwardCell(spy.metrics, "total_return", "signed") +
           forwardCell(spy.metrics, "cagr", "signed") +
           forwardCell(spy.metrics, "max_drawdown", "dd") +
@@ -1188,12 +1055,6 @@ function renderForward(payload) {
           forwardCell(spy.metrics, "final_equity", "money") +
           "</tr>"
         : "";
-    const table =
-        '<div class="table-scroll"><table><thead><tr>' +
-        "<th>Strategy</th><th class=\"num\">Total return</th><th class=\"num\">CAGR</th>" +
-        "<th class=\"num\">Max DD</th><th class=\"num\">Volatility</th><th class=\"num\">Sharpe</th>" +
-        "<th class=\"num\">Final equity</th></tr></thead><tbody>" +
-        rows + spyRow + "</tbody></table></div>";
     const cards = books.map((book) => {
         const holdings = (book.holdings || []).map((holding) => {
             const signal = holding.prior_year_return == null ? "—" : pct(holding.prior_year_return, true);
@@ -1226,7 +1087,7 @@ function renderForward(payload) {
             ? '<p class="forward-empty">' + waiting + "</p>"
             : '<div class="legend"><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;"><span class="swatch" style="background:#0F172A"></span>' +
               esc(book.name) + '</span><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;"><span class="swatch" style="background:' +
-              SPY_COLOR + ';height:0;border-top:2px dashed ' + SPY_COLOR + '"></span>S&amp;P 500 (SPY)</span></div>' +
+              SPY_COLOR + ";height:0;border-top:2px dashed " + SPY_COLOR + '"></span>S&amp;P 500 (SPY)</span></div>' +
               '<div class="chart-wrap"><svg id="forward-chart-' + esc(book.id) + '" viewBox="0 0 880 220" role="img" aria-label="' +
               esc(book.name) + ' forward test"></svg></div>';
         return '<div class="forward-book"><p class="forward-name">' + esc(book.name) + "</p><p>" +
@@ -1235,8 +1096,22 @@ function renderForward(payload) {
             "<th class=\"num\">2025 return</th><th class=\"num\">Cap</th><th class=\"num\">Entry</th>" +
             "</tr></thead><tbody>" + holdings + "</tbody></table></div>" + eventTable + chart + "</div>";
     }).join("");
-    root.innerHTML = header + table + cards;
-    books.forEach((book) => {
+    const notes = ambiguities
+        ? '<details class="fold"><summary>Rule notes</summary><ul>' + ambiguities + "</ul></details>"
+        : "";
+    return "<h2>" + label + "</h2>" +
+        "<p>Separate from the backtest above. These sleeves are marked from the Oct 15, 2026 close. The dashed line is SPY, started from the same $10,000.</p>" +
+        '<div class="callout ink"><div class="callout-title">' + esc(payload.label || label) + "</div>" +
+        '<p style="margin:0 0 8px;">' + esc(payload.status_detail || "") + "</p>" +
+        '<p style="margin:0;">' + esc(payload.entry_rule || "") + "</p></div>" +
+        '<div class="table-scroll"><table>' + TABLE_HEAD + "<tbody>" + rows + spyRow + "</tbody></table></div>" +
+        cards + notes;
+}
+
+function paintForwardCharts() {
+    const tab = currentTab();
+    const spy = state.forward && state.forward.spy;
+    forwardBooks(tab).forEach((book) => {
         if (!book.equity || !book.equity.length) return;
         const svg = document.getElementById("forward-chart-" + book.id);
         if (!svg) return;
@@ -1257,21 +1132,151 @@ function renderForward(payload) {
     });
 }
 
-async function loadForward() {
-    const root = el("forward");
-    if (!root) return;
-    try {
-        const response = await fetch("results/forward-test.json");
-        if (!response.ok) throw new Error("results/forward-test.json returned " + response.status);
-        renderForward(await response.json());
-    } catch (error) {
-        root.innerHTML = '<div class="callout"><div class="callout-title">Forward test, live since Oct 15, 2026</div><p style="margin:0;">' +
-            esc(error.message) + "</p></div>";
+function renderTabs() {
+    const bar = el("tabbar");
+    bar.innerHTML = "";
+    TABS.forEach((tab) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "pdf-btn" + (tab.id === state.tab ? " active" : "");
+        button.setAttribute("role", "tab");
+        button.setAttribute("aria-selected", tab.id === state.tab ? "true" : "false");
+        button.id = "tab-" + tab.id;
+        button.textContent = tab.label;
+        button.addEventListener("click", () => show(tab.id, null, "push"));
+        bar.appendChild(button);
+    });
+}
+
+function render() {
+    renderTabs();
+    const panel = el("panel");
+    if (state.tab === "summary") panel.innerHTML = summaryMarkup();
+    else panel.innerHTML = strategyMarkup();
+    panel.setAttribute("aria-labelledby", "tab-" + state.tab);
+    if (state.tab !== "summary") {
+        paintStrategyChart();
+        paintForwardCharts();
     }
+    wirePanel();
+}
+
+function bindActivation(selector, handler) {
+    el("panel").querySelectorAll(selector).forEach((node) => {
+        const go = () => handler(node.getAttribute("data-open") || node.getAttribute("data-variant"));
+        node.addEventListener("click", go);
+        node.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                go();
+            }
+        });
+    });
+}
+
+function wirePanel() {
+    bindActivation("[data-open]", (id) => {
+        const tab = tabForReport(id);
+        show(tab.id, id, "push");
+    });
+    bindActivation("[data-variant]", (id) => show(state.tab, id, "push"));
+    const logBtn = el("scale-log");
+    const linearBtn = el("scale-linear");
+    if (logBtn && linearBtn) {
+        logBtn.addEventListener("click", () => { state.log = true; syncScale(); paintStrategyChart(); });
+        linearBtn.addEventListener("click", () => { state.log = false; syncScale(); paintStrategyChart(); });
+    }
+    const svg = el("strategy-chart");
+    const readout = el("chart-readout");
+    if (svg && readout) {
+        svg.addEventListener("mousemove", (event) => {
+            if (!svg._dates) return;
+            const rect = svg.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width * 880;
+            let best = 0;
+            let bestDist = Infinity;
+            svg._dates.forEach((date, i) => {
+                const dist = Math.abs(svg._xOf(i) - x);
+                if (dist < bestDist) { bestDist = dist; best = i; }
+            });
+            const date = svg._dates[best];
+            const parts = (svg._series || []).map((series) => {
+                const point = series.points.find((item) => item.date === date);
+                return point ? series.name + " " + point.value.toFixed(0) : null;
+            }).filter(Boolean);
+            readout.textContent = date + " · rebased · " + parts.join(" · ");
+        });
+    }
+}
+
+function syncScale() {
+    const logBtn = el("scale-log");
+    const linearBtn = el("scale-linear");
+    if (!logBtn || !linearBtn) return;
+    logBtn.classList.toggle("active", state.log);
+    linearBtn.classList.toggle("active", !state.log);
+}
+
+function show(tabId, reportId, mode) {
+    const tab = tabById(tabId);
+    let selected = null;
+    if (tab.ids) {
+        const exists = (id) => state.reports.some((report) => report.id === id);
+        if (reportId && tab.ids.indexOf(reportId) !== -1 && exists(reportId)) selected = reportId;
+        else selected = tab.ids.find(exists) || null;
+    }
+    const hash = selected || tab.id;
+    const next = "#" + hash;
+    const panel = el("panel");
+    const same = state.tab === tab.id && state.selected === selected && panel && panel.innerHTML !== "";
+    state.tab = tab.id;
+    state.selected = selected;
+    if (mode && location.hash !== next) {
+        if (mode === "push") history.pushState(null, "", next);
+        else history.replaceState(null, "", next);
+    }
+    if (!same) {
+        render();
+        const bar = el("tabbar");
+        if (mode === "push" && bar && bar.scrollIntoView) bar.scrollIntoView({ block: "start" });
+    }
+}
+
+function readHash() {
+    const hash = decodeURIComponent(location.hash.replace(/^#/, ""));
+    if (!hash) {
+        state.tab = "summary";
+        state.selected = null;
+        render();
+        return;
+    }
+    const tab = tabForReport(hash);
+    const reportId = tab.ids && tab.ids.indexOf(hash) !== -1 ? hash : null;
+    show(tab.id, reportId, null);
+}
+
+function esc(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+    }[ch]));
+}
+
+function forwardCell(metrics, field, kind) {
+    if (!metrics) return '<td class="num">—</td>';
+    const value = metrics[field];
+    if (kind === "signed") return '<td class="num ' + signedClass(value) + '">' + pct(value, true) + "</td>";
+    if (kind === "dd") return '<td class="num neg">' + pct(value, false) + "</td>";
+    if (kind === "plain") return '<td class="num">' + pct(value, false) + "</td>";
+    if (kind === "sharpe") return '<td class="num">' + num(value) + "</td>";
+    return '<td class="num">' + money(value) + "</td>";
 }
 
 async function main() {
     if (location.protocol === "file:") el("file-warning").classList.remove("hidden");
+    const forwardPromise = fetch("results/forward-test.json").then((response) => {
+        if (!response.ok) throw new Error("results/forward-test.json returned " + response.status);
+        return response.json();
+    }).then((payload) => { state.forward = payload; }).catch((error) => { state.forwardError = error.message; });
     try {
         const manifest = await fetch("results/manifest.json").then((response) => {
             if (!response.ok) throw new Error("results/manifest.json returned " + response.status);
@@ -1286,32 +1291,21 @@ async function main() {
         state.reports = reports;
         const first = reports[0];
         el("banner-text").textContent = manifest.banner || (first && first.data_source.banner) || "";
-        const windows = reports.map((r) => r.start + " → " + r.end);
-        const sameWindow = windows.every((w) => w === windows[0]);
+        const windows = reports.map((report) => report.start + " → " + report.end);
+        const sameWindow = windows.every((span) => span === windows[0]);
         el("lab-meta").innerHTML =
             '<div class="meta-item"><strong>WINDOW</strong><br>' + (sameWindow ? windows[0] : "See each book") + "</div>" +
             '<div class="meta-item"><strong>STARTING CAPITAL</strong><br>' + money(first.initial_capital) + "</div>" +
             '<div class="meta-item"><strong>REBALANCE</strong><br>Annual, year-end close (rank books)</div>' +
             '<div class="meta-item"><strong>GENERATED</strong><br>' + (manifest.generated_at || first.generated_at) + "</div>";
-        const hash = decodeURIComponent(location.hash.replace("#", ""));
-        state.selected = reports.some((r) => r.id === hash) ? hash : reports[0].id;
-        el("app").classList.remove("hidden");
         if (manifest.event_study) {
             state.study = await fetch("results/" + manifest.event_study).then((response) => response.ok ? response.json() : null).catch(() => null);
         }
-        renderSummary();
-        renderFilters();
-        renderLegend();
-        renderCompare();
-        renderDetail();
-        renderStudy();
-        loadForward();
-        wireScale();
-        wireHover();
-        window.addEventListener("hashchange", () => {
-            const next = decodeURIComponent(location.hash.replace("#", ""));
-            if (state.reports.some((report) => report.id === next)) select(next);
-        });
+        await forwardPromise;
+        el("app").classList.remove("hidden");
+        readHash();
+        window.addEventListener("hashchange", readHash);
+        window.addEventListener("popstate", readHash);
     } catch (error) {
         const box = el("load-error");
         box.classList.remove("hidden");
@@ -1320,6 +1314,7 @@ async function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
+
 </script>
 
 </body>
