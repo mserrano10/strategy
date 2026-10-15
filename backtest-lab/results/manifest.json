@@ -1,7 +1,7 @@
 {
   "title": "Backtest Lab",
   "version": "0.1.0",
-  "banner": "These results use the free Yahoo Finance source. The four stock-ranking books are SURVIVORSHIP-BIASED: the universe is today's S&P 500, not the members that existed at each year-end. A survivorship-bias-free universe requires Sharadar (SEP / SF1 / TICKERS). The TQQQ books are single funds, so that bias does not apply to them, but the prices are still free vendor data.",
+  "banner": "These results use the free Yahoo Finance source. Books on today's listings are SURVIVORSHIP-BIASED: they are not the companies that existed at each year-end. Point-in-time books walk Wikipedia's selected S&P 500 changes backward; that table is thin before about 2011, and names that cannot be priced are logged. The size-floor books use today's NASDAQ/NYSE common stocks, so delisted names are missing. Sharadar (SEP / SF1 / TICKERS) is the exact replacement. Every equity chart includes SPY total return, rebased to the same starting capital, as a reference. SPY is not a strategy.",
   "reports": [
     {
       "id": "best-returner",
@@ -10,6 +10,36 @@
       "file": "best-returner.json",
       "csv": "best-returner.csv",
       "png": "best-returner.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "best-returner-pit",
+      "name": "Best Returner (point-in-time)",
+      "group": "Prior-year return",
+      "file": "best-returner-pit.json",
+      "csv": "best-returner-pit.csv",
+      "png": "best-returner-pit.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "best-returner-10b",
+      "name": "Best Returner (\u2265 $10B)",
+      "group": "Prior-year return",
+      "file": "best-returner-10b.json",
+      "csv": "best-returner-10b.csv",
+      "png": "best-returner-10b.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "best-returner-2b",
+      "name": "Best Returner (\u2265 $2B)",
+      "group": "Prior-year return",
+      "file": "best-returner-2b.json",
+      "csv": "best-returner-2b.csv",
+      "png": "best-returner-2b.png",
       "free_source": true,
       "survivorship_bias_free": false
     },
@@ -24,6 +54,36 @@
       "survivorship_bias_free": false
     },
     {
+      "id": "top5-returners-pit",
+      "name": "Top 5 Returners (point-in-time)",
+      "group": "Prior-year return",
+      "file": "top5-returners-pit.json",
+      "csv": "top5-returners-pit.csv",
+      "png": "top5-returners-pit.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "top5-returners-10b",
+      "name": "Top 5 Returners (\u2265 $10B)",
+      "group": "Prior-year return",
+      "file": "top5-returners-10b.json",
+      "csv": "top5-returners-10b.csv",
+      "png": "top5-returners-10b.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "top5-returners-2b",
+      "name": "Top 5 Returners (\u2265 $2B)",
+      "group": "Prior-year return",
+      "file": "top5-returners-2b.json",
+      "csv": "top5-returners-2b.csv",
+      "png": "top5-returners-2b.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
       "id": "biggest",
       "name": "Biggest",
       "group": "Size",
@@ -34,12 +94,32 @@
       "survivorship_bias_free": false
     },
     {
+      "id": "biggest-pit",
+      "name": "Biggest (point-in-time)",
+      "group": "Size",
+      "file": "biggest-pit.json",
+      "csv": "biggest-pit.csv",
+      "png": "biggest-pit.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
       "id": "top5-biggest",
       "name": "Top 5 Biggest",
       "group": "Size",
       "file": "top5-biggest.json",
       "csv": "top5-biggest.csv",
       "png": "top5-biggest.png",
+      "free_source": true,
+      "survivorship_bias_free": false
+    },
+    {
+      "id": "top5-biggest-pit",
+      "name": "Top 5 Biggest (point-in-time)",
+      "group": "Size",
+      "file": "top5-biggest-pit.json",
+      "csv": "top5-biggest-pit.csv",
+      "png": "top5-biggest-pit.png",
       "free_source": true,
       "survivorship_bias_free": false
     },
@@ -64,5 +144,6 @@
       "survivorship_bias_free": true
     }
   ],
-  "generated_at": "2026-10-15T11:46:40+00:00"
+  "generated_at": "2026-10-15T14:49:46+00:00",
+  "event_study": "event-study.json"
 }

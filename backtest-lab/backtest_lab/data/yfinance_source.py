@@ -109,9 +109,18 @@ class YFinanceSource(DataSource):
             print(f"downloading {len(need)} symbols from Yahoo Finance ({start} → {end})")
             fetched = _download_all(yf, need, start, end)
             for ticker, frame in fetched.items():
-                self._write_price_cache(ticker, frame)
+                self._write_price_cache(ticker, frame, start)
                 frames[ticker] = frame
-        missing = [ticker for ticker in unique if ticker not in frames]
+            for ticker in need:
+                if ticker not in fetched:
+                    empty = pd.DataFrame()
+                    self._write_price_cache(ticker, empty, start)
+                    frames[ticker] = empty
+        missing = [
+            ticker
+            for ticker in unique
+            if ticker not in frames or frames[ticker] is None or frames[ticker].empty
+        ]
         if missing:
             print(f"no prices for {len(missing)} symbols")
         return History(
@@ -173,30 +182,46 @@ class YFinanceSource(DataSource):
         payload = pd.read_pickle(path)
         frame = payload["frame"]
         fetched = date.fromisoformat(payload["fetched_on"])
-        if _cache_covers(frame, fetched, start, end, now):
-            return frame
+        requested = payload.get("requested_start")
+        requested_start = date.fromisoformat(requested) if requested else None
+        if _cache_covers(frame, fetched, start, end, now, requested_start):
+            return frame if frame is not None else pd.DataFrame()
         return None
 
-    def _write_price_cache(self, ticker: str, frame: pd.DataFrame) -> None:
-        pd.to_pickle(
-            {"frame": frame, "fetched_on": date.today().isoformat()},
-            self.cache_dir / f"{_safe(ticker)}.pkl",
-        )
+    def _write_price_cache(self, ticker: str, frame: pd.DataFrame, start: date | None = None) -> None:
+        payload = {"frame": frame, "fetched_on": date.today().isoformat()}
+        if start is not None:
+            payload["requested_start"] = start.isoformat()
+        pd.to_pickle(payload, self.cache_dir / f"{_safe(ticker)}.pkl")
 
 
-def _cache_covers(frame: pd.DataFrame, fetched_on: date, start: date, end: date, now: datetime) -> bool:
+def _cache_covers(
+    frame: pd.DataFrame,
+    fetched_on: date,
+    start: date,
+    end: date,
+    now: datetime,
+    requested_start: date | None = None,
+) -> bool:
     if frame is None or frame.empty:
+        # Yahoo was already asked for this window today and returned nothing.
+        return bool(requested_start and requested_start <= start and fetched_on == now.date())
+    need = required_through(end, now)
+    if frame.index.max().date() >= need:
+        fresh = True
+    else:
+        # A same-day download can end early on a holiday. Don't hammer Yahoo again.
+        short_by = need - frame.index.max().date()
+        fresh = fetched_on == now.date() and short_by <= timedelta(days=4)
+    if not fresh:
         return False
     # The requested start is a calendar date. The first bar is the next
     # session, so a cache that begins a few days later still covers it.
-    if frame.index.min().date() > start + timedelta(days=10):
-        return False
-    need = required_through(end, now)
-    if frame.index.max().date() >= need:
+    if frame.index.min().date() <= start + timedelta(days=10):
         return True
-    # A same-day download can end early on a holiday. Don't hammer Yahoo again.
-    short_by = need - frame.index.max().date()
-    return fetched_on == now.date() and short_by <= timedelta(days=4)
+    # The series simply begins later (an IPO, or a recycled ticker). Asking
+    # again for an earlier start will not grow it.
+    return bool(requested_start and requested_start <= start)
 
 
 def _panel(frames: dict[str, pd.DataFrame], field: str) -> pd.DataFrame:

@@ -16,10 +16,13 @@ from backtest_lab.constants import DISPLAY_ORDER
 
 FREE_SOURCE_PAGE_BANNER = (
     "These results use the free Yahoo Finance source. "
-    "The four stock-ranking books are SURVIVORSHIP-BIASED: the universe is today's "
-    "S&P 500, not the members that existed at each year-end. "
-    "A survivorship-bias-free universe requires Sharadar (SEP / SF1 / TICKERS). "
-    "The TQQQ books are single funds, so that bias does not apply to them, but the prices are still free vendor data."
+    "Books on today's listings are SURVIVORSHIP-BIASED: they are not the companies that existed at each year-end. "
+    "Point-in-time books walk Wikipedia's selected S&P 500 changes backward; that table is thin before about 2011, "
+    "and names that cannot be priced are logged. "
+    "The size-floor books use today's NASDAQ/NYSE common stocks, so delisted names are missing. "
+    "Sharadar (SEP / SF1 / TICKERS) is the exact replacement. "
+    "Every equity chart includes SPY total return, rebased to the same starting capital, as a reference. "
+    "SPY is not a strategy."
 )
 
 
@@ -43,6 +46,7 @@ def assemble_report(
     start_year: int,
     market_cap_note: str | None = None,
     survivorship_bias_free: bool | None = None,
+    banner: str | None = None,
 ) -> dict:
     equity = equity.astype(float).sort_index()
     equity = equity[~equity.index.duplicated(keep="last")]
@@ -56,8 +60,10 @@ def assemble_report(
         metrics["initial_capital"] = capital
     if survivorship_bias_free is None:
         survivorship_bias_free = bool(source.survivorship_bias_free)
-    banner = source.banner()
-    if survivorship_bias_free and source.free_source:
+    explicit_banner = banner
+    if banner is None:
+        banner = source.banner()
+    if explicit_banner is None and survivorship_bias_free and source.free_source:
         banner = (
             "FREE SOURCE — Yahoo Finance daily prices. "
             "This book does not select a stock universe, so S&P 500 survivorship bias does not apply. "
@@ -111,6 +117,40 @@ def write_report(report: dict, out_dir: Path) -> Path:
     return json_path
 
 
+def attach_benchmark(report: dict, spy_adjusted: pd.Series) -> dict:
+    """Rebase SPY total return onto this book's starting capital and dates.
+
+    The line is a reference. It is not part of the strategy's holdings.
+    """
+    if spy_adjusted is None or len(spy_adjusted) == 0 or not report.get("equity"):
+        report.setdefault("warnings", []).append("SPY benchmark was not available for this book.")
+        return report
+    dates = pd.to_datetime([row["date"] for row in report["equity"]])
+    spy = spy_adjusted.astype(float).sort_index()
+    spy = spy[~spy.index.duplicated(keep="last")]
+    spy = spy[spy > 0]
+    aligned = spy.reindex(spy.index.union(dates)).ffill().reindex(dates)
+    if aligned.isna().any() or float(aligned.iloc[0]) <= 0:
+        report.setdefault("warnings", []).append("SPY benchmark could not be aligned to every date of this book.")
+        return report
+    capital = float(report["initial_capital"])
+    curve = capital * aligned / float(aligned.iloc[0])
+    curve.index = pd.DatetimeIndex(dates)
+    metrics = compute_metrics(curve)
+    drawdown = drawdown_series(curve)
+    report["benchmark"] = {
+        "id": "spy",
+        "name": "S&P 500 (SPY)",
+        "note": (
+            "SPY adjusted close (total return), rebased to this book's starting capital "
+            "on the book's first date. Reference only."
+        ),
+        "metrics": metrics,
+        "equity": _equity_rows(curve, drawdown),
+    }
+    return report
+
+
 def write_manifest_banner(out_dir: Path) -> None:
     """Refresh the page-level warning even if no new report was added."""
     path = out_dir / "manifest.json"
@@ -157,9 +197,28 @@ def _write_png(report: dict, path: Path) -> None:
     fig, ax = plt.subplots(figsize=(10.6, 5.4), dpi=140)
     fig.patch.set_facecolor("#FAF9F6")
     ax.set_facecolor("#FFFFFF")
-    use_log = float(values.max()) > 8 * max(float(values.min()), 1.0)
+    benchmark = report.get("benchmark") or {}
+    bench_frame = pd.DataFrame(benchmark.get("equity") or [])
+    stacked = values
+    if len(bench_frame):
+        stacked = pd.concat([values, bench_frame["equity"].astype(float)], ignore_index=True)
+    use_log = float(stacked.max()) > 8 * max(float(stacked.min()), 1.0)
     series = values if not use_log else values.clip(lower=1e-6)
-    ax.plot(frame["date"], series, color="#0F172A", linewidth=1.7)
+    ax.plot(frame["date"], series, color="#0F172A", linewidth=1.7, label=report["name"])
+    if len(bench_frame):
+        bench_frame["date"] = pd.to_datetime(bench_frame["date"])
+        bench_values = bench_frame["equity"].astype(float)
+        if use_log:
+            bench_values = bench_values.clip(lower=1e-6)
+        ax.plot(
+            bench_frame["date"],
+            bench_values,
+            color="#0369A1",
+            linewidth=1.4,
+            linestyle=(0, (4, 3)),
+            label="S&P 500 (SPY)",
+        )
+        ax.legend(frameon=False, fontsize=8, loc="upper left")
     if use_log:
         ax.set_yscale("log")
     ax.set_title(report["name"], loc="left", color="#0F172A", fontsize=14, fontweight="bold", pad=12)

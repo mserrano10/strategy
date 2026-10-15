@@ -61,7 +61,33 @@ Open the page from the site at `/backtest-lab/`, or locally with a static server
 
 You can rerun one TQQQ book with `run tqqq-buy-hold` or `run tqqq-two-bullet`.
 
-Rank books use **today's S&P 500 constituents** as a free-data proxy for the historical index. That is survivorship-biased. Every one of those reports says so, in the CLI, in the JSON (`data_source.survivorship_bias_free: false`), and on the page.
+Rank books default to **today's S&P 500 constituents**. That is survivorship-biased. Every one of those reports says so, in the CLI, in the JSON (`data_source.survivorship_bias_free: false`), and on the page.
+
+Two other universes are configurable:
+
+| `--universe` | What it is |
+| --- | --- |
+| `sp500-current` | Today's S&P 500, applied to every year. Survivorship-biased. |
+| `sp500-pit` | fja05680/sp500 historical constituent snapshots from 1996 (`universes/sp500_constituents_fja.csv`). Wikipedia's selected-changes table supplies bankruptcy notes, ticker continuations, and changes after the file's last row. |
+| `us-listed` | Current NASDAQ, NYSE, and NYSE American common stocks, kept when approximated market cap at the prior year-end is at least `--min-cap` (`10b`, `2b`). Delisted names are missing, so this is still survivorship-biased. Listings whose split-adjusted history peaks above $20,000 while the latest print is under $10,000 are dropped (broken Yahoo reverse-split series). |
+
+```bash
+python3 -m backtest_lab run pit --start 2015 --end today
+python3 -m backtest_lab run best-returner --universe sp500-pit --start 2015 --end today
+python3 -m backtest_lab run size --start 2015 --end today
+python3 -m backtest_lab run best-returner --universe us-listed --min-cap 10b --start 2015 --end today
+python3 -m backtest_lab run event-study --start 2000 --end today
+```
+
+`pit` reruns the four rank books without overwriting the current-list results (`best-returner-pit`, and the same suffix on the other three). `size` writes `best-returner-10b`, `best-returner-2b`, `top5-returners-10b`, and `top5-returners-2b`.
+
+The snapshot file is the membership list from 1996. It is not a CRSP tape: delisted prices are still whatever Yahoo (and, when it answers, Stooq) will serve, and a name with no print is logged rather than invented. A prior-year return above +1000% is dropped unless a second vendor confirms it. Wikipedia's selected-changes table is thin before about 2011, so bankruptcy notes from those years are incomplete even when the snapshot says who was in the index.
+
+Removed tickers are priced from Yahoo first, then Stooq. A recycled ticker (prints that only exist after the removal) is not used. Names that still cannot be priced are counted by year on the report. If Wikipedia's reason is a bankruptcy and a last real print exists, the path after the removal is marked to about zero (−100%). Stooq's file has no dividend column, so a Stooq fill is price return, and the report says which tickers those were. If Stooq answers with a browser check, nothing is filled and the gap stays in the log.
+
+`event-study` lists, for each year from `--start`, the #1 and top 5 point-in-time members by that year's total return and those stocks' next-year returns. Crash rates (down more than 30% or 50%) use only years whose next year ran through mid-December. The partial live year is in the table and out of the rates. The same finished years are summarized against SPY (median, mean, hit rate). A missing next year can be dropped, filled with −100%, or filled with that year's SPY return. A prior-year return above +1000% cannot win the ranking.
+
+Every book, including TQQQ, gets an SPY total-return line on the PNG and on the page, rebased to the book's starting capital. The summary table has one SPY reference row. SPY is not a holding. The rest of the site does not plot SPY.
 
 The TQQQ books do not pick stocks. Survivorship bias of the index does not apply to them. They are still flagged as free Yahoo data.
 
@@ -134,7 +160,8 @@ market_cap(t) = shares(t*) × (splits after t*) × split_adjusted_close(t)
 
 ## Caveats
 
-- **Survivorship bias.** Current S&P members include winners that are still in the index and exclude names that were removed. A bias-free universe needs Sharadar. The free source is labeled `SURVIVORSHIP-BIASED` on every rank result.
+- **Survivorship bias.** Current S&P members, and the current US listing file, include winners that are still listed and exclude names that were removed. The point-in-time walk is only as complete as Wikipedia's selected-changes table. A bias-free universe needs Sharadar. Free rank results stay labeled `SURVIVORSHIP-BIASED` unless the banner says the book is a point-in-time attempt.
+- **SPY is a reference.** Adjusted-close total return, same dates, same starting capital. It is drawn on Backtest Lab charts only.
 - **Free data.** Yahoo's adjusted bars are vendor data. They are not a primary tape.
 - **Dividends.** Rank books and TQQQ buy-and-hold mark a constant share count on adjusted closes, which matches total return. The two-bullet TQQQ position is marked on the split-adjusted close because the memo's limits are traded prices. That book's TQQQ dividend is omitted. SPY and BIL in that book use adjusted closes.
 - **Fills.** Signals and entries use the same close. That is slightly optimistic versus the next open. The two-bullet exit fills at the limit when the daily high reaches it, or at the open if the open has gapped through the limit. The floor is updated after that check, so today's low cannot set a limit today's high already traded through.
