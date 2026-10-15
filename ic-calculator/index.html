@@ -400,12 +400,12 @@
     <div class="panel">
         <div class="grid g4" style="margin-bottom:16px">
             <div><label>Account NAV ($)</label><input id="nav" type="number" step="1000" value="200000"></div>
-            <div><label>Base VaR % of NAV</label><input id="base" type="number" step="1" value="25"></div>
-            <div><label>Edge multiple cap</label><input id="cap" type="number" step="0.5" value="3"></div>
+            <div><label>Base VaR % of NAV</label><input id="base" type="number" step="0.5" value="12.5"></div>
+            <div><label>Edge multiple cap</label><input id="cap" type="number" step="0.5" value="1.5"></div>
             <div><label>Typical week ratio</label><input id="norm" type="number" step="0.1" value="3.2"></div>
-            <div><label>Observed credit <span>$/share</span></label><input id="cred" type="number" step="0.01" value="0.02"></div>
+            <div><label>Observed credit <span>fillable $/share</span></label><input id="cred" type="number" step="0.01" value="0.02"></div>
             <div><label>Target Sigma (z)</label><input id="credz" type="number" step="0.05" value="2.90"></div>
-            <div><label>Safety margin</label><input id="marg" type="number" step="0.5" value="2"></div>
+            <div><label>Safety margin</label><input id="marg" type="number" step="0.5" value="1.5"></div>
         </div>
         <div class="grid g2"><div id="sizeout"></div><div id="stopout"></div></div>
     </div>
@@ -429,6 +429,7 @@
 const K = {
     volMult: 1.03, feeRate: 0.145801404063875,
     achInt: 1.19339083909814, achSlope: 0.0676448688446479, zFloor: 2.90,
+    priceMargin: 1.5, bandWarnMult: 1.25, baseVarPct: 12.5, edgeCap: 1.5,
     putAll: { b: -1.7698954, a: -0.4248998, r2: 0.99966 },
     callAll: { b: -2.6552800, a: 0.5966900, r2: 0.99185 },
     bands: [
@@ -551,12 +552,18 @@ function render() {
 
     const zq = V("credz");
     const beA = be(K.putAll, zq), beB = be(band, zq);
-    const bar = Math.max(beA, beB), req = bar * marg;
+    const req = beA * marg;
     const credFrac = V("cred") / W;
     const g3 = isFinite(credFrac) && credFrac > 0 ? (credFrac >= req ? "PASS" : "FAIL") : "-";
+    const gFloor = zq < K.zFloor ? "FAIL" : "PASS";
+    const hotBand = band.range === "19.8 - 23.8";
+    const bandWarn = hotBand ? beB * K.bandWarnMult : beB;
 
     let cls, big, msg;
-    if (g1 === "FAIL") {
+    if (gFloor === "FAIL") {
+        cls = "v-no"; big = "NO TRADE";
+        msg = "Entered distance is <b>" + zq.toFixed(2) + " sigma</b>, inside the <b>" + K.zFloor.toFixed(2) + " sigma</b> floor. Do not sell inside " + K.zFloor.toFixed(2) + " sigma.";
+    } else if (g1 === "FAIL") {
         cls = "v-no"; big = "STAND DOWN";
         msg = "Front end has collapsed at a ratio of <b>" + ratio.toFixed(3) + "</b>. Market pricing is calmer than VXN implies; credit at distance will be insufficient.";
     } else if (g7a === "FAIL" || g7b === "FAIL") {
@@ -564,13 +571,13 @@ function render() {
         msg = "Put side is live. <b>Call side blocked</b> due to structural momentum/gap parameters.";
     } else if (g3 === "FAIL") {
         cls = "v-no"; big = "PRICE FAIL";
-        msg = "Quoted credit of <b>" + pct(credFrac, 3) + "</b> falls short of the required <b>" + pct(req, 3) + "</b> of width at " + zq.toFixed(2) + " sigma.";
+        msg = "Fillable credit of <b>" + pct(credFrac, 3) + "</b> falls short of the required <b>" + pct(req, 3) + "</b> of width at " + zq.toFixed(2) + " sigma. Mid is not accepted.";
     } else if (g3 === "-") {
         cls = "v-wait"; big = "AWAITING QUOTE";
-        msg = "Enter fillable credit to verify the price gate. Required at " + zq.toFixed(2) + " sigma is <b>" + pct(req, 3) + "</b> of width.";
+        msg = "Enter fillable credit, not mid, to verify the price gate. Required at " + zq.toFixed(2) + " sigma is <b>" + pct(req, 3) + "</b> of width.";
     } else {
         cls = "v-go"; big = "TRADE";
-        msg = "Quoted credit of <b>" + pct(credFrac, 3) + "</b> meets the <b>" + pct(req, 3) + "</b> requirement at " + zq.toFixed(2) + " sigma.";
+        msg = "Fillable credit of <b>" + pct(credFrac, 3) + "</b> meets the <b>" + pct(req, 3) + "</b> requirement at " + zq.toFixed(2) + " sigma.";
     }
 
     const tg = (v) => v === "PASS" ? "pass" : v === "FAIL" ? "fail" : "soft";
@@ -579,16 +586,21 @@ function render() {
     const g2Note = g2 === "FAIL"
         ? '<div class="warnbox"><b>Gate 2 is advisory.</b> The strike reachable at 0.9% of width sits at <b>' + ach.toFixed(2) + ' sigma</b>, inside the 2.90 floor. VXN is <b>' + vxn.toFixed(2) + '</b> and needs <b>' + thr.toFixed(2) + '</b> or above. This does not block the trade.</div>'
         : "";
+    const bandNote = '<div class="warnbox"><b>VXN band break-even is advisory.</b> '
+        + band.name + ' (' + band.range + ') is <b>' + pct(beB, 3) + '</b> of width'
+        + (hotBand ? '. In this band, 1.25× that is <b>' + pct(bandWarn, 3) + '</b> of width' : '')
+        + '. It does not change the required credit.</div>';
 
     $("verdict").innerHTML = '<div class="verdict ' + cls + '"><div class="big">' + big + '</div><div style="flex:1">'
         + '<div style="margin-bottom:12px">' + msg + '</div><div class="gates">'
+        + '<div class="gate"><b>Floor · Entered z</b><span class="tag ' + tg(gFloor) + '">' + gFloor + '</span><span>Entered ' + zq.toFixed(2) + ' sigma vs ' + K.zFloor.toFixed(2) + ' hard floor</span></div>'
         + '<div class="gate"><b>Gate 1 · Front End</b><span class="tag ' + tg(g1) + '">' + g1 + '</span><span>Header IV / VXN = ' + ratio.toFixed(3) + ' (≥0.95 normal, 0.85-0.95 soft)</span></div>'
-        + '<div class="gate"><b>Gate 2 · Distance</b><span class="tag ' + g2Cls + '">' + g2Tag + '</span><span>Achievable ' + ach.toFixed(2) + ' sigma vs 2.90 floor (VXN ≥ ' + thr.toFixed(2) + ')</span></div>'
-        + '<div class="gate"><b>Gate 3 · Price</b><span class="tag ' + tg(g3) + '">' + g3 + '</span><span>Requires ' + pct(req, 3) + ' width at ' + zq.toFixed(2) + ' sigma</span></div>'
+        + '<div class="gate"><b>Gate 2 · Distance</b><span class="tag ' + g2Cls + '">' + g2Tag + '</span><span>Achievable ' + ach.toFixed(2) + ' sigma vs 2.90 floor (VXN ≥ ' + thr.toFixed(2) + '). Advisory.</span></div>'
+        + '<div class="gate"><b>Gate 3 · Price</b><span class="tag ' + tg(g3) + '">' + g3 + '</span><span>Fillable credit vs ' + pct(req, 3) + ' of width at ' + zq.toFixed(2) + ' sigma</span></div>'
         + '<div class="gate"><b>R7 · Monday Gap</b><span class="tag ' + tg(g7a) + '">' + g7a + '</span><span>' + (gap === null ? "Enter prior Friday close" : (pct(gap, 2) + ' vs -2.00% block')) + '</span></div>'
         + '<div class="gate"><b>R7 · Prior Week</b><span class="tag ' + tg(g7b) + '">' + g7b + '</span><span>' + (pw === null ? "Enter prior week's open" : (pct(pw, 2) + ' vs -3.00% block')) + '</span></div>'
         + '<div class="gate"><b>R8 · Earnings</b><span class="tag ' + (earn ? "soft" : "pass") + '">' + (earn ? "HALVE" : "CLEAR") + '</span><span>' + (earn ? "Inside reporting window — halve call side size." : "Outside reporting window.") + '</span></div>'
-        + '</div>' + g2Note + '</div></div>';
+        + '</div>' + g2Note + bandNote + '</div></div>';
 
     $("regime").innerHTML = '<div class="kv"><span>Sigma over ' + dte + 'd</span><span>' + pct(sig, 3) + '</span></div>'
         + '<div class="kv"><span>One sigma in points</span><span>' + pts.toFixed(2) + '</span></div>'
@@ -612,13 +624,13 @@ function render() {
     let ph = '<tr><th>z</th><th>Short K</th><th>Long K</th><th>% below spot</th><th>BE all-weeks</th><th>BE this band</th><th>Required x' + marg + '</th><th>Touch 1-in</th><th>Settle 1-in</th></tr>';
     for (const z of zs) {
         const Ks = S * Math.exp(0.5 * sig * sig - z * sig), Kl = Ks - W;
-        const bA = be(K.putAll, z), bB = be(band, z), rq = Math.max(bA, bB) * marg;
+        const bA = be(K.putAll, z), bB = be(band, z), rq = bA * marg;
         ph += '<tr class="' + (Math.abs(z - 2.90) < 0.001 ? 'hit' : '') + '"><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
             + '<td>' + pct(Ks / S - 1, 2) + '</td><td>' + pct(bA, 3) + '</td><td>' + pct(bB, 3) + '</td><td><b>' + pct(rq, 3) + '</b></td>'
             + '<td>' + fmtYears(everyN(interp(K.zL, K.putTouch, z))) + '</td><td>' + fmtYears(everyN(interp(K.zL, K.putSettle, z))) + '</td></tr>';
     }
     $("puts").innerHTML = ph;
-    $("putnote").innerHTML = "Strikes rounded to whole points. Required = Max(BE_all, BE_band) × " + marg + "x margin. Fillable execution required.";
+    $("putnote").innerHTML = "Strikes rounded to whole points. Required = all-weeks break-even × " + marg + ". Fillable credit, not mid. The band column is advisory.";
 
     let ch = '<tr><th>z</th><th>Short K</th><th>Long K</th><th>% above spot</th><th>BE all-weeks</th><th>Touch 1-in</th><th>Settle 1-in</th></tr>';
     for (const z of [2.25, 2.50, 2.75, 2.90, 3.20, 3.50]) {
@@ -631,7 +643,7 @@ function render() {
     $("callnote").innerHTML = '<div class="nobox"><b>IF THERE IS NO BID AT 2.50 SIGMA, SELL NO CALL SIDE AT ALL.</b> Never move strikes inward to find a bid.</div>';
 
     const nav = V("nav"), baseP = V("base") / 100, cap = V("cap"), norm = V("norm");
-    const rat = credFrac > 0 && bar > 0 ? credFrac / bar : 0;
+    const rat = credFrac > 0 && beA > 0 ? credFrac / beA : 0;
     const mult = Math.min(cap, Math.max(0, rat / norm));
     const risk = nav * baseP * mult;
     const peak = baseP * cap;
@@ -703,6 +715,12 @@ function loadInputs() {
         });
     }
     if (!data || !data.dt) $("dt").value = localToday();
+    const migrated = { base: ["25", K.baseVarPct], cap: ["3", K.edgeCap], marg: ["2", K.priceMargin] };
+    Object.keys(migrated).forEach(id => {
+        const el = $(id);
+        el.defaultValue = String(migrated[id][1]);
+        if (!data || String(data[id]) === migrated[id][0] || data[id] === undefined || data[id] === "") el.value = String(migrated[id][1]);
+    });
 }
 
 function saveInputs() {
