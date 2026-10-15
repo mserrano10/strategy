@@ -171,6 +171,21 @@ market_cap(t) = shares(t*) × (splits after t*) × split_adjusted_close(t)
 - **Partial years.** The last calendar year is marked `partial` when the curve has not reached late December. `--end today` does that to the current year.
 - **Not advice.** This is a research ledger. It is not a recommendation to trade.
 
+## Forward test
+
+The forward test is a separate ledger. It does not rerun the backtests and it does not rewrite `results/<strategy>.json`.
+
+Each stock book is the 2026 cohort already in those files: the names the rule held after the 2025-12-31 close. Top 5 Biggest is ranked by company, so Alphabet is one line (GOOGL, the larger class) and the fifth company is AMZN. The published backtest still lists GOOG and GOOGL as two holdings. The return starts at the Oct 15, 2026 official close. Point-in-time Best Returner and Top 5 Returners are their own sleeves. The two cap books match across the current list and the point-in-time list on this cohort, so each has one sleeve. TQQQ buy-and-hold is not included. The two-bullet book carries the engine state from the Oct 14, 2026 close (SPY shares, bullet cash, unlocked high-water mark) and keeps applying the live rules: 50% and 80% drawdowns, 50/25/25 tranches, and a sale at 10× the lowest close since the trigger.
+
+Frozen picks live in `forward/picks.json`. The page reads `results/forward-test.json`. Entry prices stay blank until the first completed cash session on or after Oct 15. A same-day Yahoo bar before 21:00 UTC is not that close.
+
+```bash
+cd backtest-lab
+python3 -m backtest_lab forward-mark
+```
+
+GitHub Actions runs that command at 21:30 UTC on weekdays (`.github/workflows/forward-test.yml`) and commits those two files.
+
 ## Tests
 
 ```bash

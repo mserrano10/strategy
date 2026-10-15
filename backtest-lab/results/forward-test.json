@@ -1,0 +1,510 @@
+{
+  "label": "Forward test, live since Oct 15, 2026",
+  "inception": "2026-10-15",
+  "initial_capital": 10000.0,
+  "status": "awaiting-close",
+  "as_of": null,
+  "entry_session": null,
+  "status_detail": "Entry prices lock at the Oct 15, 2026 close. That session is not complete yet, so these books have no return.",
+  "entry_rule": "For the stock books, entry is the adjusted close on the first completed US cash session on or after 2026-10-15. A same-day bar is not that close until 21:00 UTC, which is after both the 20:00 UTC (EDT) and 21:00 UTC (EST) cash closes. The entry price is written once and is not revised if Yahoo later restates the historical print. Later marks divide that session's adjusted close by the frozen entry. The two-bullet book does not use those ratios. It carries the engine state from the Oct 14, 2026 close and applies the live rules on each forward session. Its chart is rebased so that session equals the starting capital.",
+  "ambiguities": [
+    "The forward test starts at the Oct 15, 2026 close. A same-day Yahoo bar before 21:00 UTC is an intraday print and is not the entry. Until that close exists, entry prices stay blank and the books have no return.",
+    "Annual books use the 2026 cohort chosen at the 2025-12-31 close. They are not re-ranked here. The backtest path from that rebalance through the last session before inception is not part of the forward return.",
+    "Point-in-time Best Returner and Top 5 Returners are their own sleeves, because their 2026 names differ from the current-list books. Biggest and Top 5 Biggest hold the same names in both universes on this cohort, so each cap rule has one sleeve.",
+    "TQQQ buy-and-hold is not in the forward test. The TQQQ book is the two-bullet sleeve.",
+    "The two-bullet forward book keeps the live rules. The engine state is taken at the Oct 14, 2026 close: SPY shares, both bullet cash balances, and the unlocked high-water mark. Each new session can arm a bullet at a 50% or 80% drawdown, buy 50/25/25 at the trigger and about 30 and 60 days later, or sell at 10\u00d7 the lowest close since the trigger.",
+    "Top 5 Biggest ranks companies. Alphabet counts once, as GOOGL, the larger share class at the 2025 close. GOOG does not take a second slot, so the fifth company is AMZN. The published backtest still lists both classes. The current list and the point-in-time list agree on this forward cohort."
+  ],
+  "separate_from_backtests": true,
+  "spy": {
+    "name": "S&P 500 (SPY)",
+    "ticker": "SPY",
+    "weight": 1.0,
+    "entry_price": null,
+    "price_field": "adjusted_close",
+    "equity": [],
+    "metrics": null
+  },
+  "books": [
+    {
+      "id": "best-returner",
+      "name": "Best Returner",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Best Returner, chosen at the 2025-12-31 close. Signal: prior calendar-year total return. Universe: today's S&P 500, applied to the 2025 signal year. 498 names were eligible out of 503. That list is survivorship-biased. The book is a single name. The position is held until the next year-end close and is not re-ranked in this test. Picks: ECHO (EchoStar, 2025 total return +374.7%, cap $2.89B at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
+      "holdings": [
+        {
+          "ticker": "ECHO",
+          "name": "EchoStar",
+          "weight": 1.0,
+          "prior_year_return": 3.74672483663642,
+          "market_cap": 2894778748.728943,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "best-returner-pit",
+      "name": "Best Returner (point-in-time)",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Best Returner (point-in-time), chosen at the 2025-12-31 close. Signal: prior calendar-year total return. Universe: the fja05680 point-in-time S&P 500 membership at the 2025 year-end, not today's constituent list. 492 names were eligible out of 503. The book is a single name. The position is held until the next year-end close and is not re-ranked in this test. Picks: WDC (Western Digital, 2025 total return +283.7%, cap $59.05B at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
+      "holdings": [
+        {
+          "ticker": "WDC",
+          "name": "Western Digital",
+          "weight": 1.0,
+          "prior_year_return": 2.836785502175131,
+          "market_cap": 59053388106.76053,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "best-returner-10b",
+      "name": "Best Returner (\u2265 $10B)",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Best Returner (\u2265 $10B), chosen at the 2025-12-31 close. Signal: prior calendar-year total return, market cap at least 10,000,000,000. Universe: current NASDAQ, NYSE, and NYSE American common stocks with approximated market cap of at least $10B at the 2025 year-end. 813 names were eligible out of 5369. Delisted names are absent. A listing whose split-adjusted history peaks above $20,000 while the latest print is under $10,000 is dropped. A prior-year return above +1000% is dropped unless a second vendor confirms it. A cap above $15 trillion is ignored. The book is a single name. The position is held until the next year-end close and is not re-ranked in this test. Picks: LITE (Lumentum Holdings Inc. - Common Stock, 2025 total return +339.1%, cap $26.14B at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
+      "holdings": [
+        {
+          "ticker": "LITE",
+          "name": "Lumentum Holdings Inc. - Common Stock",
+          "weight": 1.0,
+          "prior_year_return": 3.3905897526731055,
+          "market_cap": 26137671288.41034,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "best-returner-2b",
+      "name": "Best Returner (\u2265 $2B)",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Best Returner (\u2265 $2B), chosen at the 2025-12-31 close. Signal: prior calendar-year total return, market cap at least 2,000,000,000. Universe: current NASDAQ, NYSE, and NYSE American common stocks with approximated market cap of at least $2B at the 2025 year-end. 1760 names were eligible out of 5369. Delisted names are absent. A listing whose split-adjusted history peaks above $20,000 while the latest print is under $10,000 is dropped. A prior-year return above +1000% is dropped unless a second vendor confirms it. A cap above $15 trillion is ignored. The book is a single name. The position is held until the next year-end close and is not re-ranked in this test. Picks: CELC (Celcuity Inc. - Common Stock, 2025 total return +662.0%, cap $4.62B at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
+      "holdings": [
+        {
+          "ticker": "CELC",
+          "name": "Celcuity Inc. - Common Stock",
+          "weight": 1.0,
+          "prior_year_return": 6.619556661659088,
+          "market_cap": 4615095273.813927,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "top5-returners",
+      "name": "Top 5 Returners",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Top 5 Returners, chosen at the 2025-12-31 close. Signal: prior calendar-year total return. Universe: today's S&P 500, applied to the 2025 signal year. 498 names were eligible out of 503. That list is survivorship-biased. The five names are equal weight. The position is held until the next year-end close and is not re-ranked in this test. Picks: ECHO (EchoStar, 2025 total return +374.7%, cap $2.89B at the signal close); LITE (Lumentum, 2025 total return +339.1%, cap $26.14B at the signal close); BE (Bloom Energy, 2025 total return +291.2%, cap $20.55B at the signal close); WDC (Western Digital, 2025 total return +283.7%, cap $59.05B at the signal close); MU (Micron Technology, 2025 total return +240.2%, cap $321.23B at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
+      "holdings": [
+        {
+          "ticker": "ECHO",
+          "name": "EchoStar",
+          "weight": 0.2,
+          "prior_year_return": 3.74672483663642,
+          "market_cap": 2894778748.728943,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "LITE",
+          "name": "Lumentum",
+          "weight": 0.2,
+          "prior_year_return": 3.3905897526731055,
+          "market_cap": 26137671288.41034,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "BE",
+          "name": "Bloom Energy",
+          "weight": 0.2,
+          "prior_year_return": 2.9122018447265288,
+          "market_cap": 20550419357.59529,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "WDC",
+          "name": "Western Digital",
+          "weight": 0.2,
+          "prior_year_return": 2.836785502175131,
+          "market_cap": 59053388106.76053,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "MU",
+          "name": "Micron Technology",
+          "weight": 0.2,
+          "prior_year_return": 2.4023927843844546,
+          "market_cap": 321231602303.74805,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "top5-returners-pit",
+      "name": "Top 5 Returners (point-in-time)",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Top 5 Returners (point-in-time), chosen at the 2025-12-31 close. Signal: prior calendar-year total return. Universe: the fja05680 point-in-time S&P 500 membership at the 2025 year-end, not today's constituent list. 492 names were eligible out of 503. The five names are equal weight. The position is held until the next year-end close and is not re-ranked in this test. Picks: WDC (Western Digital, 2025 total return +283.7%, cap $59.05B at the signal close); MU (Micron Technology, 2025 total return +240.2%, cap $321.23B at the signal close); STX (Seagate Technology, 2025 total return +225.3%, cap $60.00B at the signal close); HOOD (Robinhood Markets, 2025 total return +203.5%, cap $101.70B at the signal close); NEM (Newmont, 2025 total return +172.8%, cap $109.68B at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
+      "holdings": [
+        {
+          "ticker": "WDC",
+          "name": "Western Digital",
+          "weight": 0.2,
+          "prior_year_return": 2.836785502175131,
+          "market_cap": 59053388106.76053,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "MU",
+          "name": "Micron Technology",
+          "weight": 0.2,
+          "prior_year_return": 2.4023927843844546,
+          "market_cap": 321231602303.74805,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "STX",
+          "name": "Seagate Technology",
+          "weight": 0.2,
+          "prior_year_return": 2.2526241952752595,
+          "market_cap": 59999788142.545166,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "HOOD",
+          "name": "Robinhood Markets",
+          "weight": 0.2,
+          "prior_year_return": 2.035426826864848,
+          "market_cap": 101698259711.84668,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "NEM",
+          "name": "Newmont",
+          "weight": 0.2,
+          "prior_year_return": 1.7281806922137415,
+          "market_cap": 109680203464.99873,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "top5-returners-10b",
+      "name": "Top 5 Returners (\u2265 $10B)",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Top 5 Returners (\u2265 $10B), chosen at the 2025-12-31 close. Signal: prior calendar-year total return, market cap at least 10,000,000,000. Universe: current NASDAQ, NYSE, and NYSE American common stocks with approximated market cap of at least $10B at the 2025 year-end. 813 names were eligible out of 5369. Delisted names are absent. A listing whose split-adjusted history peaks above $20,000 while the latest print is under $10,000 is dropped. A prior-year return above +1000% is dropped unless a second vendor confirms it. A cap above $15 trillion is ignored. The five names are equal weight. The position is held until the next year-end close and is not re-ranked in this test. Picks: LITE (Lumentum Holdings Inc. - Common Stock, 2025 total return +339.1%, cap $26.14B at the signal close); HL (Hecla Mining Company Common Stock, 2025 total return +291.8%, cap $12.86B at the signal close); BE (Bloom Energy Corporation Class A Common Stock, 2025 total return +291.2%, cap $20.55B at the signal close); AU (AngloGold Ashanti PLC Ordinary Shares, 2025 total return +288.2%, cap $43.06B at the signal close); IREN (IREN Limited - Ordinary Shares, 2025 total return +284.6%, cap $12.40B at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
+      "holdings": [
+        {
+          "ticker": "LITE",
+          "name": "Lumentum Holdings Inc. - Common Stock",
+          "weight": 0.2,
+          "prior_year_return": 3.3905897526731055,
+          "market_cap": 26137671288.41034,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "HL",
+          "name": "Hecla Mining Company Common Stock",
+          "weight": 0.2,
+          "prior_year_return": 2.9175594932546356,
+          "market_cap": 12859193835.171299,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "BE",
+          "name": "Bloom Energy Corporation Class A Common Stock",
+          "weight": 0.2,
+          "prior_year_return": 2.9122018447265288,
+          "market_cap": 20550419357.59529,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "AU",
+          "name": "AngloGold Ashanti PLC Ordinary Shares",
+          "weight": 0.2,
+          "prior_year_return": 2.8817541367574533,
+          "market_cap": 43056871475.681305,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "IREN",
+          "name": "IREN Limited - Ordinary Shares",
+          "weight": 0.2,
+          "prior_year_return": 2.8462323453707365,
+          "market_cap": 12401465970.4529,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "top5-returners-2b",
+      "name": "Top 5 Returners (\u2265 $2B)",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Top 5 Returners (\u2265 $2B), chosen at the 2025-12-31 close. Signal: prior calendar-year total return, market cap at least 2,000,000,000. Universe: current NASDAQ, NYSE, and NYSE American common stocks with approximated market cap of at least $2B at the 2025 year-end. 1760 names were eligible out of 5369. Delisted names are absent. A listing whose split-adjusted history peaks above $20,000 while the latest print is under $10,000 is dropped. A prior-year return above +1000% is dropped unless a second vendor confirms it. A cap above $15 trillion is ignored. The five names are equal weight. The position is held until the next year-end close and is not re-ranked in this test. Picks: CELC (Celcuity Inc. - Common Stock, 2025 total return +662.0%, cap $4.62B at the signal close); ALM (Almonty Industries Inc. - Common Shares, 2025 total return +526.5%, cap $2.26B at the signal close); TMC (TMC the metals company Inc. - Common Stock, 2025 total return +450.9%, cap $3.30B at the signal close); PL (Planet Labs PBC Class A Common Stock, 2025 total return +388.1%, cap $6.19B at the signal close); GRAL (GRAIL, Inc. - Common Stock, 2025 total return +379.5%, cap $3.34B at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
+      "holdings": [
+        {
+          "ticker": "CELC",
+          "name": "Celcuity Inc. - Common Stock",
+          "weight": 0.2,
+          "prior_year_return": 6.619556661659088,
+          "market_cap": 4615095273.813927,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "ALM",
+          "name": "Almonty Industries Inc. - Common Shares",
+          "weight": 0.2,
+          "prior_year_return": 5.264889187282986,
+          "market_cap": 2259667078.7570143,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "TMC",
+          "name": "TMC the metals company Inc. - Common Stock",
+          "weight": 0.2,
+          "prior_year_return": 4.508928616094042,
+          "market_cap": 3299933385.2246895,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "PL",
+          "name": "Planet Labs PBC Class A Common Stock",
+          "weight": 0.2,
+          "prior_year_return": 3.881187994939861,
+          "market_cap": 6185468082.743528,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "GRAL",
+          "name": "GRAIL, Inc. - Common Stock",
+          "weight": 0.2,
+          "prior_year_return": 3.7949576755607524,
+          "market_cap": 3336488323.8128357,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "biggest",
+      "name": "Biggest",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Biggest, chosen at the 2025-12-31 close. Signal: approximated market cap at the prior year-end close. Universe: today's S&P 500, applied to the 2025 signal year. 500 names were eligible out of 503. That list is survivorship-biased. The book is a single name. The position is held until the next year-end close and is not re-ranked in this test. Picks: NVDA (Nvidia, 2025 total return +38.9%, cap $4.541T at the signal close). The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included. Biggest (point-in-time) holds the same names on this cohort, so the two books share this sleeve.",
+      "holdings": [
+        {
+          "ticker": "NVDA",
+          "name": "Nvidia",
+          "weight": 1.0,
+          "prior_year_return": 0.38916540459304416,
+          "market_cap": 4540715500000.0,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "shared_sleeve": "Biggest (point-in-time) holds the same names on this cohort, so the two books share this sleeve.",
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "top5-biggest",
+      "name": "Top 5 Biggest",
+      "cohort_year": 2026,
+      "signal_date": "2025-12-31",
+      "derivation": "2026 cohort of Top 5 Biggest, chosen at the 2025-12-31 close, ranked by company. Signal: approximated market cap at the prior year-end close. Universe: today's S&P 500. The point-in-time membership produces the same five companies, so the books share this sleeve. Share classes of one company take one slot, and the slot is the larger class at that close. Alphabet is held as GOOGL. The five companies are equal weight: NVDA, AAPL, GOOGL, MSFT, AMZN. The published backtest still counts GOOG and GOOGL as two holdings. This forward book holds one Alphabet line. The position is held until the next year-end close and is not re-ranked in this test. The forward return starts at the Oct 15, 2026 close, so the backtest's 2026 path is not included.",
+      "holdings": [
+        {
+          "ticker": "NVDA",
+          "name": "Nvidia",
+          "weight": 0.2,
+          "prior_year_return": 0.38916540459304416,
+          "market_cap": 4540715500000.0,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "AAPL",
+          "name": "Apple Inc.",
+          "weight": 0.2,
+          "prior_year_return": 0.09052613334426618,
+          "market_cap": 4034508208011.4746,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc. (Class A)",
+          "weight": 0.2,
+          "prior_year_return": 0.6599359066612884,
+          "market_cap": 3791094278022.0,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "MSFT",
+          "name": "Microsoft",
+          "weight": 0.2,
+          "prior_year_return": 0.15584237329363515,
+          "market_cap": 3594827887917.222,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "AMZN",
+          "name": "Amazon",
+          "weight": 0.2,
+          "prior_year_return": 0.05209903808910643,
+          "market_cap": 2467515737956.5005,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "shared_sleeve": "Top 5 Biggest (point-in-time) holds the same names on this cohort, so the two books share this sleeve.",
+      "equity": [],
+      "metrics": null,
+      "events": []
+    },
+    {
+      "id": "tqqq-two-bullet",
+      "name": "TQQQ Two-Bullet 90/10",
+      "cohort_year": 2026,
+      "signal_date": "2026-10-14",
+      "engine": "tqqq-two-bullet",
+      "derivation": "Live two-bullet book. The engine is handed off at the 2026-10-14 close and then follows the rules from the Oct 15, 2026 close. The high-water mark is 87.2200 and is unlocked, because the cycle is flat after the May 26, 2026 limit exit (both bullets sold at 80.80, ten times a floor of 8.08). Bullet 1 buys when the split-adjusted TQQQ close is at or below 43.6100 (50% below that mark). Bullet 2 buys at or below 17.4440 (80% below the same locked mark). Each bullet spends 50% of the cash it holds at the trigger, then 25% on the first session on or after 30 calendar days and 25% after 60. A limit sells every TQQQ share at 10\u00d7 the lowest close since the trigger. The SPY core is never rebalanced against the satellite. A drawdown after inception is taken. TQQQ is marked on the split-adjusted close. SPY and BIL use adjusted closes.",
+      "handoff": {
+        "as_of": "2026-10-14",
+        "spy_shares": 53.14182632141442,
+        "ath": 87.22000122070312,
+        "locked_ath": null,
+        "floor": null,
+        "cycle": false,
+        "prev_bil": 91.5199966430664,
+        "equity": 60987.87549665466,
+        "bullet1": {
+          "name": "bullet-1",
+          "cash": 15683.597644961097,
+          "shares": 0.0,
+          "active": false,
+          "trigger": null,
+          "budget": 0.0,
+          "tranches": 0
+        },
+        "bullet2": {
+          "name": "bullet-2",
+          "cash": 4406.329612140891,
+          "shares": 0.0,
+          "active": false,
+          "trigger": null,
+          "budget": 0.0,
+          "tranches": 0
+        }
+      },
+      "rule_state": {
+        "as_of": "2026-10-14",
+        "high_water_mark": 87.22000122070312,
+        "locked_high_water_mark": null,
+        "cycle": false,
+        "floor": null
+      },
+      "holdings": [
+        {
+          "ticker": "SPY",
+          "name": "SPDR S&P 500 ETF Trust",
+          "sleeve": "core",
+          "weight": 0.6705914561951912,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "TQQQ",
+          "name": "Bullet 1 ProShares UltraPro QQQ",
+          "sleeve": "bullet-1",
+          "weight": 0.0,
+          "entry_price": null,
+          "price_field": "split_adjusted_close"
+        },
+        {
+          "ticker": "TQQQ",
+          "name": "Bullet 2 ProShares UltraPro QQQ",
+          "sleeve": "bullet-2",
+          "weight": 0.0,
+          "entry_price": null,
+          "price_field": "split_adjusted_close"
+        },
+        {
+          "ticker": "BIL",
+          "name": "Bullet 1 dry powder (Treasury-bill proxy)",
+          "sleeve": "bullet-1",
+          "weight": 0.25715927169526315,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        },
+        {
+          "ticker": "BIL",
+          "name": "Bullet 2 dry powder (Treasury-bill proxy)",
+          "sleeve": "bullet-2",
+          "weight": 0.0722492721095456,
+          "entry_price": null,
+          "price_field": "adjusted_close"
+        }
+      ],
+      "equity": [],
+      "metrics": null,
+      "events": []
+    }
+  ]
+}
