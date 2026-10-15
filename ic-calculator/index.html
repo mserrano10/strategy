@@ -102,6 +102,14 @@
         }
         .back-link:hover { opacity: 0.6; }
 
+        button.back-link {
+            background: none;
+            border: 0;
+            padding: 0;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
         /* Header Anchor */
         .header {
             border-bottom: 2px solid #0F172A;
@@ -287,6 +295,7 @@
 
         .kv:last-child { border-bottom: 0; }
         .kv span:last-child { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 700; color: #0F172A; }
+        .kv.na span:last-child { color: #64748B; font-weight: 600; }
 
         .note { color: #64748B; font-size: 8pt; line-height: 1.5; margin-top: 12px; }
         .warnbox { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px; padding: 10px 14px; font-size: 8.5pt; color: #92400E; margin-top: 12px; }
@@ -342,6 +351,7 @@
     <!-- Navigation Strip -->
     <div class="nav-header">
         <a href="https://strategy.atlaswealth.cc" class="back-link">← Return to Strategy Portal</a>
+        <button type="button" id="reset-inputs" class="back-link">Reset inputs</button>
     </div>
 
     <!-- Title Anchor -->
@@ -546,37 +556,39 @@ function render() {
     const g3 = isFinite(credFrac) && credFrac > 0 ? (credFrac >= req ? "PASS" : "FAIL") : "-";
 
     let cls, big, msg;
-    if (g2 === "FAIL") {
-        cls = "v-no"; big = "NO TRADE";
-        msg = "Distance rule fails. The strike reachable at 0.9% of width sits at <b>" + ach.toFixed(2) + " sigma</b>, inside the 2.90 sigma floor. VXN is <b>" + vxn.toFixed(2) + "</b> and needs to be <b>" + thr.toFixed(2) + "</b> or above.";
-    } else if (g1 === "FAIL") {
+    if (g1 === "FAIL") {
         cls = "v-no"; big = "STAND DOWN";
         msg = "Front end has collapsed at a ratio of <b>" + ratio.toFixed(3) + "</b>. Market pricing is calmer than VXN implies; credit at distance will be insufficient.";
     } else if (g7a === "FAIL" || g7b === "FAIL") {
         cls = "v-wait"; big = "PUT ONLY";
-        msg = "Distance and front end clear, so put side is live. <b>Call side blocked</b> due to structural momentum/gap parameters.";
+        msg = "Put side is live. <b>Call side blocked</b> due to structural momentum/gap parameters.";
     } else if (g3 === "FAIL") {
         cls = "v-no"; big = "PRICE FAIL";
-        msg = "All gates clear, but quoted credit of <b>" + pct(credFrac, 3) + "</b> falls short of the required <b>" + pct(req, 3) + "</b> of width at " + zq.toFixed(2) + " sigma.";
+        msg = "Quoted credit of <b>" + pct(credFrac, 3) + "</b> falls short of the required <b>" + pct(req, 3) + "</b> of width at " + zq.toFixed(2) + " sigma.";
     } else if (g3 === "-") {
         cls = "v-wait"; big = "AWAITING QUOTE";
-        msg = "Gates clear. Enter fillable credit to verify price gate. Required at " + zq.toFixed(2) + " sigma is <b>" + pct(req, 3) + "</b> of width.";
+        msg = "Enter fillable credit to verify the price gate. Required at " + zq.toFixed(2) + " sigma is <b>" + pct(req, 3) + "</b> of width.";
     } else {
         cls = "v-go"; big = "TRADE";
-        msg = "All gates clear. Quoted credit of <b>" + pct(credFrac, 3) + "</b> meets the <b>" + pct(req, 3) + "</b> requirement at " + zq.toFixed(2) + " sigma.";
+        msg = "Quoted credit of <b>" + pct(credFrac, 3) + "</b> meets the <b>" + pct(req, 3) + "</b> requirement at " + zq.toFixed(2) + " sigma.";
     }
 
     const tg = (v) => v === "PASS" ? "pass" : v === "FAIL" ? "fail" : "soft";
+    const g2Tag = g2 === "FAIL" ? "NOTE" : g2;
+    const g2Cls = g2 === "FAIL" ? "soft" : tg(g2);
+    const g2Note = g2 === "FAIL"
+        ? '<div class="warnbox"><b>Gate 2 is advisory.</b> The strike reachable at 0.9% of width sits at <b>' + ach.toFixed(2) + ' sigma</b>, inside the 2.90 floor. VXN is <b>' + vxn.toFixed(2) + '</b> and needs <b>' + thr.toFixed(2) + '</b> or above. This does not block the trade.</div>'
+        : "";
 
     $("verdict").innerHTML = '<div class="verdict ' + cls + '"><div class="big">' + big + '</div><div style="flex:1">'
         + '<div style="margin-bottom:12px">' + msg + '</div><div class="gates">'
         + '<div class="gate"><b>Gate 1 · Front End</b><span class="tag ' + tg(g1) + '">' + g1 + '</span><span>Header IV / VXN = ' + ratio.toFixed(3) + ' (≥0.95 normal, 0.85-0.95 soft)</span></div>'
-        + '<div class="gate"><b>Gate 2 · Distance</b><span class="tag ' + tg(g2) + '">' + g2 + '</span><span>Achievable ' + ach.toFixed(2) + ' sigma vs 2.90 floor (VXN ≥ ' + thr.toFixed(2) + ')</span></div>'
+        + '<div class="gate"><b>Gate 2 · Distance</b><span class="tag ' + g2Cls + '">' + g2Tag + '</span><span>Achievable ' + ach.toFixed(2) + ' sigma vs 2.90 floor (VXN ≥ ' + thr.toFixed(2) + ')</span></div>'
         + '<div class="gate"><b>Gate 3 · Price</b><span class="tag ' + tg(g3) + '">' + g3 + '</span><span>Requires ' + pct(req, 3) + ' width at ' + zq.toFixed(2) + ' sigma</span></div>'
         + '<div class="gate"><b>R7 · Monday Gap</b><span class="tag ' + tg(g7a) + '">' + g7a + '</span><span>' + (gap === null ? "Enter prior Friday close" : (pct(gap, 2) + ' vs -2.00% block')) + '</span></div>'
         + '<div class="gate"><b>R7 · Prior Week</b><span class="tag ' + tg(g7b) + '">' + g7b + '</span><span>' + (pw === null ? "Enter prior week's open" : (pct(pw, 2) + ' vs -3.00% block')) + '</span></div>'
         + '<div class="gate"><b>R8 · Earnings</b><span class="tag ' + (earn ? "soft" : "pass") + '">' + (earn ? "HALVE" : "CLEAR") + '</span><span>' + (earn ? "Inside reporting window — halve call side size." : "Outside reporting window.") + '</span></div>'
-        + '</div></div></div>';
+        + '</div>' + g2Note + '</div></div>';
 
     $("regime").innerHTML = '<div class="kv"><span>Sigma over ' + dte + 'd</span><span>' + pct(sig, 3) + '</span></div>'
         + '<div class="kv"><span>One sigma in points</span><span>' + pts.toFixed(2) + '</span></div>'
@@ -626,11 +638,12 @@ function render() {
     const perC = (W - V("cred")) * 100;
     const cons = perC > 0 ? Math.floor(risk / perC) : 0;
 
+    const tradable = big === "TRADE" || big === "PUT ONLY";
     $("sizeout").innerHTML = '<div class="kv"><span>Credit / break-even</span><span>' + (rat ? rat.toFixed(2) + "x" : "-") + '</span></div>'
         + '<div class="kv"><span>Edge multiple (cap ' + cap + 'x)</span><span>' + mult.toFixed(2) + 'x</span></div>'
         + '<div class="kv"><span>Risk capital deploy</span><span>$' + Math.round(risk).toLocaleString() + '</span></div>'
         + '<div class="kv"><span>As % of NAV</span><span>' + pct(risk / nav, 1) + '</span></div>'
-        + '<div class="kv"><span>Contracts ($' + perC.toFixed(0) + ' risk)</span><span>' + cons + '</span></div>';
+        + '<div class="kv' + (tradable ? '' : ' na') + '"><span>Contracts ($' + perC.toFixed(0) + ' risk)</span><span>' + (tradable ? cons : 'n/a') + '</span></div>';
 
     const stopSh = 0.03 * (W - V("cred")), stopD = risk * 0.03;
     $("stopout").innerHTML = '<div class="kv"><span>Stop (3% VaR)</span><span>$' + Math.round(stopD).toLocaleString() + '</span></div>'
@@ -666,7 +679,55 @@ function render() {
     $("foot").innerHTML = "Desk v1.0 · Calibrated to 1,331-week QQQ study · Integrated Black-Scholes Engine · Confidential Policy & Quantitative Framework.";
 }
 
-document.querySelectorAll("input").forEach(el => el.addEventListener("input", render));
+const STORE_KEY = "atlas.ic-calculator.v1";
+const INPUT_IDS = ["spot", "vxn", "hiv", "dte", "wid", "pfc", "pmo", "dt", "nav", "base", "cap", "norm", "cred", "credz", "marg", "bs_r"];
+
+function localToday() {
+    const d = new Date();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-" + day;
+}
+
+function loadInputs() {
+    let data = null;
+    try {
+        const raw = localStorage.getItem(STORE_KEY);
+        if (raw) data = JSON.parse(raw);
+    } catch (e) {
+        data = null;
+    }
+    if (data && typeof data === "object") {
+        INPUT_IDS.forEach(id => {
+            if (Object.prototype.hasOwnProperty.call(data, id) && $(id)) $(id).value = data[id];
+        });
+    }
+    if (!data || !data.dt) $("dt").value = localToday();
+}
+
+function saveInputs() {
+    const data = {};
+    INPUT_IDS.forEach(id => { data[id] = $(id).value; });
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch (e) {}
+}
+
+function resetInputs() {
+    try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+    INPUT_IDS.forEach(id => {
+        const el = $(id);
+        if (el) el.value = el.defaultValue;
+    });
+    $("dt").value = localToday();
+    render();
+}
+
+loadInputs();
+document.querySelectorAll("input").forEach(el => {
+    const onEdit = () => { saveInputs(); render(); };
+    el.addEventListener("input", onEdit);
+    el.addEventListener("change", onEdit);
+});
+$("reset-inputs").addEventListener("click", resetInputs);
 render();
 </script>
 
