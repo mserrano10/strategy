@@ -491,31 +491,50 @@
 <script>
 const COLORS = ["#0F172A", "#334155", "#64748B", "#94A3B8", "#1E3A5F", "#475569"];
 
+// Point-in-time books stay in results/*.json and in each tab's ids below.
+// They are hidden until a Sharadar membership tape replaces the Wikipedia walk.
+// Set this to true to show those rows, charts, and forward sleeves again.
+const SHOW_POINT_IN_TIME = false;
+
+function isPointInTime(reportOrId) {
+    const id = typeof reportOrId === "string" ? reportOrId : reportOrId && reportOrId.id;
+    if (id && /-pit$/.test(id)) return true;
+    return !!(reportOrId && reportOrId.universe && reportOrId.universe.point_in_time);
+}
+
+function isShown(reportOrId) {
+    return SHOW_POINT_IN_TIME || !isPointInTime(reportOrId);
+}
+
 const TABS = [
     { id: "summary", label: "Summary" },
     {
         id: "best-returner",
         label: "Best Returner",
         ids: ["best-returner", "best-returner-pit", "best-returner-10b", "best-returner-2b"],
-        intro: "The single best total return in the prior year. The rows are today’s S&P 500, the point-in-time list, and the $10 billion and $2 billion size floors.",
+        intro: "The single best total return in the prior year. The rows are today’s S&P 500 and the $10 billion and $2 billion size floors.",
+        introWithPit: "The single best total return in the prior year. The rows are today’s S&P 500, the point-in-time list, and the $10 billion and $2 billion size floors.",
     },
     {
         id: "top5-returners",
         label: "Top 5 Returners",
         ids: ["top5-returners", "top5-returners-pit", "top5-returners-10b", "top5-returners-2b"],
-        intro: "The five best prior-year returns, equal weight, on the same four universes.",
+        intro: "The five best prior-year returns, equal weight, on today’s S&P 500 and the two size floors.",
+        introWithPit: "The five best prior-year returns, equal weight, on the same four universes.",
     },
     {
         id: "biggest",
         label: "Biggest",
         ids: ["biggest", "biggest-pit"],
-        intro: "The largest approximated market cap at the prior year-end. One row is today’s S&P 500. The other walks the point-in-time list.",
+        intro: "The largest approximated market cap at the prior year-end, on today’s S&P 500.",
+        introWithPit: "The largest approximated market cap at the prior year-end. One row is today’s S&P 500. The other walks the point-in-time list.",
     },
     {
         id: "top5-biggest",
         label: "Top 5 Biggest",
         ids: ["top5-biggest", "top5-biggest-pit"],
-        intro: "The five largest, equal weight. Current list and point-in-time.",
+        intro: "The five largest, equal weight, on today’s S&P 500.",
+        introWithPit: "The five largest, equal weight. Current list and point-in-time.",
     },
     {
         id: "tqqq-two-bullet",
@@ -733,8 +752,12 @@ function currentTab() {
     return tabById(state.tab);
 }
 
+function tabIntro(tab) {
+    return SHOW_POINT_IN_TIME && tab.introWithPit ? tab.introWithPit : tab.intro;
+}
+
 function tabReports(tab) {
-    return (tab.ids || []).map((id) => state.reports.find((report) => report.id === id)).filter(Boolean);
+    return (tab.ids || []).map((id) => state.reports.find((report) => report.id === id)).filter((report) => report && isShown(report));
 }
 
 function selectedReport(tab) {
@@ -768,21 +791,31 @@ function reportCells(report) {
     return "<td><strong>" + report.name + "</strong><br>" + badge(report) + "</td>" + metricTds(report.metrics);
 }
 
+function cagrOf(metrics) {
+    return metrics && typeof metrics.cagr === "number" ? metrics.cagr : -Infinity;
+}
+
 function summaryMarkup() {
     const anchor = summaryAnchor();
     const bench = spySeries(anchor);
-    const rows = state.reports.map((report) =>
-        '<tr class="clickable" tabindex="0" data-open="' + report.id + '">' + reportCells(report) + "</tr>"
-    ).join("");
-    const spy = bench
-        ? "<tr><td>" + spyLabel() + "</td>" + metricTds(bench.metrics) + "</tr>"
-        : "";
+    const rows = state.reports.filter(isShown).map((report) => ({
+        cagr: cagrOf(report.metrics),
+        html: '<tr class="clickable" tabindex="0" data-open="' + report.id + '">' + reportCells(report) + "</tr>",
+    }));
+    if (bench) {
+        rows.push({
+            cagr: cagrOf(bench.metrics),
+            html: "<tr><td>" + spyLabel() + "</td>" + metricTds(bench.metrics) + "</tr>",
+        });
+    }
+    rows.sort((left, right) => right.cagr - left.cagr);
     const windowNote = bench && bench.metrics
         ? "<p>SPY is the current-list window, " + bench.metrics.start + " → " + bench.metrics.end + ".</p>"
         : "";
+    const pitNote = SHOW_POINT_IN_TIME ? "" : " Point-in-time books are withheld until Sharadar.";
     return "<h2>Summary</h2>" +
-        "<p>All books in one table, plus SPY. Open a row for that idea’s variants, chart, and forward test. Sharpe uses daily returns, a 252-day year, and a risk-free rate of zero.</p>" +
-        '<div class="table-scroll"><table>' + TABLE_HEAD + "<tbody>" + rows + spy + "</tbody></table></div>" +
+        "<p>Sorted by CAGR, highest first, including SPY." + pitNote + " Open a row for that idea’s variants, chart, and forward test. Sharpe uses daily returns, a 252-day year, and a risk-free rate of zero.</p>" +
+        '<div class="table-scroll"><table>' + TABLE_HEAD + "<tbody>" + rows.map((row) => row.html).join("") + "</tbody></table></div>" +
         windowNote +
         studyMarkup();
 }
@@ -978,7 +1011,7 @@ function strategyMarkup() {
     const scaleLog = state.log ? " active" : "";
     const scaleLinear = state.log ? "" : " active";
     return "<h2>" + tab.label + "</h2>" +
-        "<p>" + tab.intro + "</p>" +
+        "<p>" + tabIntro(tab) + "</p>" +
         '<div class="table-scroll"><table>' + TABLE_HEAD + "<tbody>" + rows + spy + "</tbody></table></div>" +
         spyNote +
         '<div class="toolbar">' +
@@ -1042,7 +1075,7 @@ function paintStrategyChart() {
 function forwardBooks(tab) {
     const ids = tab.ids || [];
     const books = (state.forward && state.forward.books) || [];
-    return ids.map((id) => books.find((book) => book.id === id)).filter(Boolean);
+    return ids.map((id) => books.find((book) => book.id === id)).filter((book) => book && isShown(book.id));
 }
 
 function forwardMarkup(tab) {
@@ -1253,9 +1286,9 @@ function show(tabId, reportId, mode) {
     const tab = tabById(tabId);
     let selected = null;
     if (tab.ids) {
-        const exists = (id) => state.reports.some((report) => report.id === id);
-        if (reportId && tab.ids.indexOf(reportId) !== -1 && exists(reportId)) selected = reportId;
-        else selected = tab.ids.find(exists) || null;
+        const shown = (id) => state.reports.some((report) => report.id === id) && isShown(id);
+        if (reportId && tab.ids.indexOf(reportId) !== -1 && shown(reportId)) selected = reportId;
+        else selected = tab.ids.find(shown) || null;
     }
     const hash = selected || tab.id;
     const next = "#" + hash;
@@ -1284,7 +1317,8 @@ function readHash() {
     }
     const tab = tabForReport(hash);
     const reportId = tab.ids && tab.ids.indexOf(hash) !== -1 ? hash : null;
-    show(tab.id, reportId, null);
+    const hidden = reportId && !isShown(reportId);
+    show(tab.id, hidden ? null : reportId, hidden ? "replace" : null);
 }
 
 function esc(value) {
