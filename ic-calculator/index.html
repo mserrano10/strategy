@@ -301,6 +301,56 @@
         .warnbox { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px; padding: 10px 14px; font-size: 8.5pt; color: #92400E; margin-top: 12px; }
         .nobox { background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 6px; padding: 10px 14px; font-size: 8.5pt; color: #991B1B; margin-top: 12px; }
         .foot { margin-top: 48px; padding-top: 20px; border-top: 1px solid #E2E8F0; color: #94A3B8; font-size: 8pt; text-align: center; }
+
+        .eject-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+        .eject-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 16px 18px;
+            min-width: 0;
+        }
+        .eject-card .side {
+            font-size: 8pt;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #64748B;
+        }
+        .eject-card .px {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 22pt;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #0F172A;
+            margin: 2px 0 2px;
+            line-height: 1.15;
+        }
+        .eject-card .px.over { color: #92400E; }
+        .eject-card .px-sub { color: #64748B; font-size: 8pt; margin-bottom: 8px; }
+        .formula {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 8.5pt;
+            line-height: 1.65;
+            color: #0F172A;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            padding: 14px 16px;
+            margin-top: 12px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .example-title {
+            font-size: 8pt;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #0F172A;
+            margin: 18px 0 8px;
+        }
+        #ejectout .kv span:last-child { white-space: normal; text-align: right; }
         
         .pill {
             display: inline-block;
@@ -325,7 +375,14 @@
             body { padding: 24px 12px; }
             .container { padding: 32px 20px; }
             h1.doc-title { font-size: 18pt; }
+            h2 { flex-wrap: wrap; gap: 8px; }
             .brand-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .eject-pair { grid-template-columns: 1fr; }
+            .eject-card .px { font-size: 20pt; }
+            #ejectout .kv { flex-direction: column; align-items: flex-start; gap: 2px; }
+            #ejectout .kv span:last-child { text-align: left; }
+            .verdict { flex-direction: column; gap: 12px; }
+            .gate { grid-template-columns: 1fr; gap: 4px; }
         }
     </style>
 </head>
@@ -420,6 +477,22 @@
         <div class="note">
             Calculates exact strikes for specific OTM Delta targets (0.030, 0.025, 0.020) using the Black-Scholes pricing model with Brent's bisection root-finding method, calibrated directly to the Expiration Header IV.
         </div>
+    </div>
+
+    <h2>7 · Eject Price</h2>
+    <p class="sub-desc" style="margin-bottom:14px">Close price for each vertical where the week’s loss reaches 3% of VAR. The loss is the cost to close that vertical, minus the total condor credit, plus round-trip commission and fees. Commission is per contract per leg, in the same shape as a thinkorswim ticket. These fields stay in this tab and are not saved. The defaults are a hypothetical week.</p>
+    <div class="panel">
+        <div class="grid g4">
+            <div><label>VAR <span>account value at risk, $</span></label><input id="ej_var" type="number" inputmode="decimal" step="1000" min="0" autocomplete="off" value="100000"></div>
+            <div><label>Contracts</label><input id="ej_n" type="number" inputmode="numeric" step="1" min="1" autocomplete="off" value="50"></div>
+            <div><label>Put credit <span>$/share</span></label><input id="ej_put" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.05"></div>
+            <div><label>Call credit <span>$/share</span></label><input id="ej_call" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.05"></div>
+            <div><label>Wing width <span>points</span></label><input id="ej_wid" type="number" inputmode="decimal" step="1" min="0" autocomplete="off" value="10"></div>
+            <div><label>Commission <span>$ per contract per leg</span></label><input id="ej_comm" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.65"></div>
+            <div><label>Exchange / regulatory <span>$ per contract</span></label><input id="ej_fee" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.02"></div>
+            <div><label>Slippage <span>$/share on the close, optional</span></label><input id="ej_slip" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0"></div>
+        </div>
+        <div id="ejectout"></div>
     </div>
 
     <div class="foot" id="foot"></div>
@@ -658,9 +731,9 @@ function render() {
         + '<div class="kv' + (tradable ? '' : ' na') + '"><span>Contracts ($' + perC.toFixed(0) + ' risk)</span><span>' + (tradable ? cons : 'n/a') + '</span></div>';
 
     const stopSh = 0.03 * (W - V("cred")), stopD = risk * 0.03;
-    $("stopout").innerHTML = '<div class="kv"><span>Stop (3% VaR)</span><span>$' + Math.round(stopD).toLocaleString() + '</span></div>'
-        + '<div class="kv"><span>Per share value</span><span>$' + stopSh.toFixed(3) + '</span></div>'
-        + '<div class="warnbox"><b>Stop is mandatory on capped leverage weeks.</b> Set stop order upon entry.</div>';
+    $("stopout").innerHTML = '<div class="kv"><span>3% of risk capital</span><span>$' + Math.round(stopD).toLocaleString() + '</span></div>'
+        + '<div class="kv"><span>Per share of the wing</span><span>$' + stopSh.toFixed(3) + '</span></div>'
+        + '<div class="warnbox"><b>Stop is mandatory on capped leverage weeks.</b> Set the order on entry. These two lines are 3% of the risk capital deployed above. Section 7 solves the close price where the week’s loss equals 3% of VAR.</div>';
 
     // --- Black-Scholes Delta Matrix Calculation (Strictly uses Header IV) ---
     const sigmaBS = hiv / 100;
@@ -688,7 +761,150 @@ function render() {
 
     $("bs_table").innerHTML = bsh;
 
+    renderEject();
+
     $("foot").innerHTML = "Desk v1.0 · Calibrated to 1,331-week QQQ study · Integrated Black-Scholes Engine · Confidential Policy & Quantitative Framework.";
+}
+
+const EJECT_IDS = ["ej_var", "ej_n", "ej_put", "ej_call", "ej_wid", "ej_comm", "ej_fee", "ej_slip"];
+const RULE_OF_THUMB = 0.65;
+
+function usd(x, digits) {
+    const d = digits === undefined ? 2 : digits;
+    const sign = x < 0 ? "-" : "";
+    return sign + "$" + Math.abs(x).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+
+function renderEject() {
+    const out = $("ejectout");
+    const raw = {};
+    EJECT_IDS.forEach(id => { raw[id] = parseFloat($(id).value); });
+    const bad = EJECT_IDS.some(id => !isFinite(raw[id]));
+    if (bad || raw.ej_var <= 0 || raw.ej_n <= 0) {
+        out.innerHTML = '<div class="warnbox">Enter a positive VAR and a positive contract count. Credits, width, commission, fees, and slippage need a number (use 0 where a side or a cost is absent).</div>';
+        return;
+    }
+    if (raw.ej_put < 0 || raw.ej_call < 0 || raw.ej_wid < 0 || raw.ej_comm < 0 || raw.ej_fee < 0 || raw.ej_slip < 0) {
+        out.innerHTML = '<div class="warnbox">Credits, wing width, commission, fees, and slippage need to be zero or positive.</div>';
+        return;
+    }
+
+    const VAR = raw.ej_var, N = raw.ej_n, put = raw.ej_put, call = raw.ej_call;
+    const W = raw.ej_wid, comm = raw.ej_comm, fee = raw.ej_fee, slip = raw.ej_slip;
+    const putSold = put > 0, callSold = call > 0;
+    if (!putSold && !callSold) {
+        out.innerHTML = '<div class="warnbox">Enter the credit received on the put vertical, the call vertical, or both.</div>';
+        return;
+    }
+
+    const legsOpen = (putSold ? 2 : 0) + (callSold ? 2 : 0);
+    const legsClose = 2;
+    const legs = legsOpen + legsClose;
+    const optionContracts = legs * N;
+    const commDollars = comm * optionContracts;
+    const feeDollars = fee * optionContracts;
+    const costs = commDollars + feeDollars;
+    const creditShare = put + call;
+    const creditDollars = creditShare * 100 * N;
+    const budget = 0.03 * VAR;
+    const perShareRoom = (budget - costs) / (100 * N);
+    const price = creditShare + perShareRoom - slip;
+    const slipDollars = slip * 100 * N;
+
+    const lossAt = (debit) => (debit + slip) * 100 * N - creditDollars + costs;
+    const penny = Math.round(price * 100) / 100;
+    const pennyLoss = lossAt(penny);
+    const wingLoss = W > 0 ? lossAt(W) : null;
+
+    function versus(p) {
+        if (!isFinite(p)) return "";
+        const diff = p - RULE_OF_THUMB;
+        const ratio = p / RULE_OF_THUMB;
+        const gap = Math.abs(diff);
+        const place = diff > 0.005 ? "above" : diff < -0.005 ? "under" : "on";
+        if (place === "on") {
+            return "Sits on the $0.65 rule of thumb (" + usd(p, 3) + ", " + ratio.toFixed(2) + "×).";
+        }
+        return usd(gap, 3) + " " + place + " the $0.65 rule of thumb (" + ratio.toFixed(2) + "×).";
+    }
+
+    function card(sideName, sold, otherName, otherCredit) {
+        if (!sold) {
+            return '<div class="eject-card"><div class="side">' + sideName + ' vertical</div>'
+                + '<div class="px-sub" style="margin-top:8px">No ' + sideName.toLowerCase() + ' credit this week. Nothing to close on this side.</div></div>';
+        }
+        const over = W > 0 && price > W + 1e-9;
+        const under0 = price <= 0;
+        const cls = over || under0 ? "px over" : "px";
+        let headline = usd(price, 3);
+        let sub = "Debit to close this vertical";
+        if (under0) {
+            headline = "Through";
+            sub = "Costs already use the 3% budget";
+        } else if (over) {
+            sub = "Solved debit is past the " + usd(W, 0).replace(".00", "") + " wing";
+        }
+        const kept = otherCredit > 0
+            ? " Keeps the " + otherName.toLowerCase() + " credit of " + usd(otherCredit, 2) + "/share."
+            : "";
+        return '<div class="eject-card"><div class="side">' + sideName + ' vertical</div>'
+            + '<div class="' + cls + '">' + headline + '</div>'
+            + '<div class="px-sub">' + sub + '</div>'
+            + '<div class="cmp">' + versus(price) + kept + '</div></div>';
+    }
+
+    let wingNote = "";
+    if (W > 0 && isFinite(wingLoss)) {
+        const wingPct = wingLoss / VAR;
+        if (price > W + 1e-9) {
+            wingNote = '<div class="warnbox">The 3% debit is ' + usd(price, 3) + ', past a ' + W + '-point wing. Closing at the wing loses ' + usd(wingLoss) + ', which is ' + pct(wingPct, 2) + ' of VAR. The wing is reached before the 3% eject.</div>';
+        } else if (price <= 0) {
+            wingNote = '<div class="nobox">Round-trip costs of ' + usd(costs) + ' already exceed the ' + usd(budget) + ' budget plus the ' + usd(creditDollars) + ' credit. The week is through 3% of VAR as soon as it is on.</div>';
+        } else {
+            wingNote = '<div class="note">A full ' + W + '-point wing debit loses ' + usd(wingLoss) + ', ' + pct(wingPct, 1) + ' of VAR. The 3% eject is inside the wing.</div>';
+        }
+    }
+
+    const pennyNote = price > 0
+        ? '<div class="kv"><span>Nearest cent</span><span>' + usd(penny, 2) + '</span></div>'
+            + '<div class="kv"><span>Loss at that cent</span><span>' + usd(pennyLoss) + ' · ' + pct(pennyLoss / VAR, 2) + ' of VAR</span></div>'
+        : "";
+
+    const legSentence = (putSold && callSold)
+        ? "Both sides are sold, so the week opens 4 legs and closes the tested vertical’s 2 legs (6 legs)."
+        : "One side is sold, so the week opens 2 legs and closes those same 2 legs (4 legs).";
+
+    out.innerHTML = '<div class="eject-pair">'
+        + card("Put", putSold, "Call", call)
+        + card("Call", callSold, "Put", put)
+        + '</div>'
+        + wingNote
+        + '<div class="example-title">Formula</div>'
+        + '<div class="formula">loss = (P + slippage) × 100 × contracts'
+        + '\n     − (put credit + call credit) × 100 × contracts'
+        + '\n     + commission × legs × contracts'
+        + '\n     + fee × legs × contracts'
+        + '\n'
+        + '\nSet loss = 0.03 × VAR and solve for P, the debit to close the tested vertical:'
+        + '\n'
+        + '\nP = put credit + call credit'
+        + '\n  + (0.03 × VAR − commission$ − fee$) / (100 × contracts)'
+        + '\n  − slippage'
+        + '\n'
+        + '\n' + legSentence
+        + '\nThe fee uses the same leg count as commission: each option contract opened or closed.'
+        + '\nThe untested vertical expires, so its credit stays in and it adds no close debit.</div>'
+        + '<div class="example-title">Worked example <span style="font-weight:400;letter-spacing:0;text-transform:none;color:#64748B">from the numbers above</span></div>'
+        + '<div class="kv"><span>3% of VAR</span><span>0.03 × ' + usd(VAR) + ' = ' + usd(budget) + '</span></div>'
+        + '<div class="kv"><span>Total condor credit</span><span>(' + usd(put, 2) + ' + ' + usd(call, 2) + ') × 100 × ' + N + ' = ' + usd(creditDollars) + '</span></div>'
+        + '<div class="kv"><span>Round-trip legs</span><span>' + legsOpen + ' opened + ' + legsClose + ' closed = ' + legs + ' × ' + N + ' = ' + optionContracts.toLocaleString("en-US") + ' contracts</span></div>'
+        + '<div class="kv"><span>Commission</span><span>' + usd(comm, 2) + ' × ' + optionContracts.toLocaleString("en-US") + ' = ' + usd(commDollars) + '</span></div>'
+        + '<div class="kv"><span>Exchange / regulatory</span><span>' + usd(fee, 2) + ' × ' + optionContracts.toLocaleString("en-US") + ' = ' + usd(feeDollars) + '</span></div>'
+        + '<div class="kv"><span>Slippage on the close</span><span>' + usd(slip, 2) + '/share = ' + usd(slipDollars) + '</span></div>'
+        + '<div class="kv"><span>Eject debit P</span><span>' + usd(creditShare, 2) + ' + (' + usd(budget) + ' − ' + usd(costs) + ') / ' + (100 * N).toLocaleString("en-US") + ' − ' + usd(slip, 2) + ' = ' + usd(price, 3) + '</span></div>'
+        + '<div class="kv"><span>Loss at this P</span><span>(' + usd(price, 3) + ' + ' + usd(slip, 2) + ') × ' + (100 * N).toLocaleString("en-US") + ' − ' + usd(creditDollars) + ' + ' + usd(costs) + ' = ' + usd(lossAt(price)) + '</span></div>'
+        + pennyNote
+        + '<div class="note">The tracking sheet closes the breached vertical around $0.65. These inputs solve to ' + usd(price, 3) + '. ' + versus(price) + ' VAR, the contract count, the credits, and the costs move P. The wing width caps the close once that debit would sit past the wing.</div>';
 }
 
 const STORE_KEY = "atlas.ic-calculator.v1";
@@ -732,6 +948,10 @@ function saveInputs() {
 function resetInputs() {
     try { localStorage.removeItem(STORE_KEY); } catch (e) {}
     INPUT_IDS.forEach(id => {
+        const el = $(id);
+        if (el) el.value = el.defaultValue;
+    });
+    EJECT_IDS.forEach(id => {
         const el = $(id);
         if (el) el.value = el.defaultValue;
     });
