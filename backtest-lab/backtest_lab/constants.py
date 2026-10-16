@@ -15,4 +15,8 @@ DISPLAY_ORDER = [
     "top5-biggest-pit",
     "tqqq-buy-hold",
     "tqqq-two-bullet",
+    "qqq-condor-hold",
+    "qqq-condor-stop-2x",
+    "qqq-condor-stop-3pct",
+    "qqq-condor-filtered",
 ]

@@ -346,6 +346,7 @@ def _print_list() -> None:
     print("  size              best and top-5 returners at $10B and $2B")
     print("  event-study       next-year returns of #1 and top 5 since --start")
     print("tqqq also writes tqqq-buy-hold and tqqq-two-bullet.")
+    print("qqq-condor writes hold, 2× credit, 3% of VAR, and the filtered 3% book.")
 
 
 def _print_report(report: dict, path) -> None:
@@ -359,6 +360,24 @@ def _print_report(report: dict, path) -> None:
         f"vol {_pct(metrics.get('volatility'))}  "
         f"Sharpe {_num(metrics.get('sharpe'))}"
     )
+    condor = (report.get("condor") or {}).get("accounts", {}).get("10000")
+    if condor:
+        print(
+            f"  trades {condor.get('n')}  win {_pct(condor.get('win_rate'))}  "
+            f"expectancy {_pct(condor.get('expectancy_pct'))}  "
+            f"gaps {condor.get('gaps')}  ruined {condor.get('ruined')}"
+        )
+    trigger = ((report.get("condor") or {}).get("calibration") or {}).get("trigger") or {}
+    shown = (trigger.get("since_2020") or {}).get("median_tested_vertical")
+    ratio = (trigger.get("since_2020") or {}).get("ratio_to_reference")
+    if shown is None:
+        shown = trigger.get("median_tested_vertical")
+        ratio = trigger.get("ratio_to_reference")
+    if shown is not None and ratio is not None:
+        print(
+            f"  3% stop since 2020, breached vertical median ${shown:.2f} "
+            f"vs $0.65 ({ratio:.2f}×)"
+        )
     robustness = report.get("robustness")
     if robustness:
         print(

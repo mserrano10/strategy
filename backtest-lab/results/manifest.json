@@ -142,8 +142,48 @@
       "png": "tqqq-two-bullet.png",
       "free_source": true,
       "survivorship_bias_free": true
+    },
+    {
+      "id": "qqq-condor-hold",
+      "name": "QQQ Condor \u2014 hold",
+      "group": "QQQ Condor",
+      "file": "qqq-condor-hold.json",
+      "csv": "qqq-condor-hold.csv",
+      "png": "qqq-condor-hold.png",
+      "free_source": true,
+      "survivorship_bias_free": true
+    },
+    {
+      "id": "qqq-condor-stop-2x",
+      "name": "QQQ Condor \u2014 2\u00d7 credit",
+      "group": "QQQ Condor",
+      "file": "qqq-condor-stop-2x.json",
+      "csv": "qqq-condor-stop-2x.csv",
+      "png": "qqq-condor-stop-2x.png",
+      "free_source": true,
+      "survivorship_bias_free": true
+    },
+    {
+      "id": "qqq-condor-stop-3pct",
+      "name": "QQQ Condor \u2014 3% of VAR",
+      "group": "QQQ Condor",
+      "file": "qqq-condor-stop-3pct.json",
+      "csv": "qqq-condor-stop-3pct.csv",
+      "png": "qqq-condor-stop-3pct.png",
+      "free_source": true,
+      "survivorship_bias_free": true
+    },
+    {
+      "id": "qqq-condor-filtered",
+      "name": "QQQ Condor \u2014 3% of VAR, filtered",
+      "group": "QQQ Condor",
+      "file": "qqq-condor-filtered.json",
+      "csv": "qqq-condor-filtered.csv",
+      "png": "qqq-condor-filtered.png",
+      "free_source": true,
+      "survivorship_bias_free": true
     }
   ],
-  "generated_at": "2026-10-15T14:49:46+00:00",
+  "generated_at": "2026-10-16T13:07:26+00:00",
   "event_study": "event-study.json"
 }

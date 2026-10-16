@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from backtest_lab.constants import DISPLAY_ORDER
+from backtest_lab.strategies.condor import CondorStrategy
 from backtest_lab.strategies.rank import AnnualRank
 from backtest_lab.strategies.tqqq import TqqqStrategy
 
@@ -51,12 +52,17 @@ STRATEGIES = [
         ),
     ),
     TqqqStrategy(),
+    CondorStrategy(),
 ]
 
 # `python -m backtest_lab run tqqq` writes both books. These ids rerun one of them.
 VARIANT_IDS = {
     "tqqq-buy-hold": "tqqq",
     "tqqq-two-bullet": "tqqq",
+    "qqq-condor-hold": "qqq-condor",
+    "qqq-condor-stop-2x": "qqq-condor",
+    "qqq-condor-stop-3pct": "qqq-condor",
+    "qqq-condor-filtered": "qqq-condor",
 }
 
 
