@@ -413,7 +413,7 @@
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            Download PDF
+            Print / Save as PDF
         </button>
     </div>
 
@@ -429,8 +429,8 @@
     </div>
 
     <div class="meta-grid">
-        <div class="meta-item"><strong>MEMORANDUM TO:</strong> Investment Committee / Private Client</div>
-        <div class="meta-item"><strong>DATE:</strong> August 17, 2026</div>
+        <div class="meta-item"><strong>MEMORANDUM TO:</strong> Research File</div>
+        <div class="meta-item"><strong>DATA DATE:</strong> <span id="memo-date">Latest Backtest Lab close</span></div>
         <div class="meta-item"><strong>SUBJECT:</strong> 2-Bullet Asymmetric Strategy & 90/10 Hybrid Portfolio Specification</div>
         <div class="meta-item"><strong>ASSET ALLOCATION:</strong> 90% S&P 500 (SPY) / 10% Strategy Engine (TQQQ/MMF)</div>
     </div>
@@ -522,7 +522,7 @@
 
     <div class="comparison-box">
         <div class="comp-col">
-            <h4>Theoretical Model (Napkin Math)</h4>
+            <h4>Theoretical Model (Napkin Math, older separate model)</h4>
             <ul>
                 <li>Assumed 10x Total Account Multipliers</li>
                 <li>Assumed Every Market Dip Was Traded</li>
@@ -531,7 +531,7 @@
             </ul>
         </div>
         <div class="comp-col">
-            <h4>Real-World Audited Ledger</h4>
+            <h4>Earlier Ledger (older separate model, not the Backtest Lab engine)</h4>
             <ul>
                 <li>Asset 10x &ne; Account 10x (1.9x–5.2x on Deployed Cost)</li>
                 <li>Capital State Lock (Locked in '08, Missed '11)</li>
@@ -551,12 +551,17 @@
     <div class="page-break"></div>
 
     <h2>4. Full Master Portfolio Simulation ($200,000 Inception)</h2>
+    <div class="callout" style="border-left-color: #0F172A;">
+        <div class="callout-title" style="color: #0F172A;">Backtest Lab engine (current rules)</div>
+        <p id="engine-summary" style="margin:0;">The same 90/10 two-bullet rule run by the Backtest Lab engine (50% and 80% triggers, 50/25/25 tranches, exit at 10&times; the cycle floor). Loading figures&hellip;</p>
+    </div>
+    <p><strong>Older separate model.</strong> Table 4.1 comes from an earlier spreadsheet model with its own pre-2010 TQQQ reconstruction. It was not produced by the Backtest Lab engine, and its figures do not match it. Use the engine figures above for the current rule.</p>
     <p>
-        The table below models a <strong>$200,000 Total Starting Portfolio</strong> split into a <strong>90% S&P 500 Core ($180,000)</strong> and a <strong>10% TQQQ Asymmetric Engine ($20,000)</strong> across every sequential starting year from 1999 to 2022. All values reflect fully realized liquid balances as of August 2026.
+        The table below models a <strong>$200,000 Total Starting Portfolio</strong> split into a <strong>90% S&P 500 Core ($180,000)</strong> and a <strong>10% TQQQ Asymmetric Engine ($20,000)</strong> across every sequential starting year from 1999 to 2022. All values reflect fully realized liquid balances as of August 2026 (older model).
     </p>
 
     <div style="font-size: 8pt; font-weight: 700; color: #475569; margin-top: 10px; text-transform: uppercase;">
-        Table 4.1: Multi-Decade Sequential Inception Matrix ($200,000 Initial Capital)
+        Table 4.1: Multi-Decade Sequential Inception Matrix ($200,000 Initial Capital) &middot; Older separate model
     </div>
     <table>
         <thead>
@@ -767,19 +772,18 @@
 
     <h2>5. Current Portfolio Status & Operational Directive</h2>
     <p>
-        As of <strong id="live-close-date">Last Market Close</strong>, the satellite engine status is: 
-        <span class="status-badge">100% Liquid (Treasury MMF)</span>
+        As of <strong id="live-close-date">the latest forward-test close</strong>, the satellite engine status is: 
+        <span class="status-badge" id="engine-status">Loading&hellip;</span>
     </p>
     
     <div class="callout" style="border-left-color: #0F172A;">
         <div class="callout-title" style="color: #0F172A;">Live Execution Thresholds</div>
         <ul>
-            <li><strong>Cycle Completion:</strong> The 2022 Tech Bear market position hit its <strong>$82.90</strong> limit exit target in mid-2026. All shares have been fully liquidated into Treasury MMF.</li>
-            <li><strong>Current TQQQ Close Price:</strong> <span id="tqqq-last-close" style="font-weight: 700; color: #0F172A;">Loading...</span></li>
-            <li><strong>Reference High-Water Mark (P<sub>ATH</sub>):</strong> <span id="tqqq-hwm" style="font-weight: 700;">$88.09</span></li>
-            <li><strong>Next Bullet 1 Alert (-50% Trigger):</strong> <span id="bullet-1-trigger" style="font-weight: 700; color: #059669;">$44.05</span></li>
-            <li><strong>Next Bullet 2 Alert (-80% Trigger):</strong> <span id="bullet-2-trigger" style="font-weight: 700; color: #DC2626;">$17.62</span></li>
-            <li><strong>Forward Operational Directive:</strong> Maintain 90% in S&P 500 (SPY) and 10% in Treasury MMF. Await price alert at &le; $44.00.</li>
+            <li><strong>Cycle Completion:</strong> The 2022 Tech Bear market position hit its <strong>$80.80</strong> limit exit (10&times; a floor of $8.08, split-adjusted) on May 26, 2026. All shares were sold into Treasury MMF.</li>
+            <li><strong>Reference High-Water Mark (P<sub>ATH</sub>):</strong> <span id="tqqq-hwm" style="font-weight: 700;">&mdash;</span></li>
+            <li><strong>Next Bullet 1 Alert (-50% Trigger):</strong> <span id="bullet-1-trigger" style="font-weight: 700; color: #059669;">&mdash;</span></li>
+            <li><strong>Next Bullet 2 Alert (-80% Trigger):</strong> <span id="bullet-2-trigger" style="font-weight: 700; color: #DC2626;">&mdash;</span></li>
+            <li><strong>Forward Operational Directive:</strong> Maintain 90% in S&P 500 (SPY) and 10% in Treasury MMF. Await price alert at &le; <span id="bullet-1-directive">the Bullet 1 trigger</span>.</li>
         </ul>
     </div>
 
@@ -788,51 +792,45 @@
     </div>
 
 </div> <script>
-    async function fetchLiveTQQQ() {
-        const dateElement = document.getElementById('live-close-date');
-        const priceElement = document.getElementById('tqqq-last-close');
-        const hwmElement = document.getElementById('tqqq-hwm');
-        const b1Element = document.getElementById('bullet-1-trigger');
-        const b2Element = document.getElementById('bullet-2-trigger');
+    // Every figure here comes from the Backtest Lab files the forward test writes,
+    // so the memo, the lab, and the forward test always show the same state.
+    const LAB = '/backtest-lab/results/';
+    const money = (v) => '$' + Number(v).toLocaleString('en-US', { maximumFractionDigits: 0 });
+    const px = (v) => '$' + Number(v).toFixed(2);
+    const longDate = (iso) => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+    const set = (id, text) => { const node = document.getElementById(id); if (node) node.textContent = text; };
 
-        const activeHWM = 88.09; 
-
+    async function loadEngineState() {
         try {
-            const response = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/TQQQ?interval=1d&range=5d');
-            const data = await response.json();
-            
-            const result = data.chart.result[0];
-            const meta = result.meta;
-            const lastClose = meta.regularMarketPrice || meta.chartPreviousClose;
-            const timeStamp = new Date(meta.regularMarketTime * 1000);
-
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            dateElement.innerText = timeStamp.toLocaleDateString('en-US', options);
-
-            priceElement.innerText = `$${lastClose.toFixed(2)}`;
-            
-            const currentHWM = Math.max(activeHWM, lastClose);
-            hwmElement.innerText = `$${currentHWM.toFixed(2)}`;
-
-            const bullet1 = currentHWM * 0.50;
-            const bullet2 = currentHWM * 0.20;
-
-            b1Element.innerText = `$${bullet1.toFixed(2)}`;
-            b2Element.innerText = `$${bullet2.toFixed(2)}`;
-
+            const forward = await (await fetch(LAB + 'forward-test.json', { cache: 'no-store' })).json();
+            const book = (forward.books || []).find((b) => b.id === 'tqqq-two-bullet');
+            const rule = book && book.rule_state;
+            if (!rule) throw new Error('no rule state');
+            const mark = Number(rule.locked_high_water_mark || rule.high_water_mark);
+            set('live-close-date', longDate(rule.as_of) + ' close');
+            set('memo-date', longDate(forward.as_of) + ' close');
+            set('engine-status', rule.cycle ? 'Cycle active (TQQQ held)' : '100% Liquid (Treasury MMF)');
+            set('tqqq-hwm', px(mark) + (rule.locked_high_water_mark ? ' (locked)' : ''));
+            set('bullet-1-trigger', px(mark * 0.5));
+            set('bullet-2-trigger', px(mark * 0.2));
+            set('bullet-1-directive', px(mark * 0.5));
         } catch (error) {
-            const fallbackDate = new Date();
-            fallbackDate.setDate(fallbackDate.getDate() - 1);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-            dateElement.innerText = fallbackDate.toLocaleDateString('en-US', options) + " (Market Close)";
-            priceElement.innerText = "$72.03";
-            b1Element.innerText = "$44.05";
-            b2Element.innerText = "$17.62";
+            set('engine-status', 'Unavailable');
+            set('live-close-date', 'the latest forward-test close (data unavailable)');
+        }
+        try {
+            const r = await (await fetch(LAB + 'tqqq-two-bullet.json', { cache: 'no-store' })).json();
+            const m = r.metrics;
+            set('engine-summary',
+                'The same 90/10 two-bullet rule run by the Backtest Lab engine (50% and 80% triggers, 50/25/25 tranches, exit at 10\u00d7 the cycle floor): ' +
+                money(m.initial_capital) + ' on ' + longDate(m.start) + ' grew to ' + money(m.final_equity) + ' by ' + longDate(m.end) +
+                ', a CAGR of ' + (m.cagr * 100).toFixed(1) + '% with a maximum drawdown of ' + (m.max_drawdown * 100).toFixed(1) + '%. Full chart and SPY comparison are in Backtest Lab.');
+        } catch (error) {
+            set('engine-summary', 'Backtest Lab figures are unavailable right now.');
         }
     }
 
-    document.addEventListener('DOMContentLoaded', fetchLiveTQQQ);
+    document.addEventListener('DOMContentLoaded', loadEngineState);
 </script>
 
 </body>

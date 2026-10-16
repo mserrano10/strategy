@@ -1,7 +1,7 @@
 {
   "title": "Backtest Lab",
   "version": "0.1.0",
-  "banner": "These results use the free Yahoo Finance source. Books on today's listings are SURVIVORSHIP-BIASED: they are not the companies that existed at each year-end. Point-in-time books walk Wikipedia's selected S&P 500 changes backward; that table is thin before about 2011, and names that cannot be priced are logged. The size-floor books use today's NASDAQ/NYSE common stocks, so delisted names are missing. Sharadar (SEP / SF1 / TICKERS) is the exact replacement. Every equity chart includes SPY total return, rebased to the same starting capital, as a reference. SPY is not a strategy.",
+  "banner": "These results use the free Yahoo Finance source. Books on today's listings are SURVIVORSHIP-BIASED: they are not the companies that existed at each year-end. Point-in-time books are withheld until a Sharadar membership tape replaces the Wikipedia walk. The size-floor books use today's NASDAQ/NYSE common stocks, so delisted names are missing. Sharadar (SEP / SF1 / TICKERS) is the exact replacement. Every equity chart includes SPY total return, rebased to the same starting capital, as a reference. SPY is not a strategy.",
   "reports": [
     {
       "id": "best-returner",

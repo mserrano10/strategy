@@ -84,10 +84,10 @@ def check_fomc_and_cpi_window():
 def send_email():
     sender_email = os.environ.get("EMAIL_USER")
     sender_password = os.environ.get("EMAIL_PASS")
-    recipient_email = "mserrano88@gmail.com"
+    recipient_email = os.environ.get("EMAIL_TO")
 
-    if not sender_email or not sender_password:
-        print("Error: Missing EMAIL_USER or EMAIL_PASS environment variables.")
+    if not sender_email or not sender_password or not recipient_email:
+        print("Error: Missing EMAIL_USER, EMAIL_PASS, or EMAIL_TO environment variables.")
         raise ValueError("Missing email credentials.")
 
     # 1. Fetch Data First

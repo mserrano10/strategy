@@ -17,8 +17,7 @@ from backtest_lab.constants import DISPLAY_ORDER
 FREE_SOURCE_PAGE_BANNER = (
     "These results use the free Yahoo Finance source. "
     "Books on today's listings are SURVIVORSHIP-BIASED: they are not the companies that existed at each year-end. "
-    "Point-in-time books walk Wikipedia's selected S&P 500 changes backward; that table is thin before about 2011, "
-    "and names that cannot be priced are logged. "
+    "Point-in-time books are withheld until a Sharadar membership tape replaces the Wikipedia walk. "
     "The size-floor books use today's NASDAQ/NYSE common stocks, so delisted names are missing. "
     "Sharadar (SEP / SF1 / TICKERS) is the exact replacement. "
     "Every equity chart includes SPY total return, rebased to the same starting capital, as a reference. "
