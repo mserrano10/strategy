@@ -578,7 +578,7 @@
 
         .eject-line {
             display: grid;
-            grid-template-columns: 52px 108px minmax(0, 1fr);
+            grid-template-columns: 76px max-content minmax(0, 1fr);
             gap: 6px 16px;
             align-items: baseline;
             padding: 9px 0;
@@ -601,6 +601,7 @@
             color: #0F172A;
             font-variant-numeric: tabular-nums;
         }
+        .eject-line .px.range { font-size: 12pt; }
         .eject-line .px.over { color: #B45309; }
         .eject-line .px.quiet { color: #94A3B8; font-weight: 600; }
         .eject-line .cmp { color: #475569; min-width: 0; }
@@ -665,7 +666,7 @@
             .status .tip.open { grid-column: 1 / -1; grid-row: 3; }
             .tip-btn { width: 32px; height: 32px; }
             .mrow .rnd { font-size: 14pt; }
-            .eject-line { grid-template-columns: 52px minmax(0, 1fr); }
+            .eject-line { grid-template-columns: 76px minmax(0, 1fr); }
             .eject-line .cmp { grid-column: 2; }
             .g2 { grid-template-columns: 1fr; }
             details.fold > summary { flex-wrap: wrap; }
@@ -730,7 +731,7 @@
         <p class="note" id="putnote"></p>
         <div class="block-label call-block">Call</div>
         <div class="table-scroll"><table id="calls"></table></div>
-        <p class="rule" id="callnote"></p>
+        <p class="note" id="callnote"></p>
     </div>
 
     <div class="panel" style="margin-top:22px">
@@ -740,8 +741,8 @@
                 <div><label>Fillable credit <span>$/share</span></label><input id="cred" type="number" inputmode="decimal" step="0.01" value="0.09"></div>
                 <div><label>Target sigma <span>z</span></label><input id="credz" type="number" inputmode="decimal" step="0.05" value="2.90"></div>
                 <div><label>Safety margin <span>× break-even</span></label><input id="marg" type="number" inputmode="decimal" step="0.5" value="1.5"></div>
-                <div><label>Prior Friday <span>close</span></label><input id="pfc" type="number" inputmode="decimal" step="0.01" value="512"></div>
-                <div><label>Prior Monday <span>open</span></label><input id="pmo" type="number" inputmode="decimal" step="0.01" value="510"></div>
+                <div><label>Prior Friday <span>close</span></label><input id="pfc" type="number" inputmode="decimal" step="0.01" value="501"></div>
+                <div><label>Prior Monday <span>VXN</span></label><input id="pvxn" type="number" inputmode="decimal" step="0.01" value="18.40"></div>
                 <div><label>Entry date <span>earnings window</span></label><input id="dt" type="date" value="2026-10-16"></div>
             </div>
         </div>
@@ -765,26 +766,14 @@
         </div>
     </details>
 
-    <h2>Eject price</h2>
-    <p class="explain" style="margin-top:0;margin-bottom:12px">Close debit where the week’s loss, net of both credits and round-trip costs, reaches 3% of VAR. These fields stay in this tab.</p>
+    <h2>Exit</h2>
+    <p class="explain" style="margin-top:0;margin-bottom:12px">A resting stop when QQQ touches the short put strike. Hold to Friday, and close any spread within 1% of the short strike before Friday’s close. Pause after 2 stops in any rolling 12 months.</p>
     <div class="panel">
-        <div class="grid g5">
-            <div><label>VAR <span>$</span></label><input id="ej_var" type="number" inputmode="decimal" step="1000" min="0" autocomplete="off" value="100000"></div>
-            <div><label>Contracts <span>condors</span></label><input id="ej_n" type="number" inputmode="numeric" step="1" min="1" autocomplete="off" value="40"></div>
-            <div><label>Put credit <span>$/share</span></label><input id="ej_put" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.09"></div>
-            <div><label>Call credit <span>$/share</span></label><input id="ej_call" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0"></div>
-            <div><label>Wing <span>points</span></label><input id="ej_wid" type="number" inputmode="decimal" step="1" min="0" autocomplete="off" value="10"></div>
+        <div class="grid g2">
+            <div><label>Contracts <span>max 50</span></label><input id="contracts" type="number" inputmode="numeric" step="1" min="1" max="50" value="40"></div>
+            <div><label>Stops, 12 months <span>pause at 2</span></label><input id="stops12" type="number" inputmode="numeric" step="1" min="0" value="0"></div>
         </div>
-        <div id="ejectout"></div>
-        <details class="costs" id="cost-fold">
-            <summary>Commission and fees</summary>
-            <div class="grid g3">
-                <div><label>Commission <span>$ / contract / leg</span></label><input id="ej_comm" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.65"></div>
-                <div><label>Exchange / regulatory <span>$ / contract</span></label><input id="ej_fee" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.02"></div>
-                <div><label>Slippage <span>$/share, optional</span></label><input id="ej_slip" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0"></div>
-            </div>
-            <div id="ejectmath"></div>
-        </details>
+        <div id="exitout"></div>
     </div>
 
     <div class="foot" id="foot"></div>
@@ -811,7 +800,7 @@ const K = {
     callSettle: [224, 136, 88, 48, 19, 12, 4, 2, 2, 1, 0],
     weeks: 1331, wkPerYr: 52,
     earnWin: [[1,20,2,10],[4,20,5,10],[7,20,8,10],[10,20,11,10]],
-    gapBlock: -0.02, priorBlock: -0.03
+    putGap: -0.01, vxnJump: 2, vxnJumpZ: 3.25, maxContracts: 50
 };
 
 const $ = id => document.getElementById(id);
@@ -862,6 +851,37 @@ function findPutStrikeBS(targetDeltaPut, S, T, r, sigma) {
 function findCallStrikeBS(targetDeltaCall, S, T, r, sigma) {
     const f = Kstrike => calculateCallDelta(S, Kstrike, T, r, sigma) - targetDeltaCall;
     return solveRoot(f, S, S * 4.0);
+}
+
+function bsPut(S, Kstrike, T, r, sigma) {
+    if (!(S > 0) || !(Kstrike > 0) || !(T > 0) || !(sigma > 0)) return NaN;
+    const vol = sigma * Math.sqrt(T);
+    const d1 = (Math.log(S / Kstrike) + (r + 0.5 * sigma * sigma) * T) / vol;
+    const d2 = d1 - vol;
+    return Kstrike * Math.exp(-r * T) * normCDF(-d2) - S * normCDF(-d1);
+}
+
+function contractCount() {
+    const el = $("contracts");
+    let n = Math.round(parseFloat(el.value));
+    if (!isFinite(n) || n < 1) return 0;
+    if (n > K.maxContracts) {
+        n = K.maxContracts;
+        el.value = String(K.maxContracts);
+    }
+    return n;
+}
+
+function signedPct(x, d) {
+    const body = Math.abs(x * 100).toFixed(d) + "%";
+    if (x < 0) return "−" + body;
+    if (x > 0) return "+" + body;
+    return body;
+}
+
+function money0(x) {
+    const sign = x < 0 ? "−" : "";
+    return sign + "$" + Math.abs(Math.round(x)).toLocaleString("en-US");
 }
 
 function bandFor(v) {
@@ -936,51 +956,65 @@ function render() {
 
     const g1 = ratio >= 0.95 ? "PASS" : ratio >= 0.85 ? "SOFT" : "FAIL";
     const g2 = ach >= K.zFloor ? "PASS" : "FAIL";
+    const zq = V("credz");
     const gap = $("pfc").value ? S / V("pfc") - 1 : null;
-    const pw = ($("pfc").value && $("pmo").value) ? V("pfc") / V("pmo") - 1 : null;
-    const g7a = gap === null ? "-" : (gap <= K.gapBlock ? "FAIL" : "PASS");
-    const g7b = pw === null ? "-" : (pw <= K.priorBlock ? "FAIL" : "PASS");
+    const vxnRise = $("pvxn").value !== "" && isFinite(V("pvxn")) ? vxn - V("pvxn") : null;
+    const gGap = gap === null ? "-" : (gap <= K.putGap ? "FAIL" : "PASS");
+    const gVxn = vxnRise === null ? "-" : (vxnRise > K.vxnJump ? (zq + 1e-9 >= K.vxnJumpZ ? "PASS" : "FAIL") : "PASS");
+    const stopN = (() => {
+        const n = Math.round(parseFloat($("stops12").value));
+        return isFinite(n) && n > 0 ? n : 0;
+    })();
+    const gPause = stopN >= 2 ? "FAIL" : "PASS";
     const dObj = $("dt").value ? new Date($("dt").value + "T12:00:00") : null;
     const earn = inEarnWindow(dObj);
 
-    const zq = V("credz");
     const beA = be(K.putAll, zq), beB = be(band, zq);
     const req = beA * marg;
     const credFrac = V("cred") / W;
     const g3 = isFinite(credFrac) && credFrac > 0 ? (credFrac >= req ? "PASS" : "FAIL") : "-";
     const gFloor = zq < K.zFloor ? "FAIL" : "PASS";
     const hotBand = band.range === "19.8–23.8";
+    const jumped = vxnRise !== null && vxnRise > K.vxnJump;
 
     let tone, big, msg;
-    if (gFloor === "FAIL") {
+    if (gPause === "FAIL") {
+        tone = "no"; big = "PAUSE";
+        msg = stopN + " stops in the last 12 months. Pause new entries. Calls are off by rule.";
+    } else if (gGap === "FAIL") {
+        tone = "no"; big = "PUTS BLOCKED";
+        msg = "Monday gap is " + signedPct(gap, 2) + ". Puts are blocked on a gap-down of 1% or more. Calls are off by rule.";
+    } else if (gVxn === "FAIL") {
+        tone = "wait"; big = "MOVE OR SKIP";
+        msg = "VXN is up " + vxnRise.toFixed(2) + " points from the prior Monday. Move the put to 3.25 sigma or skip the week. Calls are off by rule.";
+    } else if (gFloor === "FAIL") {
         tone = "no"; big = "NO TRADE";
-        msg = "Entered distance is " + zq.toFixed(2) + " sigma, inside the " + K.zFloor.toFixed(2) + " floor.";
+        msg = "Entered distance is " + zq.toFixed(2) + " sigma, inside the " + K.zFloor.toFixed(2) + " floor. Calls are off by rule.";
     } else if (g1 === "FAIL") {
         tone = "no"; big = "STAND DOWN";
-        msg = "Header IV / VXN is " + ratio.toFixed(3) + ". The front end is too far under VXN.";
-    } else if (g7a === "FAIL" || g7b === "FAIL") {
-        tone = "wait"; big = "PUT ONLY";
-        msg = "Put side is open. The call is blocked by the Monday gap or the prior week.";
+        msg = "Header IV / VXN is " + ratio.toFixed(3) + ". The front end is too far under VXN. Calls are off by rule.";
     } else if (g3 === "FAIL") {
         tone = "no"; big = "PRICE FAIL";
-        msg = "Fillable credit is " + pct(credFrac, 3) + " of width, short of the " + pct(req, 3) + " required at " + zq.toFixed(2) + " sigma.";
+        msg = "Fillable credit is " + pct(credFrac, 3) + " of width, short of the " + pct(req, 3) + " required at " + zq.toFixed(2) + " sigma. Calls are off by rule.";
     } else if (g3 === "-") {
         tone = "wait"; big = "AWAITING QUOTE";
-        msg = "Enter a fillable credit. At " + zq.toFixed(2) + " sigma the book needs " + pct(req, 3) + " of width.";
+        msg = "Enter a fillable credit. At " + zq.toFixed(2) + " sigma the book needs " + pct(req, 3) + " of width. Calls are off by rule.";
     } else {
-        tone = "go"; big = "TRADE";
-        msg = "Fillable credit is " + pct(credFrac, 3) + " of width, which clears " + pct(req, 3) + " at " + zq.toFixed(2) + " sigma.";
+        tone = "go"; big = "PUT";
+        msg = "Put side is open at " + zq.toFixed(2) + " sigma" + (jumped ? " after the VXN rise" : "") + ". Calls are off by rule.";
     }
 
     const g2Label = g2 === "FAIL" ? "NOTE" : "PASS";
+    const vxnGate = vxnRise === null ? "Need prior Monday" : (vxnRise >= 0 ? "+" : "−") + Math.abs(vxnRise).toFixed(2) + " vs +2";
     const gates = [
         ["Floor", gFloor, zq.toFixed(2) + " vs " + K.zFloor.toFixed(2)],
         ["Front end", g1, "IV / VXN " + ratio.toFixed(3)],
         ["Distance", g2Label, ach.toFixed(2) + "σ vs 2.90"],
         ["Price", g3 === "-" ? "SOFT" : g3, isFinite(credFrac) ? pct(credFrac, 3) + " vs " + pct(req, 3) : "No credit"],
-        ["Monday", g7a === "-" ? "SOFT" : g7a, gap === null ? "Need Friday close" : pct(gap, 2) + " vs −2%"],
-        ["Prior week", g7b === "-" ? "SOFT" : g7b, pw === null ? "Need Monday open" : pct(pw, 2) + " vs −3%"],
-        ["Earnings", earn ? "HALVE" : "CLEAR", earn ? "Inside the window" : "Outside the window"]
+        ["Monday", gGap === "-" ? "SOFT" : gGap, gap === null ? "Need Friday close" : signedPct(gap, 2) + " vs −1%"],
+        ["VXN week", gVxn === "-" ? "SOFT" : gVxn, vxnGate],
+        ["Stops", gPause, stopN + " in 12 months"],
+        ["Earnings", earn ? "NOTE" : "CLEAR", earn ? "Inside the window" : "Outside the window"]
     ];
     let gateList = gates.map(g => '<li><span>' + esc(g[0]) + '</span><span class="' + stClass(g[1]) + '">' + esc(g[1] === "HALVE" ? "Halve" : g[1] === "CLEAR" ? "Clear" : g[1] === "NOTE" ? "Note" : g[1] === "SOFT" ? "Soft" : g[1].charAt(0) + g[1].slice(1).toLowerCase()) + '</span><span>' + esc(g[2]) + '</span></li>').join("");
     let gateNotes = "";
@@ -1008,14 +1042,14 @@ function render() {
         + matrixSide("Call", labels.map((label, i) => ({ delta: label, k: calls[i], s: S })))
         + '</div>';
 
-    const sigPut = S * Math.exp(0.5 * sig * sig - K.zFloor * sig);
-    const put030 = puts[0], call030 = calls[0];
-    if (isFinite(put030) && isFinite(sigPut) && isFinite(call030) && isFinite(W)) {
-        const tradedPut = Math.min(Math.round(put030), Math.round(sigPut));
-        const tradedCall = Math.round(call030);
+    const zUse = Math.max(zq, K.zFloor);
+    const sigPut = S * Math.exp(0.5 * sig * sig - zUse * sig);
+    const put030 = puts[0];
+    let tradedPut = NaN;
+    if (isFinite(put030) && isFinite(sigPut) && isFinite(W)) {
+        tradedPut = Math.min(Math.round(put030), Math.round(sigPut));
         $("desk-line").innerHTML = "Desk put <b>" + tradedPut + "</b> is the further of <b>" + Math.round(put030)
-            + "</b> at 0.030 and <b>" + Math.round(sigPut) + "</b> at 2.90σ. Desk call is <b>" + tradedCall
-            + "</b> at 0.030. Wings are " + W + " points.";
+            + "</b> at 0.030 and <b>" + Math.round(sigPut) + "</b> at " + zUse.toFixed(2) + "σ. Calls are off by rule. Wings are " + W + " points.";
     } else {
         $("desk-line").textContent = "Enter spot, Header IV, VXN, and DTE to place the desk strikes.";
     }
@@ -1036,12 +1070,13 @@ function render() {
     $("regime").innerHTML = '<p>' + esc(regimeText) + '</p>' + tipButton("tip-regime", "Show regime detail")
         + regimeDetail + '<p class="tnote">' + esc(band.note) + ' The band break-even is advisory.</p></span></span>';
 
-    const zs = [2.25, 2.50, 2.75, 2.90, 3.20, 3.50, 4.00];
+    const zs = [2.25, 2.50, 2.75, 2.90, 3.20, 3.25, 3.50, 4.00];
     let ph = '<tr><th>z</th><th>Short</th><th>Long</th><th>From spot</th><th>BE all</th><th>BE band</th><th>Required ×' + marg + '</th><th>Touch</th><th>Settle</th></tr>';
     for (const z of zs) {
         const Ks = S * Math.exp(0.5 * sig * sig - z * sig), Kl = Ks - W;
         const bA = be(K.putAll, z), bBand = be(band, z), rq = bA * marg;
-        ph += '<tr class="' + (Math.abs(z - 2.90) < 0.001 ? 'hit' : '') + '"><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
+        const hit = Math.abs(z - K.zFloor) < 0.001 || Math.abs(z - zq) < 0.001;
+        ph += '<tr class="' + (hit ? 'hit' : '') + '"><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
             + '<td>' + pct(Ks / S - 1, 2) + '</td><td>' + pct(bA, 3) + '</td><td>' + pct(bBand, 3) + '</td><td>' + pct(rq, 3) + '</td>'
             + '<td>' + fmtYears(everyN(interp(K.zL, K.putTouch, z))) + '</td><td>' + fmtYears(everyN(interp(K.zL, K.putSettle, z))) + '</td></tr>';
     }
@@ -1051,35 +1086,33 @@ function render() {
     let ch = '<tr><th>z</th><th>Short</th><th>Long</th><th>From spot</th><th>BE all</th><th>Touch</th><th>Settle</th></tr>';
     for (const z of [2.25, 2.50, 2.75, 2.90, 3.20, 3.50]) {
         const Ks = S * Math.exp(0.5 * sig * sig + z * sig), Kl = Ks + W;
-        ch += '<tr class="' + (Math.abs(z - 2.50) < 0.001 ? 'hit' : '') + '"><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
+        ch += '<tr><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
             + '<td>' + pct(Ks / S - 1, 2) + '</td><td>' + pct(be(K.callAll, z), 3) + '</td>'
             + '<td>' + fmtYears(everyN(interp(K.zL, K.callTouch, z))) + '</td><td>' + fmtYears(everyN(interp(K.zL, K.callSettle, z))) + '</td></tr>';
     }
     $("calls").innerHTML = ch;
-    $("callnote").textContent = "No bid at 2.50 sigma: sell no call. Do not move the strike in to find a bid.";
+    $("callnote").textContent = "Calls are off by rule.";
 
-    const nav = V("nav"), baseP = V("base") / 100, cap = V("cap"), norm = V("norm");
+    const cap = V("cap"), norm = V("norm");
     const rat = credFrac > 0 && beA > 0 ? credFrac / beA : 0;
     const mult = Math.min(cap, Math.max(0, rat / norm));
-    const risk = nav * baseP * mult;
-    const perC = (W - V("cred")) * 100;
-    const cons = perC > 0 ? Math.floor(risk / perC) : 0;
-    const tradable = big === "TRADE" || big === "PUT ONLY";
+    const nBook = contractCount();
+    const credit = V("cred");
+    const wingRisk = isFinite(W) && isFinite(credit) && nBook > 0 ? Math.max(0, W - credit) * 100 * nBook : NaN;
+    const creditDollars = isFinite(credit) && nBook > 0 ? credit * 100 * nBook : NaN;
 
-    $("sizeout").innerHTML = '<div class="kv"><span>Credit / break-even</span><span>' + (rat ? rat.toFixed(2) + "×" : "—") + '</span></div>'
+    $("sizeout").innerHTML = '<div class="kv"><span>Contracts</span><span>' + (nBook > 0 ? nBook : "—") + '</span></div>'
+        + '<div class="kv"><span>Cap</span><span>' + K.maxContracts + '</span></div>'
+        + '<div class="kv"><span>Full-wing risk</span><span>' + (isFinite(wingRisk) ? "$" + Math.round(wingRisk).toLocaleString("en-US") : "—") + '</span></div>'
+        + '<div class="kv"><span>Credit at entry</span><span>' + (isFinite(creditDollars) ? "$" + Math.round(creditDollars).toLocaleString("en-US") : "—") + '</span></div>';
+
+    $("stopout").innerHTML = '<div class="kv"><span>Credit / break-even</span><span>' + (rat ? rat.toFixed(2) + "×" : "—") + '</span></div>'
         + '<div class="kv"><span>Edge multiple</span><span>' + (isFinite(mult) ? mult.toFixed(2) + "×" : "—") + '</span></div>'
-        + '<div class="kv"><span>Risk capital</span><span>' + (isFinite(risk) ? "$" + Math.round(risk).toLocaleString() : "—") + '</span></div>'
-        + '<div class="kv"><span>Share of NAV</span><span>' + (nav > 0 && isFinite(risk) ? pct(risk / nav, 1) : "—") + '</span></div>'
-        + '<div class="kv' + (tradable ? '' : ' na') + '"><span>Contracts</span><span>' + (tradable ? cons : "n/a") + '</span></div>';
+        + '<p class="note">The book is the contract count, capped at ' + K.maxContracts + '. The exit is a touch of the short put.</p>';
 
-    const stopSh = 0.03 * (W - V("cred")), stopD = risk * 0.03;
-    $("stopout").innerHTML = '<div class="kv"><span>3% of risk capital</span><span>' + (isFinite(stopD) ? "$" + Math.round(stopD).toLocaleString() : "—") + '</span></div>'
-        + '<div class="kv"><span>Per share of the wing</span><span>' + (isFinite(stopSh) ? "$" + stopSh.toFixed(3) : "—") + '</span></div>'
-        + '<p class="note">These two lines are 3% of the risk capital above. The eject price is 3% of VAR.</p>';
+    $("sizehint").textContent = nBook > 0 ? nBook + " contracts" : "";
 
-    $("sizehint").textContent = tradable && isFinite(cons) ? cons + " contracts" : "";
-
-    renderEject();
+    renderExit(tradedPut, W, credit, nBook, hiv / 100, dte / 365, rBS);
     $("foot").textContent = "1,331-week study · Black–Scholes strikes from Header IV · signal from VXN";
 
     openTips.forEach(id => {
@@ -1091,101 +1124,47 @@ function render() {
     });
 }
 
-const EJECT_IDS = ["ej_var", "ej_n", "ej_put", "ej_call", "ej_wid", "ej_comm", "ej_fee", "ej_slip"];
-const RULE_OF_THUMB = 0.65;
+function renderExit(shortK, wing, credit, n, sigma, T, r) {
+    const out = $("exitout");
+    const stops = Math.round(parseFloat($("stops12").value));
+    const stopN = isFinite(stops) && stops > 0 ? stops : 0;
+    if (!(shortK > 0) || !(wing > 0) || !(n > 0) || !(sigma > 0) || !(T > 0)) {
+        out.innerHTML = '<p class="note">Enter spot, Header IV, days left, width, and a contract count to price the stop.</p>';
+        return;
+    }
+    const longK = shortK - wing;
+    const shortPx = bsPut(shortK, shortK, T, r, sigma);
+    const longPx = bsPut(shortK, longK, T, r, sigma);
+    const vertical = shortPx - longPx;
+    if (!isFinite(vertical) || vertical <= 0) {
+        out.innerHTML = '<p class="note">The model mark needs a positive Header IV and days left.</p>';
+        return;
+    }
+    const model = vertical * 100 * n;
+    const maxLoss = Math.max(0, wing - (isFinite(credit) ? credit : 0)) * 100 * n;
+    const bandLo = shortK * 0.99;
+    const bandHi = shortK * 1.01;
+    const pausePx = stopN >= 2 ? "Paused" : String(stopN);
+    const pauseCmp = stopN >= 2
+        ? stopN + " stops in the last 12 months. New entries wait."
+        : "After 2 stops in any rolling 12 months";
+    const pauseCls = stopN >= 2 ? " over" : "";
 
-function usd(x, digits) {
-    const d = digits === undefined ? 2 : digits;
-    const sign = x < 0 ? "−" : "";
-    return sign + "$" + Math.abs(x).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+    function line(side, px, cmp, pxClass) {
+        return '<div class="eject-line"><span class="side">' + esc(side) + '</span><span class="px' + pxClass + '">'
+            + esc(px) + '</span><span class="cmp">' + esc(cmp) + '</span></div>';
+    }
+
+    out.innerHTML = line("Stop", money0(model) + "–" + money0(model * 1.3),
+            "Touch " + shortK + " · 1.0–1.3× a $" + vertical.toFixed(2) + " model", " range")
+        + line("Friday", "Hold", "Close inside " + bandLo.toFixed(2) + "–" + bandHi.toFixed(2) + " before the close", "")
+        + line("Pause", pausePx, pauseCmp, pauseCls)
+        + line("Max loss", money0(maxLoss), "Full " + wing + "-point wing · " + n + " contracts", "")
+        + '<p class="note">The model uses Header IV, the days left, and spot on the short strike. Credit, wing, and the short put come from the sections above.</p>';
 }
 
-function renderEject() {
-    const out = $("ejectout");
-    const math = $("ejectmath");
-    const raw = {};
-    EJECT_IDS.forEach(id => { raw[id] = parseFloat($(id).value); });
-    const bad = EJECT_IDS.some(id => !isFinite(raw[id]));
-    if (bad || raw.ej_var <= 0 || raw.ej_n <= 0) {
-        out.innerHTML = '<div class="warnbox">Enter a positive VAR and a positive contract count.</div>';
-        math.innerHTML = "";
-        return;
-    }
-    if (raw.ej_put < 0 || raw.ej_call < 0 || raw.ej_wid < 0 || raw.ej_comm < 0 || raw.ej_fee < 0 || raw.ej_slip < 0) {
-        out.innerHTML = '<div class="warnbox">Credits, wing width, commission, fees, and slippage need to be zero or positive.</div>';
-        math.innerHTML = "";
-        return;
-    }
-
-    const VAR = raw.ej_var, N = raw.ej_n, put = raw.ej_put, call = raw.ej_call;
-    const wing = raw.ej_wid, comm = raw.ej_comm, fee = raw.ej_fee, slip = raw.ej_slip;
-    const putSold = put > 0, callSold = call > 0;
-    if (!putSold && !callSold) {
-        out.innerHTML = '<div class="warnbox">Enter the credit on the put, the call, or both.</div>';
-        math.innerHTML = "";
-        return;
-    }
-
-    const legsOpen = (putSold ? 2 : 0) + (callSold ? 2 : 0);
-    const legsClose = 2;
-    const legs = legsOpen + legsClose;
-    const optionContracts = legs * N;
-    const commDollars = comm * optionContracts;
-    const feeDollars = fee * optionContracts;
-    const costs = commDollars + feeDollars;
-    const creditShare = put + call;
-    const creditDollars = creditShare * 100 * N;
-    const budget = 0.03 * VAR;
-    const perShareRoom = (budget - costs) / (100 * N);
-    const price = creditShare + perShareRoom - slip;
-
-    const lossAt = (debit) => (debit + slip) * 100 * N - creditDollars + costs;
-    const penny = Math.round(price * 100) / 100;
-    const pennyLoss = lossAt(penny);
-    const wingLoss = wing > 0 ? lossAt(wing) : null;
-
-    function versus(p) {
-        if (!isFinite(p)) return "";
-        const diff = p - RULE_OF_THUMB;
-        const ratio = p / RULE_OF_THUMB;
-        if (Math.abs(diff) <= 0.005) return "On $0.65 · " + ratio.toFixed(2) + "×";
-        const place = diff > 0 ? "above" : "under";
-        return usd(Math.abs(diff), 3) + " " + place + " $0.65 · " + ratio.toFixed(2) + "×";
-    }
-
-    function line(sideName, sold) {
-        if (!sold) {
-            return '<div class="eject-line"><span class="side">' + sideName + '</span><span class="px quiet">—</span><span class="cmp">No ' + sideName.toLowerCase() + ' credit</span></div>';
-        }
-        const over = wing > 0 && price > wing + 1e-9;
-        const under0 = price <= 0;
-        const cls = under0 ? "px quiet" : over ? "px over" : "px";
-        const headline = under0 ? "—" : usd(price, 3);
-        let cmp = under0 ? "Costs already past 3% of VAR" : versus(price);
-        if (over) cmp += " · past the " + wing + "-point wing";
-        return '<div class="eject-line"><span class="side">' + sideName + '</span><span class="' + cls + '">' + headline + '</span><span class="cmp">' + cmp + '</span></div>';
-    }
-
-    out.innerHTML = line("Put", putSold) + line("Call", callSold);
-
-    const legSentence = (putSold && callSold)
-        ? "Both sides sold: 4 legs open, 2 close."
-        : "One side sold: 2 legs open, 2 close.";
-    let wingSentence = "";
-    if (wing > 0 && isFinite(wingLoss)) {
-        wingSentence = '<p class="note">A full ' + wing + '-point wing loses ' + usd(wingLoss) + ', ' + pct(wingLoss / VAR, 1) + ' of VAR.</p>';
-    }
-    const lossLine = price > 0
-        ? '<p class="note">Loss at ' + usd(price, 3) + ' is ' + usd(lossAt(price)) + ' (' + pct(lossAt(price) / VAR, 2) + ' of VAR). Nearest cent ' + usd(penny, 2) + ' loses ' + usd(pennyLoss) + '.</p>'
-        : '<p class="note">Round-trip costs of ' + usd(costs) + ' already exceed the ' + usd(budget) + ' budget plus the ' + usd(creditDollars) + ' credit.</p>';
-
-    math.innerHTML = '<div class="formula">P = put credit + call credit\n  + (0.03 × VAR − commission − fee) / (100 × contracts)\n  − slippage\n\n'
-        + legSentence + '\nThe untested vertical expires, so its credit stays in.</div>'
-        + lossLine + wingSentence;
-}
-
-const STORE_KEY = "atlas.ic-calculator.v2";
-const INPUT_IDS = ["spot", "vxn", "hiv", "dte", "wid", "pfc", "pmo", "dt", "nav", "base", "cap", "norm", "cred", "credz", "marg", "bs_r"];
+const STORE_KEY = "atlas.ic-calculator.v3";
+const INPUT_IDS = ["spot", "vxn", "hiv", "dte", "wid", "pfc", "pvxn", "dt", "nav", "base", "cap", "norm", "cred", "credz", "marg", "bs_r", "contracts", "stops12"];
 
 function localToday() {
     const d = new Date();
@@ -1228,10 +1207,6 @@ function resetInputs() {
         const el = $(id);
         if (el) el.value = el.defaultValue;
     });
-    EJECT_IDS.forEach(id => {
-        const el = $(id);
-        if (el) el.value = el.defaultValue;
-    });
     $("dt").value = localToday();
     render();
 }
@@ -1265,7 +1240,7 @@ document.addEventListener("keydown", (event) => {
 
 loadInputs();
 document.querySelectorAll("input").forEach(el => {
-    const onEdit = () => { saveInputs(); render(); };
+    const onEdit = () => { render(); saveInputs(); };
     el.addEventListener("input", onEdit);
     el.addEventListener("change", onEdit);
 });
