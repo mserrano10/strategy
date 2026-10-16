@@ -391,6 +391,34 @@
             overflow-x: auto;
         }
 
+        .section-label {
+            font-size: 8pt;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            margin: 18px 0 6px;
+        }
+
+        .condor-verdict {
+            display: flex;
+            gap: 28px;
+            align-items: flex-start;
+        }
+
+        .condor-verdict .verdict-title {
+            flex: 0 0 240px;
+            font-size: 18pt;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: -0.4px;
+            line-height: 1.2;
+        }
+
+        .condor-panel .toolbar {
+            align-items: flex-start;
+        }
+
         .hidden { display: none; }
 
         @media print {
@@ -426,6 +454,18 @@
             .tabbar .pdf-btn {
                 flex: 0 0 auto;
                 scroll-snap-align: start;
+            }
+            .condor-verdict {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .condor-verdict .verdict-title {
+                flex-basis: auto;
+                font-size: 16pt;
+            }
+            .condor-panel .toolbar {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -541,6 +581,12 @@ const TABS = [
         label: "TQQQ Two-Bullet",
         ids: ["tqqq-two-bullet", "tqqq-buy-hold"],
         intro: "The two-bullet 90/10 rule, and TQQQ bought and held on the same window. Buy-and-hold is a backtest row only.",
+    },
+    {
+        id: "qqq-condor",
+        label: "QQQ Condor",
+        ids: ["qqq-condor-stop-3pct", "qqq-condor-hold", "qqq-condor-stop-2x", "qqq-condor-filtered"],
+        intro: "Weekly QQQ iron condor at the 0.03 delta, Monday open to Friday close. The 3% VAR eject is sized to the account. Hold and the 2× credit stop are the comparisons.",
     },
 ];
 
@@ -674,7 +720,9 @@ function drawChart(svg, series, options) {
     ticks.forEach((tick) => {
         const y = yOf(tick);
         svg.appendChild(node("line", { x1: pad.l, x2: width - pad.r, y1: y, y2: y, stroke: "#E2E8F0", "stroke-width": "1" }));
-        const label = log ? (tick >= 1000 ? Math.round(tick).toLocaleString("en-US") : String(Math.round(tick))) : money(tick);
+        const label = log
+            ? (options.dollars ? money(tick) : (tick >= 1000 ? Math.round(tick).toLocaleString("en-US") : String(Math.round(tick))))
+            : money(tick);
         const text = node("text", { x: pad.l - 8, y: y + 3, "text-anchor": "end", fill: "#64748B", "font-size": "10", "font-family": "Inter, sans-serif" });
         text.textContent = label;
         svg.appendChild(text);
@@ -1186,6 +1234,274 @@ function paintForwardCharts() {
     });
 }
 
+function px(value) {
+    if (value === null || value === undefined || Number.isNaN(value)) return "—";
+    return "$" + Number(value).toFixed(2);
+}
+
+function finePct(value) {
+    if (value === null || value === undefined || Number.isNaN(value)) return "—";
+    const n = value * 100;
+    const body = Math.abs(n).toFixed(3) + "%";
+    if (n < 0) return "-" + body;
+    if (n > 0) return "+" + body;
+    return "0.000%";
+}
+
+function times(value) {
+    if (value === null || value === undefined || Number.isNaN(value)) return "—";
+    return Number(value).toFixed(2) + "×";
+}
+
+function condorPrimary(reports) {
+    return reports.find((report) => report.id === "qqq-condor-stop-3pct") || reports[0] || null;
+}
+
+function accountBlock(report, capital) {
+    const condor = report.condor || {};
+    const accounts = condor.accounts || {};
+    return accounts[String(capital)] || null;
+}
+
+function shortCondorName(report) {
+    return String(report.name || "").replace(/^QQQ Condor — /, "");
+}
+
+function condorTable(reports, capital) {
+    const picked = selectedReport(currentTab());
+    const rows = reports.map((report) => {
+        const block = accountBlock(report, capital);
+        const metrics = block && block.metrics ? block.metrics : (capital === 10000 ? report.metrics : null);
+        const selected = picked && report.id === picked.id ? " selected" : "";
+        return '<tr class="clickable' + selected + '" tabindex="0" data-variant="' + report.id + '">' +
+            "<td><strong>" + esc(shortCondorName(report)) + "</strong></td>" + metricTds(metrics) + "</tr>";
+    }).join("");
+    const anchor = reports.find((report) => spySeries(report));
+    const bench = spySeries(anchor);
+    let spy = "";
+    if (bench && bench.metrics) {
+        const factor = capital / (anchor.initial_capital || 10000);
+        const metrics = Object.assign({}, bench.metrics, { final_equity: bench.metrics.final_equity * factor });
+        spy = "<tr><td>" + spyLabel() + "</td>" + metricTds(metrics) + "</tr>";
+    }
+    return '<div class="table-scroll"><table>' + TABLE_HEAD + "<tbody>" + rows + spy + "</tbody></table></div>";
+}
+
+function tradeRow(report, capital) {
+    const block = accountBlock(report, capital) || {};
+    return "<tr><td><strong>" + esc(shortCondorName(report)) + "</strong></td>" +
+        '<td class="num">' + (block.n == null ? "—" : block.n) + "</td>" +
+        '<td class="num">' + pct(block.win_rate, false) + "</td>" +
+        '<td class="num ' + signedClass(block.avg_win_pct) + '">' + pct(block.avg_win_pct, true) + "</td>" +
+        '<td class="num ' + signedClass(block.avg_loss_pct) + '">' + pct(block.avg_loss_pct, true) + "</td>" +
+        '<td class="num ' + signedClass(block.expectancy_pct) + '">' + pct(block.expectancy_pct, true) + "</td>" +
+        '<td class="num">' + (block.gaps == null ? "—" : block.gaps) + "</td>" +
+        '<td class="num">' + (block.same_day_exits == null ? "—" : block.same_day_exits) + "</td></tr>";
+}
+
+function worstRows(block) {
+    return ((block && block.worst) || []).slice(0, 5).map((trade) =>
+        "<tr><td>" + esc(trade.date) + "</td><td>" + esc(trade.exit) + "</td><td>" + esc(trade.structure) + "</td>" +
+        "<td>" + esc(trade.reason) + (trade.gap ? " · gap" : "") + "</td>" +
+        '<td class="num ' + signedClass(trade.pnl_pct) + '">' + pct(trade.pnl_pct, true) + "</td>" +
+        '<td class="num ' + signedClass(trade.pnl_dollars) + '">' + money(trade.pnl_dollars) + "</td></tr>"
+    ).join("");
+}
+
+function bustCell(block, side, delta) {
+    const value = block && block[side] ? block[side][delta] : null;
+    return '<td class="num">' + pct(value, false) + "</td>";
+}
+
+function condorMarkup() {
+    const tab = currentTab();
+    const reports = tabReports(tab);
+    reports.forEach((report, index) => { report._color = COLORS[index % COLORS.length]; });
+    const primary = condorPrimary(reports);
+    const condor = (primary && primary.condor) || {};
+    const verdict = condor.verdict || {};
+    const tone = verdict.tone === "ink" ? " ink" : "";
+    const assumptions = condor.assumptions || [];
+    const lead = assumptions.slice(0, 3).map((line) => "<li>" + esc(line) + "</li>").join("");
+    const rest = assumptions.slice(3).map((line) => "<li>" + esc(line) + "</li>").join("");
+    const lessons = (condor.lessons || []).map((line) => "<li>" + esc(line) + "</li>").join("");
+    const trigger = ((condor.calibration || {}).trigger) || {};
+    const modern = trigger.since_2020 || {};
+    const recorded = (condor.calibration || {}).recorded || null;
+    const live = condor.live || null;
+    const bust = condor.bust || {};
+    const sheet = bust.sheet || {};
+    const model = (bust.model_sheet_window || {}).unrounded_prior_vol || {};
+    const rounded = (bust.model_sheet_window || {}).rounded_prior_vol || {};
+    const filtered = bust.filtered_weeks || {};
+    const big = accountBlock(primary, 200000) || {};
+    const gaps = big.gap_stats || {};
+    const picked = selectedReport(tab);
+    const pickedBig = accountBlock(picked, 200000) || {};
+    const pickedSmall = accountBlock(picked, 10000) || {};
+    const scaleLog = state.log ? " active" : "";
+    const scaleLinear = state.log ? "" : " active";
+    const legend = reports.map((report) =>
+        '<button type="button" data-variant="' + report.id + '"><span class="swatch" style="background:' + report._color + '"></span>' +
+        esc(shortCondorName(report)) + "</button>"
+    ).join("") +
+        '<span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;"><span class="swatch" style="background:' +
+        SPY_COLOR + ";height:0;border-top:2px dashed " + SPY_COLOR + '"></span>S&amp;P 500 (SPY)</span>';
+    const bustRows = ["put", "call"].map((side) => ["0.03", "0.025", "0.02"].map((delta) =>
+        "<tr><td>" + side + "</td><td>" + delta + "</td>" +
+        bustCell(sheet, side, delta) + bustCell(model, side, delta) + bustCell(rounded, side, delta) + "</tr>"
+    ).join("")).join("");
+    const recordedLine = recorded
+        ? "<p>Recorded credits over the Monday open, median: puts " + finePct(recorded.put_credit_over_spot_median) +
+          ", calls " + finePct(recorded.call_credit_over_spot_median) +
+          ". Fill IV / prior VXN: puts " + times(recorded.put_iv_over_vxn_median) +
+          ", calls " + times(recorded.call_iv_over_vxn_median) +
+          ". Model credit / recorded credit: puts " + times(recorded.model_over_recorded_put_median) +
+          ", calls " + times(recorded.model_over_recorded_call_median) +
+          ", both sides together " + times(recorded.model_over_recorded_total_median) +
+          ". " + esc(recorded.note || "") + "</p>"
+        : "";
+    const liveRows = live && live.weeks ? live.weeks.map((row) =>
+        "<tr><td>" + esc(row.week) + "</td>" +
+        '<td class="num">' + finePct(row.credit_over_spot) + "</td>" +
+        '<td class="num">' + finePct(row.model_credit_over_spot) + "</td>" +
+        '<td class="num ' + signedClass(row.return_pct) + '">' + pct(row.return_pct, true) + "</td>" +
+        "<td>" + esc(row.exit || "—") + "</td>" +
+        "<td>" + (row.put_bust ? "put" : "") + (row.put_bust && row.call_bust ? " · " : "") + (row.call_bust ? "call" : "") +
+        (!row.put_bust && !row.call_bust ? "—" : "") + "</td></tr>"
+    ).join("") : "";
+    const liveBlock = live
+        ? "<p>" + esc(live.note || "") + " " + live.n_modelled + " of " + live.n_weeks +
+          " weeks are modelled. Mean week " + pct(live.mean_week, true) +
+          ", compounded across those weeks " + pct(live.compound_on_modelled_weeks, true) +
+          ", worst week " + pct(live.worst_week, true) + ".</p>" +
+          '<div class="table-scroll"><table><thead><tr><th>Week</th><th class="num">Recorded credit / spot</th>' +
+          '<th class="num">Model credit / spot</th><th class="num">Week return</th><th>Exit</th><th>Bust</th></tr></thead><tbody>' +
+          liveRows + "</tbody></table></div>"
+        : "";
+    const diff = modern.difference_vs_reference;
+    const diffWords = diff == null ? "" : (diff < 0 ? px(Math.abs(diff)) + " under $0.65" : px(diff) + " over $0.65");
+    return '<div class="condor-panel"><h2>QQQ Condor</h2>' +
+        "<p>" + esc(tab.intro) + "</p>" +
+        '<div class="callout' + tone + '"><div class="condor-verdict">' +
+        '<div class="verdict-title">' + esc(verdict.title || "QQQ Condor") + "</div>" +
+        "<div><p>" + esc(verdict.edge || "") + "</p><p>" + esc(verdict.kills || "") + "</p><p style=\"margin-bottom:0;\">" +
+        esc(verdict.sizing || "") + "</p></div></div></div>" +
+        '<div class="callout ink"><div class="callout-title">Assumption to confirm</div><ul>' + lead + "</ul></div>" +
+        '<div class="section-label">Hypothetical $10,000</div>' +
+        condorTable(reports, 10000) +
+        '<div class="toolbar"><div class="readout" id="condor-readout-10">Dollars. SPY is the dashed line.</div><div>' +
+        '<button type="button" class="pdf-btn' + scaleLog + '" id="scale-log">Log</button> ' +
+        '<button type="button" class="pdf-btn' + scaleLinear + '" id="scale-linear">Linear</button></div></div>' +
+        '<div class="legend">' + legend + "</div>" +
+        '<div class="chart-wrap"><svg id="condor-chart-10" data-readout="condor-readout-10" viewBox="0 0 880 320" role="img" aria-label="QQQ condor equity, ten thousand dollars"></svg></div>' +
+        '<div class="section-label">Hypothetical $200,000</div>' +
+        "<p>Same rules. SPY in this table is the reference line scaled from $10,000 to $200,000. Returns match the $10,000 SPY row.</p>" +
+        condorTable(reports, 200000) +
+        '<div class="toolbar"><div class="readout" id="condor-readout-200">Dollars. SPY is the dashed line, scaled to $200,000.</div></div>' +
+        '<div class="legend">' + legend + "</div>" +
+        '<div class="chart-wrap"><svg id="condor-chart-200" data-readout="condor-readout-200" viewBox="0 0 880 320" role="img" aria-label="QQQ condor equity, two hundred thousand dollars"></svg></div>' +
+        '<div class="section-label">Week by week</div>' +
+        "<p>Win, loss, and expectancy are fractions of that Monday’s net worth. A same-day exit is a stop or a gap fill on the entry session. Hypothetical dollars are the model’s, not a broker fill.</p>" +
+        '<div class="table-scroll"><table><thead><tr><th>Book</th><th class="num">Trades</th><th class="num">Win rate</th>' +
+        '<th class="num">Avg win</th><th class="num">Avg loss</th><th class="num">Expectancy</th><th class="num">Gaps</th>' +
+        '<th class="num">Same day</th></tr></thead><tbody>' +
+        '<tr><td colspan="8"><strong>$10,000</strong></td></tr>' +
+        reports.map((report) => tradeRow(report, 10000)).join("") +
+        '<tr><td colspan="8"><strong>$200,000</strong></td></tr>' +
+        reports.map((report) => tradeRow(report, 200000)).join("") +
+        "</tbody></table></div>" +
+        '<div class="section-label">Bust rates against the tracking sheet</div>' +
+        "<p>" + esc(bust.definition || "") + " Sheet window " + esc(sheet.start || "") + " → " + esc(sheet.end || "") +
+        ", " + (model.weeks || "—") + " modelled weeks against " + (sheet.weeks || "—") + " sheet weeks. " +
+        esc((sheet.note || "")) + "</p>" +
+        '<div class="table-scroll"><table><thead><tr><th>Side</th><th>Delta</th><th class="num">Sheet</th>' +
+        '<th class="num">Model, prior VXN</th><th class="num">Model, rounded strike</th></tr></thead><tbody>' +
+        bustRows + "</tbody></table></div>" +
+        "<p>On that window, filtered weeks (short, 2% gap, FOMC, or CPI) were " +
+        pct(filtered.filtered && filtered.weeks ? filtered.filtered / filtered.weeks : null, false) +
+        " of weeks. Put busts on those weeks " + pct(filtered.put_rate_filtered, false) +
+        " versus " + pct(filtered.put_rate_clear, false) + " on the other weeks. Call busts " +
+        pct(filtered.call_rate_filtered, false) + " versus " + pct(filtered.call_rate_clear, false) +
+        ". Of the put busts, " + pct((filtered.put || {}).share_on_filtered_weeks, false) +
+        " fell on a filtered week. Of the call busts, " + pct((filtered.call || {}).share_on_filtered_weeks, false) + ".</p>" +
+        '<div class="callout"><div class="callout-title">$0.65 close on the breached vertical</div>' +
+        "<p>Since 2020, an intraday stop at 3% of VAR closes the breached vertical at a median " +
+        px(modern.median_tested_vertical) + ". The tracking figure is $0.65. The model is " +
+        times(modern.ratio_to_reference) + " that figure, " + diffWords +
+        ". Full-sample median " + px(trigger.median_tested_vertical) +
+        " (" + times(trigger.ratio_to_reference) + "). Since 2020 the stop fired " +
+        (modern.stop_fills == null ? "—" : modern.stop_fills) +
+        " times inside the session. Median credit on those stops " + px(modern.median_credit) +
+        ", median value left on the safe side " + px(modern.median_safe_vertical) +
+        ". Lining $0.65 up with this credit and this safe-side value would size the wing to about " +
+        pct(modern.implied_wing_fraction_for_065, false) + " of the account.</p>" +
+        "<p style=\"margin-bottom:0;\">" + esc(trigger.note || "") + "</p></div>" +
+        '<div class="callout"><div class="callout-title">Overnight gaps</div>' +
+        "<p style=\"margin-bottom:0;\">On the $200,000 3% book, " + (gaps.gap_throughs == null ? "—" : gaps.gap_throughs) +
+        " opens were already through the stop and filled at the open. " +
+        (gaps.premium_losses_beyond_3pct == null ? "—" : gaps.premium_losses_beyond_3pct) +
+        " weeks lost more than 3% of VAR on the premium alone. Worst gap " +
+        pct(gaps.worst_gap_loss_pct, true) + " of the account. Median gap loss " +
+        pct(gaps.median_gap_loss_pct, true) + ".</p></div>" +
+        recordedLine +
+        '<div class="section-label">Worst weeks · ' + esc(picked ? shortCondorName(picked) : "") + "</div>" +
+        "<p>Hypothetical P&amp;L. Percent of that Monday’s net worth, then dollars on the hypothetical account.</p>" +
+        '<div class="section-label">$200,000</div>' +
+        '<div class="table-scroll"><table><thead><tr><th>Entry</th><th>Exit</th><th>Structure</th><th>Reason</th>' +
+        '<th class="num">P&amp;L</th><th class="num">Hypothetical $</th></tr></thead><tbody>' +
+        (worstRows(pickedBig) || "<tr><td colspan=\"6\">No trades.</td></tr>") + "</tbody></table></div>" +
+        '<div class="section-label">$10,000</div>' +
+        '<div class="table-scroll"><table><thead><tr><th>Entry</th><th>Exit</th><th>Structure</th><th>Reason</th>' +
+        '<th class="num">P&amp;L</th><th class="num">Hypothetical $</th></tr></thead><tbody>' +
+        (worstRows(pickedSmall) || "<tr><td colspan=\"6\">No trades.</td></tr>") + "</tbody></table></div>" +
+        '<div class="section-label">Recorded fills, as percentages</div>' +
+        liveBlock +
+        '<div class="section-label">What the bust notes keep repeating</div><ul>' + lessons + "</ul>" +
+        (rest ? '<details class="fold"><summary>Rest of the assumptions</summary><ul>' + rest + "</ul></details>" : "") +
+        (picked ? '<div class="section-label">$10,000 book · yearly returns and drawdown</div>' + yearlyHtml(picked) + '<div class="chart-wrap"><svg id="dd-chart" viewBox="0 0 880 120" role="img" aria-label="Drawdown"></svg></div>' + caveatsHtml(picked) : "") +
+        "</div>";
+}
+
+function paintCondorCharts() {
+    const reports = tabReports(currentTab());
+    reports.forEach((report, index) => { report._color = COLORS[index % COLORS.length]; });
+    paintCondorChart("condor-chart-10", reports, 10000);
+    paintCondorChart("condor-chart-200", reports, 200000);
+    const picked = selectedReport(currentTab());
+    const dd = el("dd-chart");
+    if (dd && picked && picked.equity && picked.equity.length) drawDrawdown(dd, picked.equity);
+}
+
+function paintCondorChart(id, reports, capital) {
+    const svg = el(id);
+    if (!svg) return;
+    const series = [];
+    reports.forEach((report) => {
+        const rows = capital === 200000
+            ? (((report.condor || {}).accounts || {})["200000"] || {}).equity
+            : report.equity;
+        if (!rows || !rows.length) return;
+        series.push({
+            color: report._color,
+            name: shortCondorName(report),
+            points: rows.map((row) => ({ date: row.date, value: row.equity })),
+        });
+    });
+    const anchor = reports.find((report) => spySeries(report));
+    const spy = spySeries(anchor);
+    if (spy && spy.equity && spy.equity.length && anchor) {
+        const factor = capital / (anchor.initial_capital || 10000);
+        series.push({
+            color: SPY_COLOR,
+            name: "S&P 500 (SPY)",
+            dash: "5 4",
+            points: spy.equity.map((row) => ({ date: row.date, value: row.equity * factor })),
+        });
+    }
+    drawChart(svg, series, { log: state.log, height: 320, dollars: true });
+}
+
 function renderTabs() {
     const bar = el("tabbar");
     bar.innerHTML = "";
@@ -1217,12 +1533,15 @@ function render() {
     renderTabs();
     const panel = el("panel");
     if (state.tab === "summary") panel.innerHTML = summaryMarkup();
-    else panel.innerHTML = strategyMarkup();
-    panel.setAttribute("aria-labelledby", "tab-" + state.tab);
-    if (state.tab !== "summary") {
+    else if (state.tab === "qqq-condor") {
+        panel.innerHTML = condorMarkup();
+        paintCondorCharts();
+    } else {
+        panel.innerHTML = strategyMarkup();
         paintStrategyChart();
         paintForwardCharts();
     }
+    panel.setAttribute("aria-labelledby", "tab-" + state.tab);
     wirePanel();
 }
 
@@ -1248,9 +1567,40 @@ function wirePanel() {
     const logBtn = el("scale-log");
     const linearBtn = el("scale-linear");
     if (logBtn && linearBtn) {
-        logBtn.addEventListener("click", () => { state.log = true; syncScale(); paintStrategyChart(); });
-        linearBtn.addEventListener("click", () => { state.log = false; syncScale(); paintStrategyChart(); });
+        logBtn.addEventListener("click", () => {
+            state.log = true;
+            syncScale();
+            if (state.tab === "qqq-condor") paintCondorCharts();
+            else paintStrategyChart();
+        });
+        linearBtn.addEventListener("click", () => {
+            state.log = false;
+            syncScale();
+            if (state.tab === "qqq-condor") paintCondorCharts();
+            else paintStrategyChart();
+        });
     }
+    el("panel").querySelectorAll("svg[data-readout]").forEach((svg) => {
+        const readout = el(svg.getAttribute("data-readout"));
+        if (!readout) return;
+        svg.addEventListener("mousemove", (event) => {
+            if (!svg._dates) return;
+            const rect = svg.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width * 880;
+            let best = 0;
+            let bestDist = Infinity;
+            svg._dates.forEach((date, i) => {
+                const dist = Math.abs(svg._xOf(i) - x);
+                if (dist < bestDist) { bestDist = dist; best = i; }
+            });
+            const date = svg._dates[best];
+            const parts = (svg._series || []).map((series) => {
+                const point = series.points.find((item) => item.date === date);
+                return point ? series.name + " " + money(point.value) : null;
+            }).filter(Boolean);
+            readout.textContent = date + " · " + parts.join(" · ");
+        });
+    });
     const svg = el("strategy-chart");
     const readout = el("chart-readout");
     if (svg && readout) {
