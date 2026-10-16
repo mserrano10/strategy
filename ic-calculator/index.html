@@ -707,9 +707,9 @@
     <div class="panel">
         <div class="checks-label">Inputs</div>
         <div class="grid g5">
-            <div><label>Spot <span>QQQ</span></label><input id="spot" type="number" inputmode="decimal" step="0.01" value="715.17"></div>
-            <div><label>VXN <span>live</span></label><input id="vxn" type="number" inputmode="decimal" step="0.01" value="19.92"></div>
-            <div><label>Header IV <span>TOS header</span></label><input id="hiv" type="number" inputmode="decimal" step="0.01" value="19.45"></div>
+            <div><label>Spot <span>QQQ</span></label><input id="spot" type="number" inputmode="decimal" step="0.01" value="500"></div>
+            <div><label>VXN <span>live</span></label><input id="vxn" type="number" inputmode="decimal" step="0.01" value="18.50"></div>
+            <div><label>Header IV <span>expiry header</span></label><input id="hiv" type="number" inputmode="decimal" step="0.01" value="18.10"></div>
             <div><label>DTE <span>calendar days</span></label><input id="dte" type="number" inputmode="numeric" step="1" value="4"></div>
             <div><label>Rate <span>risk-free %</span></label><input id="bs_r" type="number" inputmode="decimal" step="0.5" value="4.0"></div>
         </div>
@@ -737,12 +737,12 @@
         <div class="checks">
             <div class="checks-label">Signal checks</div>
             <div class="grid g3">
-                <div><label>Fillable credit <span>$/share</span></label><input id="cred" type="number" inputmode="decimal" step="0.01" value="0.02"></div>
+                <div><label>Fillable credit <span>$/share</span></label><input id="cred" type="number" inputmode="decimal" step="0.01" value="0.09"></div>
                 <div><label>Target sigma <span>z</span></label><input id="credz" type="number" inputmode="decimal" step="0.05" value="2.90"></div>
                 <div><label>Safety margin <span>× break-even</span></label><input id="marg" type="number" inputmode="decimal" step="0.5" value="1.5"></div>
-                <div><label>Prior Friday <span>close</span></label><input id="pfc" type="number" inputmode="decimal" step="0.01" value="716.43"></div>
-                <div><label>Prior Monday <span>open</span></label><input id="pmo" type="number" inputmode="decimal" step="0.01" value="709.66"></div>
-                <div><label>Entry date <span>earnings window</span></label><input id="dt" type="date" value="2026-08-31"></div>
+                <div><label>Prior Friday <span>close</span></label><input id="pfc" type="number" inputmode="decimal" step="0.01" value="512"></div>
+                <div><label>Prior Monday <span>open</span></label><input id="pmo" type="number" inputmode="decimal" step="0.01" value="510"></div>
+                <div><label>Entry date <span>earnings window</span></label><input id="dt" type="date" value="2026-10-16"></div>
             </div>
         </div>
         <div id="verdict" aria-live="polite"></div>
@@ -770,9 +770,9 @@
     <div class="panel">
         <div class="grid g5">
             <div><label>VAR <span>$</span></label><input id="ej_var" type="number" inputmode="decimal" step="1000" min="0" autocomplete="off" value="100000"></div>
-            <div><label>Contracts <span>condors</span></label><input id="ej_n" type="number" inputmode="numeric" step="1" min="1" autocomplete="off" value="50"></div>
-            <div><label>Put credit <span>$/share</span></label><input id="ej_put" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.05"></div>
-            <div><label>Call credit <span>$/share</span></label><input id="ej_call" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.05"></div>
+            <div><label>Contracts <span>condors</span></label><input id="ej_n" type="number" inputmode="numeric" step="1" min="1" autocomplete="off" value="40"></div>
+            <div><label>Put credit <span>$/share</span></label><input id="ej_put" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0.09"></div>
+            <div><label>Call credit <span>$/share</span></label><input id="ej_call" type="number" inputmode="decimal" step="0.01" min="0" autocomplete="off" value="0"></div>
             <div><label>Wing <span>points</span></label><input id="ej_wid" type="number" inputmode="decimal" step="1" min="0" autocomplete="off" value="10"></div>
         </div>
         <div id="ejectout"></div>
@@ -1184,7 +1184,7 @@ function renderEject() {
         + lossLine + wingSentence;
 }
 
-const STORE_KEY = "atlas.ic-calculator.v1";
+const STORE_KEY = "atlas.ic-calculator.v2";
 const INPUT_IDS = ["spot", "vxn", "hiv", "dte", "wid", "pfc", "pmo", "dt", "nav", "base", "cap", "norm", "cred", "credz", "marg", "bs_r"];
 
 function localToday() {
