@@ -15,6 +15,7 @@ from backtest_lab.strategies.condor import (
     prepare,
     resolve_stop,
     run_book,
+    sigma_put_strike,
     strike_for_delta,
     var_stop_debit,
 )
@@ -74,6 +75,10 @@ class CondorMathTests(unittest.TestCase):
         call_02 = strike_for_delta(spot, year_frac, 0.04, sigma, 0.02, "call")
         self.assertAlmostEqual(put_025, 38.49, delta=0.01)
         self.assertAlmostEqual(call_02, 42.16, delta=0.01)
+        floor = sigma_put_strike(spot, year_frac, sigma)
+        # Calculator: K = S * exp(0.5*m^2 - 2.90*m), m = VXN * 1.03 * sqrt(T).
+        self.assertAlmostEqual(floor, 37.5907, delta=0.001)
+        self.assertLess(floor, put)
 
     def test_stop_fills_at_the_level_unless_the_open_has_gapped_through(self):
         fill, reason = resolve_stop(0.30, 0.90, 0.50, 10.0, allow_gap=False)
@@ -191,6 +196,34 @@ class CondorMathTests(unittest.TestCase):
             contracts_for(10_000, weeks[0].credit, "var"),
             contracts_for(10_000, weeks[0].credit, "desk"),
         )
+
+    def test_quiet_week_expires_instead_of_stopping_on_the_entry_spread(self):
+        index = pd.bdate_range("2009-12-31", "2010-01-08")
+        frame = pd.DataFrame(
+            {
+                "open": 500.0,
+                "high": 503.0,
+                "low": 497.0,
+                "close": 500.0,
+                "vxn": 20.0,
+                "vix": 18.0,
+            },
+            index=index,
+        )
+        weeks, sessions, _note = prepare(frame, 2010, index[-1].date())
+        self.assertEqual(len(weeks), 1)
+        week = weeks[0]
+        price_week(week)
+        self.assertTrue(week.tradable, week.skip)
+        traded = week.strikes["traded_put"]
+        self.assertLess(traded["used"], traded["delta_rounded"])
+        self.assertEqual(traded["used"], traded["sigma_rounded"])
+        entry = week.sessions[0]
+        self.assertLess(entry.open_debit, week.credit + 0.05)
+        result = run_book(weeks, sessions, 200_000, "stop-3pct", False, "var")
+        self.assertEqual(len(result["trades"]), 1)
+        self.assertEqual(result["trades"][0]["reason"], "expiry")
+        self.assertGreater(result["trades"][0]["pnl_dollars"], 0)
 
 
 if __name__ == "__main__":

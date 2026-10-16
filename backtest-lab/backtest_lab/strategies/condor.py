@@ -1,9 +1,10 @@
 """QQQ weekly iron condor.
 
-The tracking sheet sells the 0.03-delta put and call at the Monday open and
-holds to the Friday close. Strikes are Black–Scholes deltas with T = calendar
-days to expiry / 365, r = 4%, q = 0, and sigma = VXN. The wing is a fixed
-10 points. There is no profit target.
+The tracking sheet's delta columns are Black–Scholes 0.03 / 0.025 / 0.02.
+The traded put is the further of that 0.03-delta strike and the calculator's
+2.90-sigma floor (VXN × 1.03). The traded call stays at 0.03 delta. T is
+calendar days to expiry / 365, r = 4%, q = 0. The wing is a fixed 10 points.
+There is no profit target.
 
 Three exits are books, plus one filtered book:
 
@@ -12,9 +13,9 @@ Three exits are books, plus one filtered book:
 - buy back once the loss, net of that week's credit, reaches 3% of VAR
 
 VAR is the account net worth at Monday's entry. That definition is an
-assumption the page asks the reader to confirm. The 3% books size the wing's
-maximum loss to about the whole account. The hold and 2× books use the
-calculator's desk budget: 12.5% of net worth, times the 1.5 edge cap.
+assumption the page asks the reader to confirm. Every book sizes contracts
+from the calculator's desk budget: 12.5% of net worth, times the 1.5 edge
+cap. The 3% eject is still 3% of the whole net worth.
 
 Prices are modelled. There is no historical option tape. Credits are compared
 with recorded fills only as percentages of spot.
@@ -41,6 +42,8 @@ WIDTH = 10.0
 RATE = 0.04
 DELTAS = (0.03, 0.025, 0.02)
 PRIMARY = 0.03
+VOL_MULT = 1.03
+PUT_SIGMA_FLOOR = 2.90
 COMMISSION = 0.65
 HALF_FLOOR = 0.035
 HALF_FRAC = 0.10
@@ -67,7 +70,7 @@ VARIANTS = (
         "variant": "hold",
         "filters": False,
         "sizing": "desk",
-        "blurb": "Sell the 0.03-delta condor at the Monday open and hold it to the Friday intrinsic settlement.",
+        "blurb": "Sell the Monday condor and hold it to the Friday intrinsic settlement. The put is at or beyond 2.90 sigma. The call is the 0.03 delta.",
     },
     {
         "id": "qqq-condor-stop-2x",
@@ -82,16 +85,16 @@ VARIANTS = (
         "name": "QQQ Condor — 3% of VAR",
         "variant": "stop-3pct",
         "filters": False,
-        "sizing": "var",
-        "blurb": "Size the wing to the account. Exit once the loss, net of the week's credit, reaches 3% of Monday net worth.",
+        "sizing": "desk",
+        "blurb": "Desk size. Exit once the loss, net of the week's credit, reaches 3% of Monday net worth.",
     },
     {
         "id": "qqq-condor-filtered",
         "name": "QQQ Condor — 3% of VAR, filtered",
         "variant": "stop-3pct",
         "filters": True,
-        "sizing": "var",
-        "blurb": "The 3% VAR book, skipping holiday-short weeks, 2% Monday gaps, FOMC weeks, and CPI weeks.",
+        "sizing": "desk",
+        "blurb": "The 3% VAR eject at desk size, skipping holiday-short weeks, 2% Monday gaps, FOMC weeks, and CPI weeks.",
     },
 )
 
@@ -116,6 +119,14 @@ def strike_for_delta(spot: float, year_frac: float, rate: float, sigma: float, d
 
 def round_strike(strike: float) -> float:
     return float(math.floor(strike + 0.5))
+
+
+def sigma_put_strike(spot: float, year_frac: float, sigma: float, z: float = PUT_SIGMA_FLOOR) -> float:
+    """Put short strike z sigma below spot. Distance uses VXN × 1.03, as the calculator does."""
+    move = sigma * VOL_MULT * math.sqrt(year_frac)
+    if spot <= 0 or move <= 0:
+        raise ValueError("spot and sigma distance must be positive")
+    return spot * math.exp(0.5 * move * move - z * move)
 
 
 def bs_price(spot: float, strike: float, year_frac: float, rate: float, sigma: float, kind: str) -> float:
@@ -292,6 +303,8 @@ class Week:
     call_long: float | None = None
     put_short_raw: float | None = None
     call_short_raw: float | None = None
+    put_basis: float | None = None
+    call_basis: float | None = None
     n_legs: int = 0
     tradable: bool = False
     skip: str | None = None
@@ -329,9 +342,26 @@ def _vertical_at(week: Week, spot: float, year_frac: float, sigma: float, prev_c
     return vertical_debit(short_mid, long_mid)
 
 
+def _anchored(debit: float, basis: float | None, credit: float) -> float:
+    """Cost to close, with the entry debit shifted so the sale itself is not a loss.
+
+    The half-spread floor is what lines the entry credit up with recorded fills.
+    Charging that same spread again as the opening mark put the condor within a
+    few cents of the 3% stop before the market moved. The loss is the later
+    rise in the close cost: debit now, minus the entry debit, plus the credit.
+    """
+    if basis is None:
+        return debit
+    return min(WIDTH, max(0.0, debit - basis + credit))
+
+
 def structure_at(week: Week, spot: float, year_frac: float, sigma: float, prev_close: float, stress: bool) -> tuple[float, float, float]:
     put = _vertical_at(week, spot, year_frac, sigma, prev_close, stress, "put")
     call = _vertical_at(week, spot, year_frac, sigma, prev_close, stress, "call")
+    if week.put_short is not None:
+        put = _anchored(put, week.put_basis, week.put_credit)
+    if week.call_short is not None:
+        call = _anchored(call, week.call_basis, week.call_credit)
     return put + call, put, call
 
 
@@ -354,21 +384,31 @@ def price_week(week: Week) -> None:
     call_credit = 0.0
     if week.call_short is not None:
         call_credit = _price_credit(week, week.call_short, week.call_long, "call")
-    if put_credit <= 0:
+    # A 2.90-sigma put is often inside the half-spread floor. A negative model
+    # credit means there was no bid; the wing is still on, for no credit.
+    if put_credit < 0:
+        put_credit = 0.0
+    if call_credit <= 0:
+        call_credit = 0.0
+        week.call_short = None
+        week.call_long = None
+    if put_credit <= 0 and call_credit <= 0:
         week.tradable = False
         week.skip = "no-credit"
         week.put_credit = put_credit
         week.call_credit = call_credit
         return
-    if call_credit <= 0:
-        call_credit = 0.0
-        week.call_short = None
-        week.call_long = None
     week.put_credit = put_credit
     week.call_credit = call_credit
     week.credit = put_credit + call_credit
-    week.n_legs = 4 if week.call_short is not None else 2
+    week.n_legs = (2 if week.put_short is not None else 0) + (2 if week.call_short is not None else 0)
     week.tradable = True
+    week.put_basis = _vertical_at(week, snap0.open, snap0.t_trade, week.prior_sig, snap0.prev_close, False, "put")
+    week.call_basis = (
+        _vertical_at(week, snap0.open, snap0.t_trade, week.prior_sig, snap0.prev_close, False, "call")
+        if week.call_short is not None
+        else None
+    )
     week.entry_open_debit = 0.0
     for snap in week.sessions:
         trade_t = snap.t_trade
@@ -618,7 +658,7 @@ def bust_report(weeks: list[Week]) -> dict:
         return _rate(puts if side == "put" else calls)
 
     return {
-        "definition": "A bust is the last session's close beyond the short strike. The sheet's counts use the unrounded 0.03 / 0.025 / 0.02 strikes.",
+        "definition": "A bust is the last session's close beyond the short strike. The sheet's counts use the unrounded 0.03 / 0.025 / 0.02 strikes. The traded put is the further of the rounded 0.03-delta strike and the rounded 2.90-sigma strike.",
         "sheet": {
             "start": SHEET_START.date().isoformat(),
             "end": SHEET_END.date().isoformat(),
@@ -655,6 +695,23 @@ def bust_report(weeks: list[Week]) -> dict:
             "call": _rate(call_sheet),
             "weeks": len(put_sheet),
         },
+        "traded_put": _traded_put_bust(sheet),
+    }
+
+
+def _traded_put_bust(weeks: list[Week]) -> dict:
+    flagged = [week for week in weeks if week.put_short is not None and week.sessions]
+    puts = [week.friday_close < week.put_short for week in flagged]
+    used_sigma = [
+        week for week in flagged
+        if (week.strikes.get("traded_put") or {}).get("used") == (week.strikes.get("traded_put") or {}).get("sigma_rounded")
+        and (week.strikes.get("traded_put") or {}).get("sigma_rounded") != (week.strikes.get("traded_put") or {}).get("delta_rounded")
+    ]
+    return {
+        "weeks": len(flagged),
+        "bust_rate": _rate(puts),
+        "weeks_on_sigma_floor": len(used_sigma),
+        "note": "Friday close through the traded put. That strike is the 2.90-sigma floor whenever it is further out than the 0.03 delta.",
     }
 
 
@@ -712,7 +769,7 @@ def _trigger_stats(trades: list[dict]) -> dict:
         },
         "note": (
             "Stop fills are the weeks closed at a 3% VAR loss during the session. "
-            "The tested vertical is the breached side's debit, after the bid/ask haircut, at the spot where the condor loss equals 3% of Monday net worth. "
+            "The tested vertical is the breached side's debit at the spot where the condor loss equals 3% of Monday net worth. "
             "Gap fills are left out of the median. The since-2020 block is the comparison to the $0.65 figure, because that is when a 10-point wing and the credits look like the recent book."
         ),
     }
@@ -825,20 +882,40 @@ def build_verdict(books: dict[str, dict[str, dict]]) -> dict:
         title = "The modelled condor does not clear its own costs."
     two_same = two.get("same_day_exits") or 0
     two_n = two.get("n") or 0
+    two_ratio = two.get("median_entry_open_over_credit") or 0
+    if two_n and two_same >= two_n * 0.9 and two_ratio >= 1.5:
+        two_clause = (
+            f"{two_same} of {two_n} $10,000 trades buy back the same day, "
+            f"because the cost to close at the entry open is already about {two_ratio:.1f}× the credit just received."
+        )
+    else:
+        two_clause = (
+            f"It runs to Friday on {two.get('expiries') or 0} of {two_n} $10,000 trades "
+            f"and stops on {two.get('stops') or 0}. "
+            f"The entry-open close cost is {two_ratio:.2f}× the credit."
+        )
     edge = (
         f"Held to Friday at desk size, the average week is {_fmt_pct(hold.get('expectancy_pct'), 2)} of the account "
         f"({_fmt_pct(hold.get('win_rate'), 1)} of weeks finish green, average win {_fmt_pct(hold.get('avg_win_pct'), 2)}, "
         f"average loss {_fmt_pct(hold.get('avg_loss_pct'), 2)}). "
         f"The 2× credit stop averages {_fmt_pct(two.get('expectancy_pct'), 2)} a week. "
-        f"{two_same} of {two_n} $10,000 trades buy back the same day, "
-        f"because the cost to close at the entry open is already about "
-        f"{(two.get('median_entry_open_over_credit') or 0):.1f}× the credit just received."
+        + two_clause
     )
     var_dd = (var_big.get("metrics") or {}).get("max_drawdown")
+    gap_n = (var_big.get("gap_stats") or {}).get("gap_throughs") or 0
+    if gap_n == 1:
+        gap_clause = "One open on the $200,000 book was already through the stop and filled at the open."
+    elif gap_n == 0:
+        gap_clause = "No open on the $200,000 book was already through the stop."
+    else:
+        gap_clause = (
+            f"{gap_n} opens on the $200,000 book were already through the stop and filled at the open."
+        )
     kills = (
-        f"On the 3% VAR book the wing's maximum loss is about the whole account. "
+        f"The eject is 3% of Monday net worth, on the desk's contract budget (18.75% of that net worth). "
         f"A stop that fills at the level loses 3% net of the credit. "
-        f"{var_big.get('gap_stats', {}).get('gap_throughs', 0)} opens on the $200,000 book were already through that level and filled at the open. "
+        f"A full wing is larger than that, so a gap can go through it. "
+        f"{gap_clause} "
         f"The worst of those is {_fmt_pct((var_big.get('gap_stats') or {}).get('worst_gap_loss_pct'), 1)} of the account. "
         f"The book’s maximum drawdown is {_fmt_pct(var_dd)}."
     )
@@ -854,7 +931,7 @@ def build_verdict(books: dict[str, dict[str, dict]]) -> dict:
         if implied is not None:
             close += (
                 f" Matching $0.65 with this credit and this residual value on the safe side would mean a wing of about "
-                f"{_fmt_pct(implied, 0)} of the account. This book sizes the wing to the whole account."
+                f"{_fmt_pct(implied, 0)} of the account. This book risks 18.75% of Monday net worth."
             )
     sizing = (
         f"Desk size risks 18.75% of Monday net worth (the 12.5% base VAR times the 1.5 edge cap) and cannot lose more than about one wing in a week. "
@@ -871,11 +948,12 @@ def build_verdict(books: dict[str, dict[str, dict]]) -> dict:
 def assumptions() -> list[str]:
     return [
         "VAR is the account's net worth at the Monday entry. The 3% loss is 3% of that number. This is the sizing plan's definition, and it is an assumption to confirm.",
-        "The loss is net of the premium collected that week: cost to close the whole condor, minus the total credit received. Commissions sit on top of that and are not part of the 3% test.",
+        "The loss is net of the premium collected that week: cost to close the whole condor, minus the total credit received. The sign is that way around. A mark below the credit is a profit and does not stop. Commissions sit on top of the 3% test.",
+        "The entry credit already includes the half-spread. The close mark starts at that credit and then follows the change in the model debit. The spread is not charged a second time as an opening loss.",
         "The tracking notes put that same 3% loss at roughly a 0.65 price to close the breached vertical. The model does not aim at 0.65. The calibration block reports the debit it produces.",
-        "The traded strike is the 0.03 delta. 0.025 and 0.02 are reconciliation columns only. Delta is Black–Scholes with T equal to the calendar days from entry to the last session, divided by 365, r = 4%, q = 0, sigma = the prior session's VXN.",
+        "The call is the 0.03 delta. The put is the further of that 0.03-delta strike and the 2.90-sigma floor. Sigma distance is prior VXN times 1.03, times the square root of calendar days over 365, the same formula as the calculator. 0.025 and 0.02 stay reconciliation columns. Delta is Black–Scholes with r = 4%, q = 0, and the prior session's VXN.",
         "The short strike is rounded to the nearest dollar. The long strike is 10 points further out. The sheet has no long strike. Ten points is the calculator's width. On a $40 QQQ that wing is very wide and the long is nearly worthless.",
-        "A put credit at or below zero skips the week. A call credit at or below zero drops the call and trades the put spread.",
+        "A put whose model bid is inside the half-spread is kept on for no credit. The week is skipped only when both sides have no credit. A call credit at or below zero drops the call.",
         "The half-spread charged on every leg is the larger of "
         f"${HALF_FLOOR:.3f} and 10% of the mid. The short is sold at the bid and bought back at the ask. "
         "Settlement at expiry is intrinsic, with no commission. A stop pays commission on the way out. "
@@ -885,9 +963,9 @@ def assumptions() -> list[str]:
         "Close marks use that session's VXN. Entry and stop marks use the prior session's VXN plus the spot-vol add-on. Before VXN exists, vol is VIX times the median VXN/VIX ratio.",
         "The entry open is not treated as a gap through the stop. From the next session on, an open already through the stop fills at the open, capped at the wing. An intraday breach fills at the stop. The adverse mark is the worse of the low and the high. Both extremes are not added together.",
         "Friday intraday marks keep a quarter-day of residual time. The close, if the stop has not fired, is the intrinsic value.",
-        "The desk books risk 18.75% of Monday net worth. The 3% books set contracts so the wing's maximum loss is about the whole account. One contract is the minimum. A book that cannot buy one contract skips the week.",
+        "Every book, including the 3% eject, sizes contracts from the desk budget: 18.75% of Monday net worth. The eject is still 3% of the whole net worth, so the per-share stop is wider than 3% of one wing. One contract is the minimum. A book that cannot buy one contract skips the week.",
         "The filtered book skips a week with fewer than five sessions, a Monday (or first-session) gap of 2% or more in either direction, a week that contains an FOMC announcement (or the Sunday before a Monday entry), or a CPI release. The first matching reason is the one counted.",
-        "The 2.90-sigma floor in the calculator is a stricter strike than 0.03 delta and is not the strike this sheet traded. Earnings windows and the calculator's call-block on a down Monday are notes, not filters, except for the explicit 2% gap on the filtered book.",
+        "Earnings windows and the calculator's call-block on a down Monday are notes, not filters, except for the explicit 2% gap on the filtered book.",
         "CPI dates other than 2024 were compiled. A one-day miss usually stays inside the same week. Gate 1 (the live IV versus VXN check) cannot be rebuilt from daily bars; recorded fill IV sits close to VXN.",
     ]
 
@@ -899,7 +977,7 @@ def lessons() -> list[str]:
         "Holiday-short weeks are described as fussy on both sides. The filtered book drops any week with fewer than five sessions.",
         "A second week of a sharp bounce, debt-ceiling noise, and single-name earnings show up in the notes. Several notes say the headline was not really the cause.",
         "One call-side note in August 2026 records a stop-out on a gap two days into the week. That is the overnight case the 3% book fills at the open.",
-        "The sheet's 2.90-sigma distance would have sat further out of the money than the 0.03 delta that was actually marked. This backtest follows the marked delta.",
+        "The sheet's bust columns are the 0.03 / 0.025 / 0.02 delta strikes. The traded put in this backtest is the calculator's 2.90-sigma floor when that strike is further out, which it is on a four-day week.",
     ]
 
 
@@ -958,8 +1036,8 @@ def build_reports(frame: pd.DataFrame, capital: float, end: date, start_year: in
     print(f"  condor weeks {len(weeks)}  tradable {sum(1 for week in weeks if week.tradable)}  sessions {len(sessions)}")
     tradable = sum(1 for week in weeks if week.tradable)
     scale_note += (
-        f" {tradable} of {len(weeks)} weeks collect a positive put credit after the haircut. "
-        "A 10-point wing on a low QQQ price usually does not."
+        f" {tradable} of {len(weeks)} weeks have a credit after the haircut. "
+        "The 2.90-sigma put is often inside that haircut and is then carried for no credit."
     )
     books: dict[str, dict[str, dict]] = {}
     results: dict[str, dict[float, dict]] = {}
@@ -986,14 +1064,14 @@ def build_reports(frame: pd.DataFrame, capital: float, end: date, start_year: in
         stats_10 = books[spec["id"]]["10000"]
         equity = results[spec["id"]][10_000.0]["equity"]
         big = books[spec["id"]]["200000"]
-        trigger = big.get("trigger") if spec["sizing"] == "var" else None
+        trigger = big.get("trigger") if spec["variant"] == "stop-3pct" else None
         report = assemble_report(
             strategy_id=spec["id"],
             name=spec["name"],
             description=spec["blurb"],
             kind="qqq-condor",
             group="QQQ Condor",
-            signal="0.03 delta Monday open, 10-point wings",
+            signal="2.90-sigma put, 0.03-delta call, 10-point wings",
             rebalance="weekly, Monday open to Friday close",
             equity=equity,
             cohorts=[],
@@ -1024,7 +1102,7 @@ def build_reports(frame: pd.DataFrame, capital: float, end: date, start_year: in
             "calibration": {
                 "recorded": None if not derived else derived.get("recorded"),
                 "trigger": trigger,
-                "trigger_10k": stats_10.get("trigger") if spec["sizing"] == "var" else None,
+                "trigger_10k": stats_10.get("trigger") if spec["variant"] == "stop-3pct" else None,
                 "reference_vertical": REFERENCE_VERTICAL,
             },
             "live": None if not derived else derived.get("live"),
@@ -1117,12 +1195,21 @@ def prepare(frame: pd.DataFrame, start_year: int, end: date) -> tuple[list[Week]
                 "same": _strike_map(spot, year_frac, same_sig),
             }
             primary = week.strikes["prior"]["0.03"]
-            week.put_short = primary["put_rounded"]
+            sigma_put = round_strike(sigma_put_strike(spot, year_frac, week.prior_sig))
+            delta_put = primary["put_rounded"]
+            # Further out of the money is the lower put strike. On a normal week
+            # 0.03 delta is about 1.9 sigma, so the 2.90 floor is the traded put.
+            week.put_short = min(delta_put, sigma_put)
             week.put_long = week.put_short - WIDTH
             week.call_short = primary["call_rounded"]
             week.call_long = week.call_short + WIDTH
             week.put_short_raw = primary["put"]
             week.call_short_raw = primary["call"]
+            week.strikes["traded_put"] = {
+                "delta_rounded": delta_put,
+                "sigma_rounded": sigma_put,
+                "used": week.put_short,
+            }
             if week.put_long <= 0 or week.call_short <= week.put_short:
                 week.skip = "no-vol"
                 week.put_short = None
@@ -1250,7 +1337,7 @@ class CondorStrategy:
     id = "qqq-condor"
     name = "QQQ Condor"
     description = (
-        "Weekly QQQ iron condor at the 0.03 delta, 10-point wings, Monday open to Friday close. "
+        "Weekly QQQ iron condor. Put at or beyond 2.90 sigma, call at the 0.03 delta, 10-point wings, Monday open to Friday close. "
         "Books: hold, stop at 2× credit, stop at a 3% VAR loss, and that stop with FOMC/CPI/gap/short-week filters."
     )
 

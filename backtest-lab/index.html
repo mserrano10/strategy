@@ -586,7 +586,7 @@ const TABS = [
         id: "qqq-condor",
         label: "QQQ Condor",
         ids: ["qqq-condor-stop-3pct", "qqq-condor-hold", "qqq-condor-stop-2x", "qqq-condor-filtered"],
-        intro: "Weekly QQQ iron condor at the 0.03 delta, Monday open to Friday close. The 3% VAR eject is sized to the account. Hold and the 2× credit stop are the comparisons.",
+        intro: "Weekly QQQ iron condor, Monday open to Friday close. The put is at or beyond 2.90 sigma and the call is the 0.03 delta. The 3% eject is 3% of Monday net worth, on the desk's contract budget. Hold and the 2× credit stop are the comparisons.",
     },
 ];
 
@@ -1414,7 +1414,10 @@ function condorMarkup() {
         '<div class="section-label">Bust rates against the tracking sheet</div>' +
         "<p>" + esc(bust.definition || "") + " Sheet window " + esc(sheet.start || "") + " → " + esc(sheet.end || "") +
         ", " + (model.weeks || "—") + " modelled weeks against " + (sheet.weeks || "—") + " sheet weeks. " +
-        esc((sheet.note || "")) + "</p>" +
+        esc((sheet.note || "")) +
+        (bust.traded_put ? " Traded put busts " + pct(bust.traded_put.bust_rate, false) +
+          " of " + (bust.traded_put.weeks || "—") + " weeks. " + esc(bust.traded_put.note || "") : "") +
+        "</p>" +
         '<div class="table-scroll"><table><thead><tr><th>Side</th><th>Delta</th><th class="num">Sheet</th>' +
         '<th class="num">Model, prior VXN</th><th class="num">Model, rounded strike</th></tr></thead><tbody>' +
         bustRows + "</tbody></table></div>" +
