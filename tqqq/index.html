@@ -646,6 +646,58 @@
             text-align: left;
         }
 
+        .page-warning {
+            margin: 0 0 8px;
+        }
+
+        .page-warning p:last-child {
+            margin-bottom: 0;
+        }
+
+        .original-fold {
+            margin: 8px 0 28px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            background: #FFFFFF;
+        }
+
+        .original-fold summary {
+            cursor: pointer;
+            padding: 14px 16px;
+            font-weight: 700;
+            font-size: 10.5pt;
+            line-height: 1.45;
+            color: #0F172A;
+            list-style: none;
+        }
+
+        .original-fold summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .original-fold summary::before {
+            content: "Show";
+            display: inline-block;
+            margin-right: 8px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #0F172A;
+            color: #FFFFFF;
+            font-size: 7.5pt;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            vertical-align: 2px;
+        }
+
+        .original-fold[open] summary::before {
+            content: "Hide";
+        }
+
+        .original-fold .fold-body {
+            padding: 0 12px 4px;
+        }
+
         /* Footer */
         .footer {
             margin-top: 48px;
@@ -699,6 +751,7 @@
             .legend-grid { grid-template-columns: 1fr; }
             .all-results h3 { font-size: 12pt; }
             .metric-switch button { flex: 1 1 100%; }
+            .original-fold summary { font-size: 10pt; padding: 12px; }
         }
     </style>
 </head>
@@ -747,6 +800,11 @@
         <div class="meta-item"><strong>DATA DATE:</strong> <span id="memo-date">Latest Backtest Lab close</span></div>
         <div class="meta-item"><strong>SUBJECT:</strong> 2-Bullet Asymmetric Strategy & 90/10 Hybrid Portfolio Specification</div>
         <div class="meta-item"><strong>ASSET ALLOCATION:</strong> 90% S&P 500 (SPY) / 10% Strategy Engine (TQQQ/MMF)</div>
+    </div>
+
+    <div class="callout page-warning">
+        <div class="callout-title">Read this first</div>
+        <p>The original table, folded lower on this page, is an older model. It starts at $200,000 and uses no haircut on the rebuilt pre-2010 3x data, so the pre-2010 rows are higher than the new tables. Those years use a rebuilt (simulated) 3x fund, not the listed fund.</p>
     </div>
 
     <h2>1. Executive Summary & Core Mandate</h2>
@@ -862,255 +920,13 @@
         <strong>2. Dry Powder Impairment Protection:</strong> Keeping Bullet 2 in an S&P 500 index fund rather than MMF reduces final strategy wealth by ~40%. When TQQQ touches its -80% trigger, broad equities are down -25% to -50%, forcing forced liquidation of equities at market troughs.
     </p>
 
-    <div class="page-break"></div>
-
-    <h2>4. Full Master Portfolio Simulation ($200,000 Inception)</h2>
-    <div class="callout" style="border-left-color: #0F172A;">
-        <div class="callout-title" style="color: #0F172A;">Backtest Lab engine (current rules)</div>
-        <p id="engine-summary" style="margin:0;">The same 90/10 two-bullet rule run by the Backtest Lab engine (50% and 80% triggers, 50/25/25 tranches, exit at 10&times; the cycle floor). Loading figures&hellip;</p>
-    </div>
-    <p><strong>Older separate model.</strong> Table 4.1 comes from an earlier spreadsheet model with its own pre-2010 TQQQ reconstruction. It was not produced by the Backtest Lab engine, and its figures do not match it. Use the engine figures above for the current rule.</p>
-    <p>
-        The table below models a <strong>$200,000 Total Starting Portfolio</strong> split into a <strong>90% S&P 500 Core ($180,000)</strong> and a <strong>10% TQQQ Asymmetric Engine ($20,000)</strong> across every sequential starting year from 1999 to 2022. All values reflect fully realized liquid balances as of August 2026 (older model).
-    </p>
-
-    <div style="font-size: 8pt; font-weight: 700; color: #475569; margin-top: 10px; text-transform: uppercase;">
-        Table 4.1: Multi-Decade Sequential Inception Matrix ($200,000 Initial Capital) &middot; Older separate model
-    </div>
-    <p class="results-scroll-hint">On a narrow screen, slide this table sideways. Every column and figure is unchanged.</p>
-    <div class="results-scroll">
-    <table>
-        <thead>
-            <tr>
-                <th>Inception Year</th>
-                <th>90% S&P 500 Core ($180k)</th>
-                <th>10% TQQQ Engine ($20k)</th>
-                <th>Final Combined Portfolio (2026)</th>
-                <th>Engine % Share</th>
-                <th>Combined CAGR</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>1999</strong></td>
-                <td>$1,360,000</td>
-                <td>$1,720,904</td>
-                <td><strong>$3,080,904</strong></td>
-                <td>55.9%</td>
-                <td><strong>~10.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2000</strong></td>
-                <td>$1,130,000</td>
-                <td>$1,720,904</td>
-                <td><strong>$2,850,904</strong></td>
-                <td>60.4%</td>
-                <td><strong>~10.6% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2001</strong></td>
-                <td>$1,242,000</td>
-                <td>$2,410,200</td>
-                <td><strong>$3,652,200</strong></td>
-                <td>66.0%</td>
-                <td><strong>~12.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2002</strong></td>
-                <td>$1,426,000</td>
-                <td>$3,084,000</td>
-                <td><strong>$4,510,000</strong></td>
-                <td>68.4%</td>
-                <td><strong>~13.6% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2003</strong></td>
-                <td>$1,818,000</td>
-                <td>$2,960,000</td>
-                <td><strong>$4,778,000</strong></td>
-                <td>62.0%</td>
-                <td><strong>~14.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2004</strong></td>
-                <td>$1,642,000</td>
-                <td>$2,816,444</td>
-                <td><strong>$4,458,444</strong></td>
-                <td>63.2%</td>
-                <td><strong>~14.7% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2005</strong></td>
-                <td>$1,605,600</td>
-                <td>$2,816,444</td>
-                <td><strong>$4,422,044</strong></td>
-                <td>63.7%</td>
-                <td><strong>~15.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2006</strong></td>
-                <td>$1,532,000</td>
-                <td>$2,816,444</td>
-                <td><strong>$4,348,444</strong></td>
-                <td>64.8%</td>
-                <td><strong>~16.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2007</strong></td>
-                <td>$1,442,000</td>
-                <td>$2,591,214</td>
-                <td><strong>$4,033,214</strong></td>
-                <td>64.2%</td>
-                <td><strong>~16.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2008</strong></td>
-                <td>$1,366,000</td>
-                <td>$2,512,000</td>
-                <td><strong>$3,878,000</strong></td>
-                <td>64.8%</td>
-                <td><strong>~17.3% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2009</strong></td>
-                <td>$2,162,000</td>
-                <td>$3,813,698</td>
-                <td><strong>$5,975,698</strong></td>
-                <td>63.8%</td>
-                <td><strong>~21.4% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2010</strong></td>
-                <td>$1,710,000</td>
-                <td>$3,700,000</td>
-                <td><strong>$5,410,000</strong></td>
-                <td>68.4%</td>
-                <td><strong>~22.0% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2011</strong></td>
-                <td>$1,486,000</td>
-                <td>$3,594,000</td>
-                <td><strong>$5,080,000</strong></td>
-                <td>70.7%</td>
-                <td><strong>~23.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2012</strong></td>
-                <td>$1,456,000</td>
-                <td>$683,600</td>
-                <td><strong>$2,139,600</strong></td>
-                <td>32.0%</td>
-                <td><strong>~17.7% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2013</strong></td>
-                <td>$1,255,000</td>
-                <td>$683,600</td>
-                <td><strong>$1,938,600</strong></td>
-                <td>35.3%</td>
-                <td><strong>~18.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2014</strong></td>
-                <td>$1,104,000</td>
-                <td>$670,200</td>
-                <td><strong>$1,774,200</strong></td>
-                <td>37.8%</td>
-                <td><strong>~19.0% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2015</strong></td>
-                <td>$970,000</td>
-                <td>$672,944</td>
-                <td><strong>$1,642,944</strong></td>
-                <td>41.0%</td>
-                <td><strong>~20.0% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2016</strong></td>
-                <td>$958,000</td>
-                <td>$672,944</td>
-                <td><strong>$1,630,944</strong></td>
-                <td>41.3%</td>
-                <td><strong>~21.9% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2017</strong></td>
-                <td>$786,000</td>
-                <td>$659,600</td>
-                <td><strong>$1,445,600</strong></td>
-                <td>45.6%</td>
-                <td><strong>~23.1% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2018</strong></td>
-                <td>$646,000</td>
-                <td>$653,600</td>
-                <td><strong>$1,299,600</strong></td>
-                <td>50.3%</td>
-                <td><strong>~24.4% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2019</strong></td>
-                <td>$676,000</td>
-                <td>$154,400</td>
-                <td><strong>$830,400</strong></td>
-                <td>18.6%</td>
-                <td><strong>~20.5% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2020</strong></td>
-                <td>$515,000</td>
-                <td>$154,400</td>
-                <td><strong>$669,400</strong></td>
-                <td>23.1%</td>
-                <td><strong>~19.8% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2021</strong></td>
-                <td>$392,000</td>
-                <td>$151,600</td>
-                <td><strong>$543,600</strong></td>
-                <td>27.9%</td>
-                <td><strong>~19.8% / yr</strong></td>
-            </tr>
-            <tr>
-                <td><strong>2022</strong></td>
-                <td>$478,000</td>
-                <td>$149,800</td>
-                <td><strong>$627,800</strong></td>
-                <td>23.9%</td>
-                <td><strong>~27.9% / yr</strong></td>
-            </tr>
-        </tbody>
-    </table>
-    </div>
-
-    <h2>5. Current Portfolio Status & Operational Directive</h2>
-    <p>
-        As of <strong id="live-close-date">the latest forward-test close</strong>, the satellite engine status is: 
-        <span class="status-badge" id="engine-status">Loading&hellip;</span>
-    </p>
-    
-    <div class="callout" style="border-left-color: #0F172A;">
-        <div class="callout-title" style="color: #0F172A;">Live Execution Thresholds</div>
-        <ul>
-            <li><strong>Cycle Completion:</strong> The 2022 Tech Bear market position hit its <strong>$80.80</strong> limit exit (10&times; a floor of $8.08, split-adjusted) on May 26, 2026. All shares were sold into Treasury MMF.</li>
-            <li><strong>Reference High-Water Mark (P<sub>ATH</sub>):</strong> <span id="tqqq-hwm" style="font-weight: 700;">&mdash;</span></li>
-            <li><strong>Next Bullet 1 Alert (-50% Trigger):</strong> <span id="bullet-1-trigger" style="font-weight: 700; color: #059669;">&mdash;</span></li>
-            <li><strong>Next Bullet 2 Alert (-80% Trigger):</strong> <span id="bullet-2-trigger" style="font-weight: 700; color: #DC2626;">&mdash;</span></li>
-            <li><strong>Forward Operational Directive:</strong> Maintain 90% in S&P 500 (SPY) and 10% in Treasury MMF. Await price alert at &le; <span id="bullet-1-directive">the Bullet 1 trigger</span>.</li>
-        </ul>
-    </div>
-
     <section class="reframe" id="jarvis-nassim-reframe" aria-label="The Jarvis/Nassim Reframe">
         <div class="reframe-badge">Jarvis reframe, not yet independently red-teamed</div>
         <h2>The Jarvis/Nassim Reframe</h2>
         <p class="reframe-lead">Keep the S&amp;P 500 as the core. Use a small pocket, and only a small pocket, to bet that the Nasdaq bounces back after a crash.</p>
         <p class="reframe-scope">Hypothetical $100,000 start. US-listed funds only. One published path, from the December 31, 2014 close to the October 14, 2026 close, restated at $100,000.</p>
         <p>
-            Nassim, the red-team agent, has reviewed the underlying numbers. He has not reviewed this reframing as a standalone rule. The memorandum and the results above are unchanged. This is a separate reading of them.
+            Nassim, the red-team agent, has reviewed the underlying numbers. He has not reviewed this reframing as a standalone rule. The memorandum on this page is unchanged. This is a separate reading of it.
         </p>
 
         <h3>The idea</h3>
@@ -1177,7 +993,7 @@
                     </tr>
                     <tr>
                         <td>May 26, 2026</td>
-                        <td>Sold both buys at the $80.80 limit already noted above.</td>
+                        <td>Sold both buys at the $80.80 limit noted in the live thresholds.</td>
                     </tr>
                 </tbody>
             </table>
@@ -1400,6 +1216,254 @@
         </div>
     </section>
 
+
+    <div class="page-break"></div>
+
+    <h2>4. Full Master Portfolio Simulation ($200,000 Inception)</h2>
+    <div class="callout" style="border-left-color: #0F172A;">
+        <div class="callout-title" style="color: #0F172A;">Backtest Lab engine (current rules)</div>
+        <p id="engine-summary" style="margin:0;">The same 90/10 two-bullet rule run by the Backtest Lab engine (50% and 80% triggers, 50/25/25 tranches, exit at 10&times; the cycle floor). Loading figures&hellip;</p>
+    </div>
+    <p><strong>Older separate model.</strong> Table 4.1 comes from an earlier spreadsheet model with its own pre-2010 TQQQ reconstruction. It was not produced by the Backtest Lab engine, and its figures do not match it. Use the engine figures above for the current rule.</p>
+    <p>
+        The table below models a <strong>$200,000 Total Starting Portfolio</strong> split into a <strong>90% S&P 500 Core ($180,000)</strong> and a <strong>10% TQQQ Asymmetric Engine ($20,000)</strong> across every sequential starting year from 1999 to 2022. All values reflect fully realized liquid balances as of August 2026 (older model).
+    </p>
+
+    <details class="original-fold">
+        <summary>Original table (older model: $200k start, no haircut on the rebuilt pre-2010 3x data)</summary>
+        <div class="fold-body">
+        <div style="font-size: 8pt; font-weight: 700; color: #475569; margin-top: 10px; text-transform: uppercase;">
+        Table 4.1: Multi-Decade Sequential Inception Matrix ($200,000 Initial Capital) &middot; Older separate model
+    </div>
+    <p class="results-scroll-hint">On a narrow screen, slide this table sideways. Every column and figure is unchanged.</p>
+    <div class="results-scroll">
+    <table>
+        <thead>
+            <tr>
+                <th>Inception Year</th>
+                <th>90% S&P 500 Core ($180k)</th>
+                <th>10% TQQQ Engine ($20k)</th>
+                <th>Final Combined Portfolio (2026)</th>
+                <th>Engine % Share</th>
+                <th>Combined CAGR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>1999</strong></td>
+                <td>$1,360,000</td>
+                <td>$1,720,904</td>
+                <td><strong>$3,080,904</strong></td>
+                <td>55.9%</td>
+                <td><strong>~10.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2000</strong></td>
+                <td>$1,130,000</td>
+                <td>$1,720,904</td>
+                <td><strong>$2,850,904</strong></td>
+                <td>60.4%</td>
+                <td><strong>~10.6% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2001</strong></td>
+                <td>$1,242,000</td>
+                <td>$2,410,200</td>
+                <td><strong>$3,652,200</strong></td>
+                <td>66.0%</td>
+                <td><strong>~12.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2002</strong></td>
+                <td>$1,426,000</td>
+                <td>$3,084,000</td>
+                <td><strong>$4,510,000</strong></td>
+                <td>68.4%</td>
+                <td><strong>~13.6% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2003</strong></td>
+                <td>$1,818,000</td>
+                <td>$2,960,000</td>
+                <td><strong>$4,778,000</strong></td>
+                <td>62.0%</td>
+                <td><strong>~14.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2004</strong></td>
+                <td>$1,642,000</td>
+                <td>$2,816,444</td>
+                <td><strong>$4,458,444</strong></td>
+                <td>63.2%</td>
+                <td><strong>~14.7% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2005</strong></td>
+                <td>$1,605,600</td>
+                <td>$2,816,444</td>
+                <td><strong>$4,422,044</strong></td>
+                <td>63.7%</td>
+                <td><strong>~15.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2006</strong></td>
+                <td>$1,532,000</td>
+                <td>$2,816,444</td>
+                <td><strong>$4,348,444</strong></td>
+                <td>64.8%</td>
+                <td><strong>~16.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2007</strong></td>
+                <td>$1,442,000</td>
+                <td>$2,591,214</td>
+                <td><strong>$4,033,214</strong></td>
+                <td>64.2%</td>
+                <td><strong>~16.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2008</strong></td>
+                <td>$1,366,000</td>
+                <td>$2,512,000</td>
+                <td><strong>$3,878,000</strong></td>
+                <td>64.8%</td>
+                <td><strong>~17.3% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2009</strong></td>
+                <td>$2,162,000</td>
+                <td>$3,813,698</td>
+                <td><strong>$5,975,698</strong></td>
+                <td>63.8%</td>
+                <td><strong>~21.4% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2010</strong></td>
+                <td>$1,710,000</td>
+                <td>$3,700,000</td>
+                <td><strong>$5,410,000</strong></td>
+                <td>68.4%</td>
+                <td><strong>~22.0% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2011</strong></td>
+                <td>$1,486,000</td>
+                <td>$3,594,000</td>
+                <td><strong>$5,080,000</strong></td>
+                <td>70.7%</td>
+                <td><strong>~23.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2012</strong></td>
+                <td>$1,456,000</td>
+                <td>$683,600</td>
+                <td><strong>$2,139,600</strong></td>
+                <td>32.0%</td>
+                <td><strong>~17.7% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2013</strong></td>
+                <td>$1,255,000</td>
+                <td>$683,600</td>
+                <td><strong>$1,938,600</strong></td>
+                <td>35.3%</td>
+                <td><strong>~18.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2014</strong></td>
+                <td>$1,104,000</td>
+                <td>$670,200</td>
+                <td><strong>$1,774,200</strong></td>
+                <td>37.8%</td>
+                <td><strong>~19.0% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2015</strong></td>
+                <td>$970,000</td>
+                <td>$672,944</td>
+                <td><strong>$1,642,944</strong></td>
+                <td>41.0%</td>
+                <td><strong>~20.0% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2016</strong></td>
+                <td>$958,000</td>
+                <td>$672,944</td>
+                <td><strong>$1,630,944</strong></td>
+                <td>41.3%</td>
+                <td><strong>~21.9% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2017</strong></td>
+                <td>$786,000</td>
+                <td>$659,600</td>
+                <td><strong>$1,445,600</strong></td>
+                <td>45.6%</td>
+                <td><strong>~23.1% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2018</strong></td>
+                <td>$646,000</td>
+                <td>$653,600</td>
+                <td><strong>$1,299,600</strong></td>
+                <td>50.3%</td>
+                <td><strong>~24.4% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2019</strong></td>
+                <td>$676,000</td>
+                <td>$154,400</td>
+                <td><strong>$830,400</strong></td>
+                <td>18.6%</td>
+                <td><strong>~20.5% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2020</strong></td>
+                <td>$515,000</td>
+                <td>$154,400</td>
+                <td><strong>$669,400</strong></td>
+                <td>23.1%</td>
+                <td><strong>~19.8% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2021</strong></td>
+                <td>$392,000</td>
+                <td>$151,600</td>
+                <td><strong>$543,600</strong></td>
+                <td>27.9%</td>
+                <td><strong>~19.8% / yr</strong></td>
+            </tr>
+            <tr>
+                <td><strong>2022</strong></td>
+                <td>$478,000</td>
+                <td>$149,800</td>
+                <td><strong>$627,800</strong></td>
+                <td>23.9%</td>
+                <td><strong>~27.9% / yr</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+        </div>
+    </details>
+
+    <h2>5. Current Portfolio Status & Operational Directive</h2>
+    <p>
+        As of <strong id="live-close-date">the latest forward-test close</strong>, the satellite engine status is: 
+        <span class="status-badge" id="engine-status">Loading&hellip;</span>
+    </p>
+    
+    <div class="callout" style="border-left-color: #0F172A;">
+        <div class="callout-title" style="color: #0F172A;">Live Execution Thresholds</div>
+        <ul>
+            <li><strong>Cycle Completion:</strong> The 2022 Tech Bear market position hit its <strong>$80.80</strong> limit exit (10&times; a floor of $8.08, split-adjusted) on May 26, 2026. All shares were sold into Treasury MMF.</li>
+            <li><strong>Reference High-Water Mark (P<sub>ATH</sub>):</strong> <span id="tqqq-hwm" style="font-weight: 700;">&mdash;</span></li>
+            <li><strong>Next Bullet 1 Alert (-50% Trigger):</strong> <span id="bullet-1-trigger" style="font-weight: 700; color: #059669;">&mdash;</span></li>
+            <li><strong>Next Bullet 2 Alert (-80% Trigger):</strong> <span id="bullet-2-trigger" style="font-weight: 700; color: #DC2626;">&mdash;</span></li>
+            <li><strong>Forward Operational Directive:</strong> Maintain 90% in S&P 500 (SPY) and 10% in Treasury MMF. Await price alert at &le; <span id="bullet-1-directive">the Bullet 1 trigger</span>.</li>
+        </ul>
+    </div>
+
     <div class="footer">
         CONFIDENTIAL — FOR INTERNAL INVESTMENT COMMITTEE USE ONLY — NOT FOR PUBLIC DISTRIBUTION
     </div>
@@ -1444,6 +1508,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadEngineState);
+
+    window.addEventListener('beforeprint', () => {
+        const fold = document.querySelector('.original-fold');
+        if (fold) fold.open = true;
+    });
 
     document.querySelectorAll('.metric-switch button').forEach((button) => {
         button.addEventListener('click', () => {
