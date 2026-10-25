@@ -351,6 +351,109 @@
             page-break-before: always;
         }
 
+        /* Separate closing note. The memorandum above is unchanged. */
+        .reframe {
+            margin-top: 56px;
+            padding-top: 4px;
+            border-top: 2px solid #0F172A;
+            page-break-before: always;
+        }
+
+        .reframe-badge {
+            display: inline-block;
+            max-width: 100%;
+            margin: 20px 0 0;
+            background: #0F172A;
+            color: #FFFFFF;
+            font-size: 8pt;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            line-height: 1.45;
+            padding: 6px 12px;
+            border-radius: 4px;
+            white-space: normal;
+        }
+
+        .results-scroll {
+            width: 100%;
+            max-width: 100%;
+            margin: 16px 0 24px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #94A3B8 #F1F5F9;
+        }
+
+        .results-scroll table {
+            margin: 0;
+        }
+
+        .results-scroll-hint {
+            display: none;
+            margin: 0 0 8px;
+            font-size: 8pt;
+            font-weight: 500;
+            letter-spacing: 0;
+            text-transform: none;
+            color: #64748B;
+            text-align: left;
+        }
+
+        .reframe h2 {
+            margin-top: 14px;
+        }
+
+        .reframe-lead {
+            font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+            font-size: 13.5pt;
+            font-weight: 500;
+            line-height: 1.45;
+            color: #0F172A;
+            text-align: left;
+            margin: 0 0 12px;
+        }
+
+        .reframe-scope {
+            font-size: 8.5pt;
+            color: #64748B;
+            text-align: left;
+            margin: 0 0 18px;
+        }
+
+        .reframe h3 {
+            font-size: 11pt;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 26px 0 8px;
+            letter-spacing: 0.2px;
+            page-break-after: avoid;
+        }
+
+        .reframe-table-label {
+            font-size: 8pt;
+            font-weight: 700;
+            color: #475569;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .reframe-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .reframe .callout li {
+            margin-bottom: 10px;
+        }
+
+        .reframe-badge,
+        .reframe-lead,
+        .reframe h3,
+        .reframe-table-label {
+            page-break-after: avoid;
+        }
+
         /* Footer */
         .footer {
             margin-top: 48px;
@@ -376,6 +479,9 @@
             .brand-header, .nav-header {
                 display: none;
             }
+            .results-scroll {
+                overflow: visible;
+            }
         }
 
         @media (max-width: 768px) {
@@ -385,6 +491,12 @@
             .brand-header { flex-direction: column; align-items: flex-start; gap: 12px; }
             .meta-grid { grid-template-columns: 1fr; }
             .comparison-box { grid-template-columns: 1fr; }
+            .reframe { margin-top: 40px; }
+            .reframe-lead { font-size: 13pt; }
+            .reframe h3 { font-size: 12pt; }
+            .reframe table { font-size: 9pt; }
+            .reframe th, .reframe td { padding: 8px 10px; }
+            .results-scroll-hint { display: block; }
         }
     </style>
 </head>
@@ -563,6 +675,8 @@
     <div style="font-size: 8pt; font-weight: 700; color: #475569; margin-top: 10px; text-transform: uppercase;">
         Table 4.1: Multi-Decade Sequential Inception Matrix ($200,000 Initial Capital) &middot; Older separate model
     </div>
+    <p class="results-scroll-hint">On a narrow screen, slide this table sideways. Every column and figure is unchanged.</p>
+    <div class="results-scroll">
     <table>
         <thead>
             <tr>
@@ -769,6 +883,7 @@
             </tr>
         </tbody>
     </table>
+    </div>
 
     <h2>5. Current Portfolio Status & Operational Directive</h2>
     <p>
@@ -786,6 +901,104 @@
             <li><strong>Forward Operational Directive:</strong> Maintain 90% in S&P 500 (SPY) and 10% in Treasury MMF. Await price alert at &le; <span id="bullet-1-directive">the Bullet 1 trigger</span>.</li>
         </ul>
     </div>
+
+    <section class="reframe" id="jarvis-nassim-reframe" aria-label="The Jarvis/Nassim Reframe">
+        <div class="reframe-badge">Jarvis reframe, not yet independently red-teamed</div>
+        <h2>The Jarvis/Nassim Reframe</h2>
+        <p class="reframe-lead">Keep the S&amp;P 500 as the core. Use a small pocket, and only a small pocket, to bet that the Nasdaq bounces back after a crash.</p>
+        <p class="reframe-scope">Hypothetical $100,000 start. US-listed funds only. One published path, from the December 31, 2014 close to the October 14, 2026 close, restated at $100,000.</p>
+        <p>
+            Nassim, the red-team agent, has reviewed the underlying numbers. He has not reviewed this reframing as a standalone rule. The memorandum and the results above are unchanged. This is a separate reading of them.
+        </p>
+
+        <h3>The idea</h3>
+        <p>
+            Keep about 90% in a plain S&amp;P 500 core, and leave it there. Hold about 10% as a pocket that buys the 3x fund only after a crash. The pocket is a bet that the Nasdaq bounces back. Do not switch the core to QQQ. The pocket is already that Nasdaq bet, and a QQQ core would put the rest of the portfolio into the same risk.
+        </p>
+
+        <h3>What the published path shows</h3>
+        <p>
+            The Backtest Lab file for this rule is one path in three US-listed funds: the S&amp;P 500 fund (SPY), the 3x fund (TQQQ), and a Treasury-bill fund standing in for the memo's money market fund. The file charges no trading cost, so a hypothetical $100,000 start grows at the same rate as the published path. Figures below are rounded to the nearest dollar.
+        </p>
+
+        <div class="comparison-box">
+            <div class="comp-col">
+                <h4>S&amp;P 500 alone</h4>
+                <ul>
+                    <li>Ends at <strong>$454,422</strong></li>
+                    <li>Grows at <strong>13.7% a year</strong></li>
+                    <li>Deepest drop <strong>33.7%</strong>, on March 23, 2020</li>
+                </ul>
+            </div>
+            <div class="comp-col">
+                <h4>S&amp;P 500 plus the pocket</h4>
+                <ul>
+                    <li>Ends at <strong>$609,879</strong></li>
+                    <li>Grows at <strong>16.6% a year</strong></li>
+                    <li>Deepest drop <strong>35.8%</strong>, on March 23, 2020</li>
+                </ul>
+            </div>
+        </div>
+
+        <p>
+            On this single path the mix finished about <strong>2.9 points a year</strong> ahead of the S&amp;P 500 alone. Its deepest drop was about <strong>2.1 points</strong> deeper than the core alone, and both bottoms fell on March 23, 2020. The lab file contains this start only. It is not a result for every start from 2010 to 2022, and it is not a result for every start from 1986 to 2022.
+        </p>
+        <p>
+            The pocket started buying three times, and only three times.
+        </p>
+
+        <div class="reframe-table-label">Pocket buys on the published path</div>
+        <div class="reframe-table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>What the pocket did</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>December 21, 2018</td>
+                        <td>Started the first buy, with the 3x fund 54.7% below its high.</td>
+                    </tr>
+                    <tr>
+                        <td>September 1, 2021</td>
+                        <td>Sold that buy at about $37.99, ten times its low.</td>
+                    </tr>
+                    <tr>
+                        <td>March 7, 2022</td>
+                        <td>Started the first buy again, 51.8% below the high.</td>
+                    </tr>
+                    <tr>
+                        <td>October 14, 2022</td>
+                        <td>Started the second buy, 80.2% below that same high.</td>
+                    </tr>
+                    <tr>
+                        <td>May 26, 2026</td>
+                        <td>Sold both buys at the $80.80 limit already noted above.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            Those are two round trips. The gain over the S&amp;P 500 on this path comes from those two trips, not from a long list of buys.
+        </p>
+        <p>
+            The lab uses the listed 3x fund only. This path starts at the end of 2014, after the fund's 2010 listing, and it does not rebuild a 3x series for earlier years. The table in section 4 is an older, separate model. This page already says those figures are not this engine, and this note does not restate them. The files also do not include a check that moves the buy levels, so no such check is reported here.
+        </p>
+
+        <div class="callout">
+            <div class="callout-title">How to read it</div>
+            <ul>
+                <li><strong>If it is timing luck.</strong> The pocket started buying on three dates and finished two round trips. A short record can look like a rule when it is only a couple of rebounds.</li>
+                <li><strong>If it depends on the era.</strong> This path sits in the years after 2014, and it includes the rebound from the 2022 buys. The file does not show a slow recovery, and it does not show another interest-rate backdrop.</li>
+                <li><strong>If it is just the Nasdaq beating the S&amp;P 500.</strong> The pocket is that bet, kept small, and taken only after a crash. Leave the core in the S&amp;P 500. Switching the core to QQQ would add Nasdaq risk on top of the pocket, and this file does not measure that switch.</li>
+                <li><strong>If it depends on rebuilt data from before 2010.</strong> Set that reading aside for this path. The lab uses the listed fund. The earlier table is a different model, with its own pre-2010 reconstruction.</li>
+                <li><strong>If you cannot sit through the drops.</strong> On this path the mix fell 35.8%, against 33.7% for the S&amp;P 500 alone. The memo already caps the pocket at 10%, because a very bad single day in the Nasdaq-100 can wipe out the 3x fund, and the pocket with it.</li>
+            </ul>
+        </div>
+    </section>
 
     <div class="footer">
         CONFIDENTIAL — FOR INTERNAL INVESTMENT COMMITTEE USE ONLY — NOT FOR PUBLIC DISTRIBUTION
