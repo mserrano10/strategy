@@ -454,6 +454,198 @@
             page-break-after: avoid;
         }
 
+        /* All-start-years layout. Cells stay pending until the corrected pack is in. */
+        .all-results {
+            margin-top: 48px;
+            padding-top: 4px;
+            border-top: 2px solid #0F172A;
+            page-break-before: always;
+        }
+
+        .all-results h2 {
+            margin-top: 16px;
+        }
+
+        .all-results h3 {
+            font-size: 11pt;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 26px 0 8px;
+            letter-spacing: 0.2px;
+            page-break-after: avoid;
+        }
+
+        .all-results .status-line {
+            font-size: 8.5pt;
+            color: #64748B;
+            text-align: left;
+            margin: 0 0 16px;
+        }
+
+        .caveat-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 20px;
+            margin: 8px 0 18px;
+        }
+
+        .legend-item {
+            font-size: 9pt;
+            color: #334155;
+            text-align: left;
+        }
+
+        .legend-item strong {
+            display: block;
+            color: #0F172A;
+            font-size: 9pt;
+            margin-bottom: 2px;
+        }
+
+        .metric-switch {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 8px 0 8px;
+        }
+
+        .metric-switch button {
+            font-family: inherit;
+            font-size: 8.5pt;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            border-radius: 6px;
+            border: 1px solid #CBD5E1;
+            background: #FAF9F6;
+            color: #0F172A;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .metric-switch button[aria-selected="true"] {
+            background: #0F172A;
+            color: #FFFFFF;
+            border-color: #0F172A;
+        }
+
+        .metric-lead {
+            font-size: 9pt;
+            color: #334155;
+            text-align: left;
+            margin: 0 0 12px;
+        }
+
+        .dollar-warning {
+            background: #FAF9F6;
+            border: 1px solid #E2E8F0;
+            border-left: 4px solid #0F172A;
+            border-radius: 0 8px 8px 0;
+            padding: 10px 14px;
+            font-size: 9pt;
+            text-align: left;
+            margin: 0 0 10px;
+        }
+
+        .table-scroll {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 0 8px;
+            scrollbar-width: thin;
+            scrollbar-color: #94A3B8 #F1F5F9;
+        }
+
+        .all-results table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: max-content;
+            min-width: 100%;
+            margin: 0;
+        }
+
+        .all-results th,
+        .all-results td {
+            white-space: nowrap;
+        }
+
+        .all-results th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .all-results th:first-child,
+        .all-results td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            text-align: left;
+            min-width: 76px;
+        }
+
+        .all-results th:first-child {
+            z-index: 3;
+            background: #0F172A;
+        }
+
+        .all-results td:first-child {
+            font-weight: 700;
+            color: #0F172A;
+            background: #FFFFFF;
+            box-shadow: 1px 0 0 #E2E8F0;
+        }
+
+        .all-results tbody tr:nth-child(even) td:first-child {
+            background: #FAF9F6;
+        }
+
+        .all-results td.is-best {
+            background: #ECFDF5;
+            color: #065F46;
+            font-weight: 700;
+        }
+
+        .all-results tr.rebuilt td:first-child {
+            box-shadow: inset 3px 0 0 #CBD5E1, 1px 0 0 #E2E8F0;
+        }
+
+        .all-results .tag {
+            display: inline-block;
+            margin-left: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
+            background: #E2E8F0;
+            color: #475569;
+            font-size: 7pt;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            vertical-align: 1px;
+        }
+
+        .pending {
+            color: #94A3B8;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        .scroll-hint {
+            font-size: 8pt;
+            color: #64748B;
+            text-align: left;
+            margin: 0 0 14px;
+        }
+
+        .summary-pending {
+            font-size: 9.5pt;
+            text-align: left;
+        }
+
         /* Footer */
         .footer {
             margin-top: 48px;
@@ -479,8 +671,15 @@
             .brand-header, .nav-header {
                 display: none;
             }
-            .results-scroll {
+            .results-scroll,
+            .table-scroll {
                 overflow: visible;
+            }
+            .all-results .metric-panel[hidden] {
+                display: block !important;
+            }
+            .metric-switch {
+                display: none;
             }
         }
 
@@ -497,6 +696,9 @@
             .reframe table { font-size: 9pt; }
             .reframe th, .reframe td { padding: 8px 10px; }
             .results-scroll-hint { display: block; }
+            .legend-grid { grid-template-columns: 1fr; }
+            .all-results h3 { font-size: 12pt; }
+            .metric-switch button { flex: 1 1 100%; }
         }
     </style>
 </head>
@@ -1000,6 +1202,204 @@
         </div>
     </section>
 
+
+    <section class="all-results" id="all-results" aria-label="All results, start year by start year">
+        <h2>All results, start year by start year ($100k)</h2>
+        <p class="status-line">Layout only. Every cell says Pending until the corrected figures are on the page. The note above is one published path. This block is the all-start-years view, and it is not filled in.</p>
+
+        <div class="callout caveat-box">
+            <div class="callout-title">Before you read the tables</div>
+            <p>This box is where the three caveats will sit. They are not written yet. Until they are here, do not treat anything in the grid as a result.</p>
+            <p>When the figures arrive, read <strong>growth per year</strong> first, then the <strong>ratio to the core</strong>. Ending dollars are a secondary view, and they are <strong>not comparable across start years</strong>. A start in 1986 has far more years to compound than a start in 2022.</p>
+            <p>Rebuilt years and day-one years will be marked on the start-year column once the corrected flags are in. A day-one mark will mean the pocket bought on the first day, so that row is not the rule waiting for a crash.</p>
+        </div>
+
+        <h3>What each column is</h3>
+        <div class="legend-grid">
+            <div class="legend-item"><strong>S&amp;P 500</strong> All $100,000 in the S&amp;P 500, dividends reinvested, bought once and left alone.</div>
+            <div class="legend-item"><strong>QQQ</strong> All $100,000 in the Nasdaq-100, dividends reinvested, bought once and left alone.</div>
+            <div class="legend-item"><strong>S&amp;P + pocket</strong> About $90,000 in the S&amp;P 500, never rebalanced, plus about $10,000 that waits in T-bills and buys the 3x fund only after a crash. This is the memo rule. First buy at a 50% fall, second at an 80% fall. Each buy round is three steps.</div>
+            <div class="legend-item"><strong>QQQ + pocket</strong> The same crash pocket, with the core in QQQ instead of the S&amp;P 500.</div>
+            <div class="legend-item"><strong>S&amp;P + held 3x</strong> About $90,000 in the S&amp;P 500 and about $10,000 in the 3x fund from the first day, never timed and never sold.</div>
+            <div class="legend-item"><strong>QQQ + held 3x</strong> The same always-held 3x slice, with a QQQ core. This is not the crash pocket.</div>
+            <div class="legend-item"><strong>S&amp;P + 10% QQQ</strong> About $90,000 in the S&amp;P 500 and about $10,000 in QQQ, bought once. No 3x fund and no timing.</div>
+            <div class="legend-item"><strong>S&amp;P + pocket B</strong> The memo rule, except the first buy is at a 30% fall rather than 50%.</div>
+            <div class="legend-item"><strong>QQQ + pocket B</strong> Pocket B with a QQQ core.</div>
+            <div class="legend-item"><strong>S&amp;P + pocket C</strong> The memo rule, except each buy is spread over two years in five equal steps.</div>
+            <div class="legend-item"><strong>QQQ + pocket C</strong> Pocket C with a QQQ core.</div>
+            <div class="legend-item"><strong>Cash control</strong> Column reserved. The plain-English definition arrives with the corrected pack. No figure is shown for it yet.</div>
+        </div>
+
+        <div class="metric-switch" role="tablist" aria-label="Choose a measure">
+            <button type="button" role="tab" id="tab-cagr" aria-controls="panel-cagr" aria-selected="true" data-metric="cagr">Growth per year</button>
+            <button type="button" role="tab" id="tab-ratio" aria-controls="panel-ratio" aria-selected="false" data-metric="ratio">Ratio to core</button>
+            <button type="button" role="tab" id="tab-value" aria-controls="panel-value" aria-selected="false" data-metric="value">Ending value</button>
+        </div>
+        <p class="metric-lead">Lead with growth per year, then the ratio to the core. Ending value is the third view. Dollars are not comparable across start years.</p>
+
+        <div class="metric-panel" id="panel-cagr" data-metric="cagr">
+            <div class="reframe-table-label">Growth per year</div>
+            
+            <div class="table-scroll">
+                <table>
+                    <thead><tr><th scope="col">Start year</th><th scope="col">S&P 500</th><th scope="col">QQQ</th><th scope="col">S&P + pocket</th><th scope="col">QQQ + pocket</th><th scope="col">S&P + held 3x</th><th scope="col">QQQ + held 3x</th><th scope="col">S&P + 10% QQQ</th><th scope="col">S&P + pocket B</th><th scope="col">QQQ + pocket B</th><th scope="col">S&P + pocket C</th><th scope="col">QQQ + pocket C</th><th scope="col">Cash control</th></tr></thead>
+                    <tbody>
+<tr><td class="year">1986</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1987</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1988</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1989</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1990</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1991</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1992</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1993</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1994</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1995</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1996</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1997</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1998</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1999</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2000</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2001</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2002</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2003</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2004</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2005</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2006</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2007</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2008</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2009</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2010</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2011</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2012</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2013</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2014</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2015</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2016</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2017</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2018</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2019</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2020</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2021</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2022</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="scroll-hint">Slide sideways to see every portfolio. The start year stays put.</p>
+        </div>
+        <div class="metric-panel" id="panel-ratio" data-metric="ratio" hidden>
+            <div class="reframe-table-label">Ratio to the core</div>
+            
+            <div class="table-scroll">
+                <table>
+                    <thead><tr><th scope="col">Start year</th><th scope="col">S&P 500</th><th scope="col">QQQ</th><th scope="col">S&P + pocket</th><th scope="col">QQQ + pocket</th><th scope="col">S&P + held 3x</th><th scope="col">QQQ + held 3x</th><th scope="col">S&P + 10% QQQ</th><th scope="col">S&P + pocket B</th><th scope="col">QQQ + pocket B</th><th scope="col">S&P + pocket C</th><th scope="col">QQQ + pocket C</th><th scope="col">Cash control</th></tr></thead>
+                    <tbody>
+<tr><td class="year">1986</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1987</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1988</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1989</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1990</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1991</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1992</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1993</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1994</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1995</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1996</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1997</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1998</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1999</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2000</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2001</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2002</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2003</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2004</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2005</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2006</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2007</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2008</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2009</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2010</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2011</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2012</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2013</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2014</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2015</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2016</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2017</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2018</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2019</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2020</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2021</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2022</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="scroll-hint">Slide sideways to see every portfolio. The start year stays put.</p>
+        </div>
+        <div class="metric-panel" id="panel-value" data-metric="value" hidden>
+            <div class="reframe-table-label">Ending value on $100,000</div>
+            <p class="dollar-warning"><strong>Not comparable across start years.</strong> These are ending dollars on a hypothetical $100,000. An early start has many more years to compound than a late one. Read growth per year first, then the ratio to the core.</p>
+            <div class="table-scroll">
+                <table>
+                    <thead><tr><th scope="col">Start year</th><th scope="col">S&P 500</th><th scope="col">QQQ</th><th scope="col">S&P + pocket</th><th scope="col">QQQ + pocket</th><th scope="col">S&P + held 3x</th><th scope="col">QQQ + held 3x</th><th scope="col">S&P + 10% QQQ</th><th scope="col">S&P + pocket B</th><th scope="col">QQQ + pocket B</th><th scope="col">S&P + pocket C</th><th scope="col">QQQ + pocket C</th><th scope="col">Cash control</th></tr></thead>
+                    <tbody>
+<tr><td class="year">1986</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1987</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1988</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1989</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1990</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1991</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1992</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1993</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1994</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1995</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1996</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1997</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1998</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">1999</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2000</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2001</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2002</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2003</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2004</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2005</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2006</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2007</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2008</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2009</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2010</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2011</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2012</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2013</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2014</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2015</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2016</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2017</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2018</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2019</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2020</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2021</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+<tr><td class="year">2022</td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td><td><span class="pending">Pending</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="scroll-hint">Slide sideways to see every portfolio. The start year stays put.</p>
+        </div>
+
+        <h3>Worst drop, in short</h3>
+        <p class="summary-pending">Pending. This block will show the deepest fall in the rebuilt years and in the real-fund years, plus the gap versus the core. It is empty until the corrected pack is in.</p>
+
+        <div class="callout">
+            <div class="callout-title">How to read the full set</div>
+            <ul>
+                <li><strong>If it is timing luck.</strong> Count buy rounds, not headlines. Each round is bought in steps. The counts are not on this page yet.</li>
+                <li><strong>If it depends on the era.</strong> Compare a rebuilt start year with a real-fund start year on growth per year. The era marks are not on the rows yet.</li>
+                <li><strong>If it is just the Nasdaq beating the S&amp;P 500.</strong> In one row, compare a QQQ core with an S&amp;P core using growth per year or the ratio to that core. Do not use ending dollars for that comparison across different start years.</li>
+                <li><strong>If it depends on rebuilt data.</strong> A rebuilt year is a model of the 3x fund, not the listed fund. The caveat box above is where that limit will be spelled out.</li>
+                <li><strong>If you cannot sit through the drops.</strong> Use the worst-drop summary, and the gap versus the core, once those figures are in. Ending dollars do not tell you the drop.</li>
+            </ul>
+        </div>
+    </section>
+
     <div class="footer">
         CONFIDENTIAL — FOR INTERNAL INVESTMENT COMMITTEE USE ONLY — NOT FOR PUBLIC DISTRIBUTION
     </div>
@@ -1044,6 +1444,18 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadEngineState);
+
+    document.querySelectorAll('.metric-switch button').forEach((button) => {
+        button.addEventListener('click', () => {
+            const metric = button.dataset.metric;
+            document.querySelectorAll('.metric-switch button').forEach((other) => {
+                other.setAttribute('aria-selected', other === button ? 'true' : 'false');
+            });
+            document.querySelectorAll('.all-results .metric-panel').forEach((panel) => {
+                panel.hidden = panel.dataset.metric !== metric;
+            });
+        });
+    });
 </script>
 
 </body>
