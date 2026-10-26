@@ -377,8 +377,9 @@
         .results-scroll {
             width: 100%;
             max-width: 100%;
+            max-height: 70vh;
             margin: 16px 0 24px;
-            overflow-x: auto;
+            overflow: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
             scrollbar-color: #94A3B8 #F1F5F9;
@@ -386,10 +387,21 @@
 
         .results-scroll table {
             margin: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: visible;
+            border-radius: 0;
+        }
+
+        .results-scroll thead th {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            background-color: #0F172A;
         }
 
         .results-scroll-hint {
-            display: none;
+            display: block;
             margin: 0 0 8px;
             font-size: 8pt;
             font-weight: 500;
@@ -553,7 +565,8 @@
         .table-scroll {
             width: 100%;
             max-width: 100%;
-            overflow-x: auto;
+            max-height: 70vh;
+            overflow: auto;
             -webkit-overflow-scrolling: touch;
             margin: 0 0 8px;
             scrollbar-width: thin;
@@ -578,7 +591,8 @@
         .all-results th {
             position: sticky;
             top: 0;
-            z-index: 1;
+            z-index: 4;
+            background-color: #0F172A;
         }
 
         .all-results th:first-child,
@@ -638,7 +652,8 @@
         }
 
         .all-results th:first-child {
-            z-index: 3;
+            z-index: 6;
+            top: 0;
             background: #0F172A;
         }
 
@@ -703,14 +718,14 @@
             margin-bottom: 0;
         }
 
-        .original-fold {
-            margin: 8px 0 28px;
+        .fold {
+            margin: 0 0 12px;
             border: 1px solid #E2E8F0;
             border-radius: 8px;
             background: #FFFFFF;
         }
 
-        .original-fold summary {
+        .fold summary {
             cursor: pointer;
             padding: 14px 16px;
             font-weight: 700;
@@ -720,11 +735,11 @@
             list-style: none;
         }
 
-        .original-fold summary::-webkit-details-marker {
+        .fold summary::-webkit-details-marker {
             display: none;
         }
 
-        .original-fold summary::before {
+        .fold summary::before {
             content: "Show";
             display: inline-block;
             margin-right: 8px;
@@ -739,12 +754,49 @@
             vertical-align: 2px;
         }
 
-        .original-fold[open] summary::before {
+        .fold[open] summary::before {
             content: "Hide";
         }
 
-        .original-fold .fold-body {
+        .fold .fold-body {
             padding: 0 12px 4px;
+        }
+
+        .fold-body > h2:first-child {
+            margin-top: 8px;
+        }
+
+        .fold-body > h3:first-child {
+            margin-top: 4px;
+        }
+
+        .fold-body > .callout:first-child {
+            margin-top: 0;
+        }
+
+        .fold .fold {
+            margin-top: 12px;
+        }
+
+        .fold .reframe {
+            margin-top: 8px;
+            border-top: none;
+            page-break-before: auto;
+        }
+
+        .bottom-line li {
+            margin-bottom: 8px;
+        }
+
+        .bottom-line p {
+            text-align: left;
+            margin: 12px 0 0;
+        }
+
+        .bottom-line a {
+            color: #0F172A;
+            font-weight: 600;
+            text-underline-offset: 2px;
         }
 
         /* Footer */
@@ -774,7 +826,16 @@
             }
             .results-scroll,
             .table-scroll {
+                max-height: none;
                 overflow: visible;
+            }
+            .fold .reframe {
+                margin-top: 56px;
+                border-top: 2px solid #0F172A;
+                page-break-before: always;
+            }
+            .fold summary::before {
+                display: none;
             }
             .all-results .metric-panel[hidden] {
                 display: block !important;
@@ -796,11 +857,10 @@
             .reframe h3 { font-size: 12pt; }
             .reframe table { font-size: 9pt; }
             .reframe th, .reframe td { padding: 8px 10px; }
-            .results-scroll-hint { display: block; }
             .legend-grid { grid-template-columns: 1fr; }
             .all-results h3 { font-size: 12pt; }
             .metric-switch button { flex: 1 1 100%; }
-            .original-fold summary { font-size: 10pt; padding: 12px; }
+            .fold summary { font-size: 10pt; padding: 12px; }
         }
     </style>
 </head>
@@ -855,6 +915,22 @@
         <div class="callout-title">Read this first</div>
         <p>The original table below is kept for the record only. It is higher than the corrected tables above in every start year, including recent ones (for example the 2014 start shows 19.0% a year against about 17.0% corrected). It could not be reproduced from real data. Use the tables above.</p>
     </div>
+
+    <div class="callout bottom-line">
+        <div class="callout-title">Bottom line</div>
+        <ul>
+            <li>The pocket rule is not shown to work. It did not pass its own test, so it should not be acted on as a strategy.</li>
+            <li>Most of the wins come from holding a 3x fund through a long bull market. Holding that fund from day one, with no timing, beats the S&amp;P 500 core in 32 of 37 starts. The pocket rule beats that plain held version in only 16 of 37 starts (6 of 13 from 2010).</li>
+            <li>The 37 start years are not 37 tests. The 13 starts from 2010 rest on the same 3 crashes: late 2018, March 2020, and 2022. The older starts use a modelled 3x fund, because the real fund did not exist yet.</li>
+            <li>The biggest results are lucky start dates. In the 10 older starts that are not those lucky dates, the pocket ends below its S&amp;P 500 core in 9 of them, and only 0.1% to 14.0% above simply keeping the 10% in T-bills.</li>
+            <li>The risk is real. A 3x fund can lose 80% to 99%. The pocket is re-bet after each sale, so its loss is not capped at $10,000.</li>
+        </ul>
+        <p><a href="#all-results">The full grid of every start year is further down this page.</a></p>
+    </div>
+
+    <details class="fold">
+        <summary>The original write-up of the rule</summary>
+        <div class="fold-body">
 
     <h2>1. Executive Summary & Core Mandate</h2>
     <p>
@@ -969,6 +1045,13 @@
         <strong>2. Dry Powder Impairment Protection:</strong> Keeping Bullet 2 in an S&P 500 index fund rather than MMF reduces final strategy wealth by ~40%. When TQQQ touches its -80% trigger, broad equities are down -25% to -50%, forcing forced liquidation of equities at market troughs.
     </p>
 
+        </div>
+    </details>
+
+    <details class="fold">
+        <summary>One example, from late 2014 to October 2026</summary>
+        <div class="fold-body">
+
     <section class="reframe" id="jarvis-nassim-reframe" aria-label="The Jarvis/Nassim Reframe">
         <div class="reframe-badge">Jarvis reframe, not yet independently red-teamed</div>
         <h2>The Jarvis/Nassim Reframe</h2>
@@ -1067,18 +1150,28 @@
         </div>
     </section>
 
+        </div>
+    </details>
 
     <section class="all-results" id="all-results" aria-label="All results, start year by start year">
         <h2>All results, start year by start year ($100k)</h2>
         <p class="status-line">Hypothetical $100,000. One row per start year, 1986 to 2022, valued at the October 21, 2026 close. The 2010 row begins on February 11, 2010. The note above is one published path and ends on a different date. Before February 2010 the modelled 3x fund in these tables is cut by an extra 1.5% a year. Starts from 2010 use the listed fund and are not cut.</p>
 
+        <details class="fold">
+            <summary>The longer notes before the grid</summary>
+            <div class="fold-body">
         <div class="callout caveat-box">
             <div class="callout-title">Before you read the tables</div>
             <p>1. <strong>This is not 37 tests.</strong> The 37 start years overlap heavily and move together. In the real TQQQ era (13 starts, 2010 to 2022) the pocket beats the S&amp;P 500 core in 13 of 13 starts, but all 13 rest on the same 3 crash episodes (late 2018, March 2020, 2022), and every start from 2010 to 2018 makes exactly the same trades. The 24 starts from 1986 to 2009 use a modelled 3x Nasdaq-100 fund, because TQQQ did not exist. They rest on 4 distinct modelled crash episodes, plus 4 later re-buys that happen only because the modelled fund never got back to its 2000 peak. Counting 37 results as 37 pieces of evidence overstates the case.</p>
             <p>2. <strong>Most of the wins are leverage and lucky starting points, not the rule, and the rule did not pass its own test.</strong> With an S&amp;P 500 core the pocket ends above the core in 25 of 37 starts, but 4 are close calls, so the clear wins are 21 (15 to 25 depending on the end date). Holding the 3x fund from day one with no timing beats the S&amp;P 500 core in 32 of 37 starts and the QQQ core in 21 of 37, while the pocket beats that held fund in only 16 of 37 (6 of 13 from 2010): most of &quot;the pocket beats its core&quot; is 3x leverage in a long bull market, not the pocket rule. The biggest results are day-one artefacts: the 3x fund was already more than 50% below its high, or the first buy came within 10 trading days (15 of 37 starts, an arbitrary cut-off; up to 9.9 times the S&amp;P 500 core). Without them, in the 10 pre-2010 starts left the pocket ends below its S&amp;P 500 core in 9 and below its QQQ core in all 10, only 0.1% to 14.0% above a control that keeps the 10% in T-bills. The rule failed the pre-registered robustness test, and falls from 6 to 5 of 8 events without the 1997 to 2000 bubble. A variant that buys earlier (B) passed the pre-registered wording, but it was one of three tried, it also falls to 5 of 8 without that bubble, and it beat held 3x in only 6 of 8 events with a negative average. B is a hypothesis, not a rule or a result.</p>
             <p>3. <strong>The pocket is 10% only on day one, the loss is not capped at $10,000, and the end values flatter the real-era starts.</strong> After every sale the whole pocket is re-bet, so it grows with winnings and by the end date is up to 91% of the portfolio. A 3x fund can lose 80% to 99%: real TQQQ fell 81.8% in 2022 and the modelled fund fell 99.98% from 2000 to 2009. The -75.8% fall (2009 start, 2021-11-19 to 2022-12-28, against -33.7% for the S&amp;P 500 alone) is the worst only for the pocket with an S&amp;P 500 core. With a QQQ core the pocket fell 85.8%, pocket version B fell 85.9% (S&amp;P 500 core) and 89.8% (QQQ core), and holding the 3x fund from day one fell 96.5%. For the 2010 to 2018 starts the pocket sold everything at 10 times the low on 2026-05-26 and has held about $280,000 in T-bills since (24.5% to 48.4% of the portfolio with an S&amp;P 500 core), so the end values are measured just after a sale near a peak, with the pocket out of the market. Results are hypothetical, before taxes and trading costs, and every sale at 10 times the low is a taxable gain.</p>
         </div>
+            </div>
+        </details>
 
+        <details class="fold">
+            <summary>Words used on this page</summary>
+            <div class="fold-body">
         <div class="callout plain-words">
             <div class="callout-title">Plain words</div>
             <p><strong>Core.</strong> The 90% of the money that is simply bought once and never touched: the S&amp;P 500 (S&amp;P core) or the Nasdaq-100 through QQQ (QQQ core). &quot;Core held alone&quot; means the whole $100,000 in that index.</p>
@@ -1090,7 +1183,12 @@
             <p><strong>Close call.</strong> An ending value within 7.6% of the comparison. Treat it as a tie.</p>
             <p><strong>Control.</strong> 90% core plus 10% T-bills that are never invested.</p>
         </div>
+            </div>
+        </details>
 
+        <details class="fold">
+            <summary>What each column means</summary>
+            <div class="fold-body">
         <h3>What each column is</h3>
         <div class="legend-grid">
             <div class="legend-item"><strong>S&amp;P 500</strong> All $100,000 in the S&amp;P 500, dividends reinvested, bought once, never touched.</div>
@@ -1107,6 +1205,8 @@
             <div class="legend-item"><strong>S&amp;P + pocket C</strong> Version A triggers, but each half of the pocket is bought in 5 equal steps over 2 years instead of 3 steps over 60 days. The column is shown in the grid. It is not evidence.</div>
             <div class="legend-item"><strong>QQQ + pocket C</strong> The same as pocket C, with a QQQ core. The column is shown in the grid. It is not evidence.</div>
         </div>
+            </div>
+        </details>
 
         <p class="mark-key"><span class="tag">modelled</span> on the start year means that year uses the modelled 3x fund, before February 2010. <span class="tag dayone">day-one</span> on a cell means the day-one artefact flag is set for that portfolio and that start. The flag is not the same in every column, so the mark sits on the cell. <span class="tag tie">close</span> means the ending value is within 7.6% of the core held alone. Treat a close call as a tie.</p>
 
@@ -1164,7 +1264,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="scroll-hint">Slide sideways to see every portfolio. The start year stays put.</p>
+            <p class="scroll-hint">Scroll down the rows and the column names stay in place. Slide sideways to see every portfolio. The start year stays put.</p>
         </div>
         <div class="metric-panel" id="panel-ratio" data-metric="ratio" hidden>
             <div class="reframe-table-label">Ratio to the core</div>
@@ -1212,7 +1312,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="scroll-hint">Slide sideways to see every portfolio. The start year stays put.</p>
+            <p class="scroll-hint">Scroll down the rows and the column names stay in place. Slide sideways to see every portfolio. The start year stays put.</p>
         </div>
         <div class="metric-panel" id="panel-value" data-metric="value" hidden>
             <div class="reframe-table-label">Ending value on $100,000</div>
@@ -1261,7 +1361,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="scroll-hint">Slide sideways to see every portfolio. The start year stays put.</p>
+            <p class="scroll-hint">Scroll down the rows and the column names stay in place. Slide sideways to see every portfolio. The start year stays put.</p>
         </div>
         <div class="metric-panel" id="panel-dd" data-metric="dd" hidden>
             <div class="reframe-table-label">Worst drop</div>
@@ -1310,9 +1410,12 @@
                     </tbody>
                 </table>
             </div>
-            <p class="scroll-hint">Slide sideways to see every portfolio. The start year stays put.</p>
+            <p class="scroll-hint">Scroll down the rows and the column names stay in place. Slide sideways to see every portfolio. The start year stays put.</p>
         </div>
 
+        <details class="fold">
+            <summary>How to read the grid</summary>
+            <div class="fold-body">
         <div class="callout">
             <div class="callout-title">How to read the full set</div>
             <ul>
@@ -1323,10 +1426,16 @@
                 <li><strong>If you cannot sit through the drops.</strong> Use the worst-drop view. Ending dollars do not show the fall. Read the third caveat before treating an ending value as the whole story.</li>
             </ul>
         </div>
+            </div>
+        </details>
     </section>
 
 
     <div class="page-break"></div>
+
+    <details class="fold">
+        <summary>The older $200,000 simulation, kept for the record</summary>
+        <div class="fold-body">
 
     <h2>4. Full Master Portfolio Simulation ($200,000 Inception)</h2>
     <div class="callout" style="border-left-color: #0F172A;">
@@ -1338,13 +1447,13 @@
         The table below models a <strong>$200,000 Total Starting Portfolio</strong> split into a <strong>90% S&P 500 Core ($180,000)</strong> and a <strong>10% TQQQ Asymmetric Engine ($20,000)</strong> across every sequential starting year from 1999 to 2022. All values reflect fully realized liquid balances as of August 2026 (older model).
     </p>
 
-    <details class="original-fold">
+    <details class="fold">
         <summary>Original table (older model, overstated, kept for the record only)</summary>
         <div class="fold-body">
         <div style="font-size: 8pt; font-weight: 700; color: #475569; margin-top: 10px; text-transform: uppercase;">
         Table 4.1: Multi-Decade Sequential Inception Matrix ($200,000 Initial Capital) &middot; Older separate model
     </div>
-    <p class="results-scroll-hint">On a narrow screen, slide this table sideways. Every column and figure is unchanged.</p>
+    <p class="results-scroll-hint">Scroll down and the column names stay in place. On a narrow screen, slide sideways. Every column and figure is unchanged.</p>
     <div class="results-scroll">
     <table>
         <thead>
@@ -1556,6 +1665,9 @@
         </div>
     </details>
 
+        </div>
+    </details>
+
     <h2>5. Current Portfolio Status & Operational Directive</h2>
     <p>
         As of <strong id="live-close-date">the latest forward-test close</strong>, the satellite engine status is: 
@@ -1619,8 +1731,15 @@
     document.addEventListener('DOMContentLoaded', loadEngineState);
 
     window.addEventListener('beforeprint', () => {
-        const fold = document.querySelector('.original-fold');
-        if (fold) fold.open = true;
+        document.querySelectorAll('details.fold').forEach((fold) => {
+            fold.dataset.wasOpen = fold.open ? 'true' : 'false';
+            fold.open = true;
+        });
+    });
+    window.addEventListener('afterprint', () => {
+        document.querySelectorAll('details.fold').forEach((fold) => {
+            fold.open = fold.dataset.wasOpen === 'true';
+        });
     });
 
     document.querySelectorAll('.metric-switch button').forEach((button) => {
