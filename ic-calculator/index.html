@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QQQ Weekly Iron Condor Pre-Trade Desk — Atlas Wealth</title>
+    <meta name="robots" content="noindex, nofollow">
+    <title>QQQ Weekly Iron Condor Calculator — Atlas Wealth</title>
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%230F172A'/></svg>">
 
@@ -53,6 +54,7 @@
             letter-spacing: 3px;
             text-transform: uppercase;
             color: #0F172A;
+            white-space: nowrap;
         }
 
         .brand-name-atlas { font-weight: 800; }
@@ -163,7 +165,7 @@
             display: inline;
             min-height: 0;
             margin: 0;
-            color: #94A3B8;
+            color: #475569;
             font-weight: 500;
         }
 
@@ -380,7 +382,7 @@
             font-weight: 700;
             letter-spacing: 0.05em;
             text-transform: uppercase;
-            color: #94A3B8;
+            color: #475569;
             padding-bottom: 6px;
             border-bottom: 1px solid #E2E8F0;
         }
@@ -603,7 +605,7 @@
         }
         .eject-line .px.range { font-size: 12pt; }
         .eject-line .px.over { color: #B45309; }
-        .eject-line .px.quiet { color: #94A3B8; font-weight: 600; }
+        .eject-line .px.quiet { color: #475569; font-weight: 600; }
         .eject-line .cmp { color: #475569; min-width: 0; }
 
         .formula {
@@ -642,7 +644,7 @@
             margin-top: 28px;
             padding-top: 14px;
             border-top: 1px solid #E2E8F0;
-            color: #94A3B8;
+            color: #475569;
             font-size: 8pt;
             text-align: center;
         }
@@ -698,7 +700,7 @@
                 <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEA<span class="brand-slash">\</span>TH</span>
             </span>
         </a>
-        <div class="desk-badge">Pre-Trade Engine</div>
+        <div class="desk-badge">Calculator</div>
     </div>
 
     <div class="nav-header">
@@ -1054,7 +1056,7 @@ function render() {
     let tradedPut = NaN;
     if (isFinite(put030) && isFinite(sigPut) && isFinite(W)) {
         tradedPut = Math.min(Math.round(put030), Math.round(sigPut));
-        $("desk-line").innerHTML = "Desk put <b>" + tradedPut + "</b> is the further of <b>" + Math.round(put030)
+        $("desk-line").innerHTML = "Put <b>" + tradedPut + "</b> is the further of <b>" + Math.round(put030)
             + "</b> at 0.030 and <b>" + Math.round(sigPut) + "</b> at " + zUse.toFixed(2) + "σ. Calls are off by rule. Wings are " + W + " points.";
     } else {
         $("desk-line").textContent = "Enter spot, Header IV, VXN, and DTE to place the desk strikes.";

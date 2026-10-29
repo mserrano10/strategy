@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlas Wealth — Strategy & Quantitative Portal</title>
+    <meta name="robots" content="noindex, nofollow">
+    <title>Atlas Wealth — Personal research</title>
 
     <!-- Embedded Geometric Atlas SVG Favicon (Monochrome) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%230F172A'/></svg>">
@@ -49,6 +50,7 @@
             letter-spacing: 3.5px;
             text-transform: uppercase;
             color: #0F172A;
+            white-space: nowrap;
         }
 
         .brand-name-atlas { font-weight: 800; }
@@ -157,7 +159,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 8.5pt;
-            color: #94A3B8;
+            color: #475569;
         }
 
         footer a { color: #0F172A; text-decoration: none; font-weight: 600; }
@@ -165,6 +167,8 @@
 
         @media (max-width: 768px) {
             body { padding: 36px 24px; }
+            header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .column-header { flex-wrap: wrap; gap: 8px; }
             .dual-grid { grid-template-columns: 1fr; gap: 40px; }
         }
     </style>
@@ -182,58 +186,57 @@
                 <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEA<span class="brand-slash">\</span>TH</span>
             </span>
         </a>
-        <div class="portal-label">Strategy & Research Portal</div>
+        <div class="portal-label">Personal research</div>
     </header>
 
     <main>
-        <div class="page-title">Quantitative Framework & Operational Desks</div>
+        <div class="page-title">Notes and tools</div>
 
         <div class="dual-grid">
             
             <!-- Column 1: Core Research & Policy -->
             <div>
                 <div class="column-header">
-                    <span>01 · Policy & Backtests</span>
-                    <span>Research Papers</span>
+                    <span>01 · Notes</span>
+                    <span>Writing</span>
                 </div>
                 <div class="item-list">
                     <a href="/principles/" class="card">
-                        <div class="card-tag">Policy Document</div>
+                        <div class="card-tag">Note</div>
                         <div class="card-title">Principles of Investing <span>→</span></div>
-                        <div class="card-desc">Core capital allocation philosophy, valuation heuristics, purchasing power expansion, and structural risk controls.</div>
+                        <div class="card-desc">Notes on owning businesses, price, and risk. Personal research.</div>
                     </a>
 
                     <a href="/sigfried/" class="card">
-                        <div class="card-tag">Quantitative Thesis</div>
+                        <div class="card-tag">Note</div>
                         <div class="card-title">Strategy Backtest <span>→</span></div>
-                        <div class="card-desc">Empirical foundation, raw asset selection backtest results.</div>
+                        <div class="card-desc">A backtest of the stock-selection rules, kept for my own reference.</div>
                     </a>
 
                     <a href="/tqqq/" class="card">
-                        <div class="card-tag">Strategy Memorandum</div>
-                        <div class="card-title">TQQQ Two-Bullet 90/10 Strategy <span>→</span></div>
-                        <div class="card-desc">Drawdown-triggered TQQQ entries on a 90% SPY core, 50/25/25 tranches, a 10&times; cycle-floor exit, and the live trigger levels.</div>
+                        <div class="card-tag">Note</div>
+                        <div class="card-title">TQQQ two-bullet note <span>→</span></div>
+                        <div class="card-desc">The pocket rule is not shown to work. It did not pass its own test, so it should not be acted on as a strategy.</div>
                     </a>
                 </div>
             </div>
 
-            <!-- Column 2: Execution Engines & Tools -->
             <div>
                 <div class="column-header">
-                    <span>02 · Execution Desks</span>
-                    <span>Interactive Engines</span>
+                    <span>02 · Tools</span>
+                    <span>Calculators</span>
                 </div>
                 <div class="item-list">
                     <a href="/ic-calculator/" class="card">
-                        <div class="card-tag tool">Interactive Pre-Trade Desk</div>
+                        <div class="card-tag tool">Calculator</div>
                         <div class="card-title">QQQ Iron Condor Calculator <span>→</span></div>
-                        <div class="card-desc">Sigma-defined strike selection engine calibrated with Black-Scholes Delta matrix and live VXN regime gates.</div>
+                        <div class="card-desc">A calculator for weekly QQQ iron condor strikes. For my own research.</div>
                     </a>
                     <a href="/heat-index/" class="card">
-    <div class="card-tag tool">Interactive Analytics Engine</div>
-    <div class="card-title">Macro Valuation Heat Desk <span>→</span></div>
-    <div class="card-desc">Real-time aggregate valuation engine combining CAPE, Buffett Indicator, Tobin's Q (NCBCEPNW), and Market Structure breadths.</div>
-</a>
+                        <div class="card-tag tool">Worksheet</div>
+                        <div class="card-title">Macro valuation worksheet <span>→</span></div>
+                        <div class="card-desc">CAPE, the Buffett indicator, Tobin's Q, trailing P/E, and a market-breadth state. Each figure is dated.</div>
+                    </a>
                 </div>
             </div>
 
