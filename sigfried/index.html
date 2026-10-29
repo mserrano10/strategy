@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Investment Thesis — Atlas Wealth</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%230F172A'/></svg>">
 
@@ -62,6 +62,7 @@
             letter-spacing: 3.5px;
             text-transform: uppercase;
             color: #0F172A;
+            white-space: nowrap;
         }
 
         .brand-name-atlas { font-weight: 800; }
@@ -164,7 +165,7 @@
             margin-top: 0;
             margin-bottom: 16px;
             color: #334155;
-            text-align: justify;
+            text-align: left;
         }
 
         .principle-card {
@@ -244,7 +245,7 @@
         th:first-child, td:first-child { text-align: left; }
         tr:nth-child(even) td { background-color: #FAF9F6; }
 
-        .pos { color: #059669; font-weight: 700; }
+        .pos { color: #047857; font-weight: 700; }
         .neg { color: #DC2626; font-weight: 700; }
 
         blockquote {
@@ -260,8 +261,47 @@
 
         .note {
             font-size: 8pt;
-            color: #64748B;
+            color: #475569;
             margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .spread-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .spread-row {
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr) 52px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .spread-year,
+        .spread-val {
+            font-size: 11px;
+            font-weight: 700;
+            color: #0F172A;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .spread-val { text-align: right; }
+
+        .spread-track {
+            height: 10px;
+            background: #E2E8F0;
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .spread-fill {
+            display: block;
+            height: 100%;
+            background: #334155;
+            border-radius: 99px;
         }
 
         /* Footer Nav */
@@ -272,7 +312,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 8.5pt;
-            color: #94A3B8;
+            color: #475569;
         }
 
         footer a { color: #0F172A; text-decoration: none; font-weight: 600; }
@@ -318,7 +358,7 @@
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            Download PDF
+            Print / Save as PDF
         </button>
     </div>
 
@@ -359,8 +399,7 @@
     <ul class="edge-list">
         <li><strong>Volatility Tolerance:</strong> Unconcerned with short-term volatility. It is simply the price of admission.</li>
         <li><strong>Unconstrained Time Horizon:</strong> Fully comfortable sitting on hands for extended periods and looking foolish when required. No quarterly earnings pressure or analyst metrics.</li>
-        <li><strong>Performance Alignment:</strong> Zero management fees means performance is everything.</li>
-        <li><strong>Skin in the Game:</strong> We invest our own capital alongside our thesis.</li>
+        <li><strong>Own research:</strong> These notes are ideas for my own money. They are not an offer to manage anyone else's, and they do not invite anyone to invest with me.</li>
     </ul>
 
     <h2>Performance Backtest Data</h2>
@@ -392,26 +431,37 @@
             <tr><td>2021</td><td>5.43%</td><td>5.85%</td><td>6.81%</td><td class="neg">-0.41%</td></tr>
             <tr><td>2022</td><td>11.78%</td><td>15.95%</td><td>16.70%</td><td class="neg">-4.17%</td></tr>
             <tr><td>2023</td><td>11.52%</td><td>11.99%</td><td>12.18%</td><td class="neg">-0.48%</td></tr>
-            <tr><td>2024</td><td>6.87%</td><td>1.72%</td><td>0.66%</td><td class="pos">+5.15%</td></tr>
+            <tr><td>2024</td><td>6.87%</td><td>1.72%</td><td>2.37%</td><td class="pos">+5.15%</td></tr>
         </tbody>
     </table>
-    <div class="note">* Analysis ending June 2025. 2024 represents actual data portfolio performance (non-backtested).</div>
+    <div class="note">* Rows through 2023 are annualized from that year-end to June 2025. The 2024 row is different: the first cell is actual portfolio performance (not a backtest), and the two S&amp;P cells are the simple change from the 31 Dec 2024 close to the 17 June 2025 close, not an annualized rate. Price is the S&amp;P 500 price index. Total return is the S&amp;P 500 total-return index. Checked on Yahoo Finance on 29 Oct 2026: the price change is +1.72%, which matches this row, and the total-return change is +2.37%. The old total-return cell of +0.66% was wrong. It sat below the price change, which a total-return index cannot do. Over / under is still the first column minus the price column.</div>
 
     <blockquote>“Time is the friend of the wonderful business.”</blockquote>
 
     <h2>5-Year Rolling Avg. of Portfolio Over-performance to index</h2>
     
     <div style="background: #FAF9F6; border: 1px solid #E2E8F0; border-radius: 8px; padding: 24px; margin: 20px 0;">
-        <div style="position: relative; height: 300px; width: 100%;">
-            <canvas id="rollingAvgChart"></canvas>
+        <div class="spread-chart" aria-label="Five-year average of the over or under column">
+            <div class="spread-row"><span class="spread-year">2024</span><span class="spread-track"><span class="spread-fill" style="width:0.8%"></span></span><span class="spread-val">0.08%</span></div>
+            <div class="spread-row"><span class="spread-year">2023</span><span class="spread-track"><span class="spread-fill" style="width:9.8%"></span></span><span class="spread-val">0.98%</span></div>
+            <div class="spread-row"><span class="spread-year">2022</span><span class="spread-track"><span class="spread-fill" style="width:11.5%"></span></span><span class="spread-val">1.15%</span></div>
+            <div class="spread-row"><span class="spread-year">2021</span><span class="spread-track"><span class="spread-fill" style="width:21.3%"></span></span><span class="spread-val">2.13%</span></div>
+            <div class="spread-row"><span class="spread-year">2020</span><span class="spread-track"><span class="spread-fill" style="width:29.3%"></span></span><span class="spread-val">2.93%</span></div>
+            <div class="spread-row"><span class="spread-year">2019</span><span class="spread-track"><span class="spread-fill" style="width:41.6%"></span></span><span class="spread-val">4.16%</span></div>
+            <div class="spread-row"><span class="spread-year">2018</span><span class="spread-track"><span class="spread-fill" style="width:35.9%"></span></span><span class="spread-val">3.59%</span></div>
+            <div class="spread-row"><span class="spread-year">2017</span><span class="spread-track"><span class="spread-fill" style="width:48.8%"></span></span><span class="spread-val">4.88%</span></div>
+            <div class="spread-row"><span class="spread-year">2016</span><span class="spread-track"><span class="spread-fill" style="width:63.1%"></span></span><span class="spread-val">6.31%</span></div>
+            <div class="spread-row"><span class="spread-year">2015</span><span class="spread-track"><span class="spread-fill" style="width:72.1%"></span></span><span class="spread-val">7.21%</span></div>
+            <div class="spread-row"><span class="spread-year">2014</span><span class="spread-track"><span class="spread-fill" style="width:79.9%"></span></span><span class="spread-val">7.99%</span></div>
+            <div class="spread-row"><span class="spread-year">2013</span><span class="spread-track"><span class="spread-fill" style="width:85.5%"></span></span><span class="spread-val">8.55%</span></div>
         </div>
-        <div style="text-align: center; font-size: 8pt; color: #64748B; margin-top: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-            Start Year of 5-Year Lookback Period
+        <div style="text-align: center; font-size: 8pt; color: #475569; margin-top: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+            End year of the 5-year window. Bar length is the average gap, on a 0 to 10 scale.
         </div>
     </div>
 
     <p style="font-size: 8pt; color: #64748B; line-height: 1.5; font-style: italic; text-align: center; margin-top: 12px;">
-        **This graph shows the 5-year rolling average CAGR of portfolios started annually from 2010 to 2025, with each portfolio's CAGR calculated from its start year to the last update date from the table above. Each point reflects the average CAGR of portfolios in a 5-year window (e.g., 2010–2014 would be bar 2014). The trend indicates higher average CAGRs for windows with earlier start years, showing improved returns for older portfolios**
+        Each bar is the average of the Over / under column for five start years ending in that year. It is not a CAGR. The 2014 bar, for example, averages the rows for 2010 through 2014. Newest is at the top. Earlier windows show a larger average gap than later ones.
     </p>
 
     <footer>
@@ -421,67 +471,7 @@
 
 </div>
 
-<script>
-    const ctxRolling = document.getElementById('rollingAvgChart').getContext('2d');
-    new Chart(ctxRolling, {
-        type: 'bar',
-        data: {
-            labels: ['2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013'],
-            datasets: [{
-                label: 'Over-Performance Spreads',
-                data: [0.08, 0.98, 1.15, 2.13, 2.93, 4.16, 3.59, 4.88, 6.31, 7.21, 7.99, 8.55],
-                backgroundColor: [
-                    '#CBD5E1', '#94A3B8', '#64748B', '#475569', '#334155', 
-                    '#1E293B', '#0F172A', '#0F172A', '#0F172A', '#0F172A', '#0F172A', '#0F172A'
-                ],
-                borderRadius: 4,
-                borderSkipped: false
-            }]
-        },
-        plugins: [{
-            id: 'alwaysShowDataLabels',
-            afterDraw(chart) {
-                const { ctx } = chart;
-                chart.data.datasets.forEach((dataset, i) => {
-                    const meta = chart.getDatasetMeta(i);
-                    meta.data.forEach((bar, index) => {
-                        const val = dataset.data[index].toFixed(2) + '%';
-                        ctx.save();
-                        ctx.fillStyle = '#0F172A';
-                        ctx.font = '700 11px Inter, sans-serif';
-                        ctx.textAlign = 'center';
-                        ctx.fillText(val, bar.x, bar.y - 8);
-                        ctx.restore();
-                    });
-                });
-            }
-        }],
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: true }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: { color: '#64748B', font: { family: 'Inter', size: 11 } }
-                },
-                y: {
-                    grid: { color: '#E2E8F0' },
-                    ticks: { 
-                        color: '#64748B', 
-                        font: { family: 'Inter' },
-                        callback: v => v.toFixed(2) + '%'
-                    },
-                    max: 10.00,
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script>
+
 
 </body>
 </html>

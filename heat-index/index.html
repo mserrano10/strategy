@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Macro Heat & Valuation Desk — Atlas Wealth</title>
+    <meta name="robots" content="noindex, nofollow">
+    <title>Macro valuation worksheet — Atlas Wealth</title>
 
     <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -64,6 +65,7 @@
             letter-spacing: 3.5px;
             text-transform: uppercase;
             color: #0F172A;
+            white-space: nowrap;
         }
 
         .brand-name-atlas { font-weight: 800; }
@@ -244,7 +246,22 @@
         .g3 { grid-template-columns: repeat(3, 1fr); }
         .g2 { grid-template-columns: repeat(2, 1fr); }
 
-        @media(max-width: 860px) { .g3, .g2 { grid-template-columns: 1fr; } .hero-card { grid-template-columns: 1fr; } .score-display { border-right: none; padding-right: 0; border-bottom: 1px solid #E2E8F0; padding-bottom: 20px; } }
+        @media(max-width: 860px) {
+            .g3, .g2 { grid-template-columns: 1fr; }
+            .hero-card { grid-template-columns: 1fr; }
+            .score-display { border-right: none; padding-right: 0; border-bottom: 1px solid #E2E8F0; padding-bottom: 20px; }
+            .brand-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+        }
+
+        .asof {
+            margin-top: 6px;
+            font-size: 8pt;
+            line-height: 1.4;
+            color: #475569;
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0;
+        }
 
         label {
             display: block;
@@ -378,7 +395,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 8.5pt;
-            color: #94A3B8;
+            color: #475569;
         }
 
         footer a { color: #0F172A; text-decoration: none; font-weight: 600; }
@@ -407,7 +424,7 @@
                 <span class="brand-name-atlas">ATLAS</span><span class="brand-name-wealth">WEA<span class="brand-slash">\</span>TH</span>
             </span>
         </a>
-        <div class="desk-badge">Macro Heat Engine</div>
+        <div class="desk-badge">Worksheet</div>
     </div>
 
     <!-- Navigation Header -->
@@ -419,15 +436,15 @@
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            Download PDF
+            Print / Save as PDF
         </button>
     </div>
 
     <!-- Title Anchor -->
     <div class="header">
-        <h1 class="doc-title">Macro Valuation Heat Desk</h1>
+        <h1 class="doc-title">Macro valuation worksheet</h1>
         <div class="sub-desc">
-            Unified valuation and structural sentiment monitoring desk aggregating multi-decade equity ratios (CAPE, Buffett Indicator, Tobin's Q / NCBCEPNW) with short-term breadth structure.
+            Personal research worksheet. It combines CAPE, the Buffett indicator, Tobin's Q (NCBCEPNW), trailing P/E, and a short-term breadth state. Each figure keeps its own date.
         </div>
     </div>
 
@@ -444,37 +461,39 @@
                 Aggregate z-score across long-term structural ratios sits in the top ~2% of historical data. Forward 10-year expected real index returns are statistically compressed. Maintains strict justification for cash-reserve dry powder mandates in satellite execution models.
             </p>
             <div style="font-size: 8pt; color: #64748B; font-family: ui-monospace, SFMono-Regular, monospace;">
-                WEIGHTS: CAPE (25%) · BUFFETT (25%) · NCBCEPNW (25%) · PE (15%) · MSINDEX (10%)
+                <span id="weightLine">WEIGHTS: CAPE (25%) · BUFFETT (25%) · NCBCEPNW (25%) · PE (15%) · MSINDEX (10%)</span>
             </div>
         </div>
     </div>
 
-    <h2>1 · Live Indicator Readings</h2>
+    <h2>1 · Indicator readings</h2>
+    <p class="sub-desc" style="margin-top:0;">A figure is current only when its date is shown. Boxes with no date were typed into the file and were not refreshed.</p>
     <div class="panel">
         <div class="grid g3">
             <div>
                 <label>Shiller CAPE <span>multpl.com/shiller-pe</span></label>
-                <input id="in_cape" type="number" step="0.1" value="42.4">
+                <input id="in_cape" type="number" step="0.1" value="41.04">
+                <p class="asof" id="asof_cape">As of 29 Oct 2026 · multpl.com/shiller-pe</p>
             </div>
             <div>
                 <label>Buffett Indicator % <span>currentmarketvaluation</span></label>
                 <input id="in_buffett" type="number" step="0.1" value="244.0">
+                <p class="asof" id="asof_buffett">As of 30 Jun 2026 · currentmarketvaluation.com</p>
             </div>
             <div>
-                <label>NCBCEPNW % <span>FRED Series</span></label>
+                <label>NCBCEPNW % <span>FRED series</span></label>
                 <input id="in_ncb" type="number" step="0.1" value="224.9">
+                <p class="asof" id="asof_ncb">No date on file. Not rechecked against FRED on 29 Oct 2026.</p>
             </div>
             <div>
-                <label>S&P 500 Trailing P/E <span>multpl.com</span></label>
-                <input id="in_pe" type="number" step="0.1" value="26.2">
+                <label>S&amp;P 500 Trailing P/E <span>multpl.com</span></label>
+                <input id="in_pe" type="number" step="0.1" value="26.44">
+                <p class="asof" id="asof_pe">As of 29 Oct 2026 · multpl.com/s-p-500-pe-ratio</p>
             </div>
             <div>
-                <label>MSIndex State (0-100) <span>msindex.net</span></label>
+                <label>MSIndex state (0-100) <span>typed scale</span></label>
                 <input id="in_ms" type="number" step="1" value="78">
-            </div>
-            <div>
-                <label>Effective Date</label>
-                <input id="in_date" type="date" value="2026-09-01">
+                <p class="asof" id="asof_ms">No date on file. This 0-100 state is not the raw msindex.net index. That index was 2.37 on 28 Oct 2026.</p>
             </div>
         </div>
     </div>
@@ -486,7 +505,7 @@
                 <thead>
                     <tr>
                         <th>Metric / Source</th>
-                        <th>Current Reading</th>
+                        <th>Reading</th>
                         <th>Historical Mean</th>
                         <th>Deviation z-Score</th>
                         <th>Heat Index</th>
@@ -510,7 +529,7 @@
         </div>
     </div>
 
-    <h2>4 · Primary Reference Desks</h2>
+    <h2>4 · Sources</h2>
     <div class="desk-links">
         <a href="https://msindex.net/" target="_blank" rel="noopener" class="desk-card">
             <div>
@@ -574,9 +593,9 @@
     const PARAMS = {
         cape: { mean: 17.5, sd: 7.2, weight: 0.25, name: "Shiller CAPE" },
         buffett: { mean: 120.0, sd: 45.0, weight: 0.25, name: "Buffett Indicator (%)" },
-        ncb: { mean: 100.0, sd: 42.0, weight: 0.1, name: "FRED NCBCEPNW (%)" },
+        ncb: { mean: 100.0, sd: 42.0, weight: 0.25, name: "FRED NCBCEPNW (%)" },
         pe: { mean: 16.8, sd: 5.5, weight: 0.15, name: "Trailing P/E" },
-        ms: { mean: 50.0, sd: 20.0, weight: 0.25, name: "MSIndex Structure" }
+        ms: { mean: 50.0, sd: 20.0, weight: 0.10, name: "MSIndex Structure" }
     };
 
     const $ = id => document.getElementById(id);
@@ -629,12 +648,12 @@
             desc.innerHTML = "Aggregate z-score across structural valuation metrics sits in the extreme upper tail (&gt;2.0σ). Forward 10-year expected real index returns are statistically compressed. Validates strict risk management and maintaining full dry powder reserves.";
         } else if (composite >= 70) {
             pill.innerText = "Elevated Risk";
-            pill.style.background = "#D97706";
+            pill.style.background = "#B45309";
             title.innerText = "Elevated Valuation Regime";
             desc.innerHTML = "Valuations are substantially above historical averages. Expected long-term compound growth is below baseline averages. Selectivity in single-name equity assets is paramount.";
         } else if (composite >= 45) {
             pill.innerText = "Fair Valuation";
-            pill.style.background = "#059669";
+            pill.style.background = "#047857";
             title.innerText = "Historical Equilibrium";
             desc.innerHTML = "Aggregate metrics sit within standard historical standard deviation bands (-0.5σ to +0.8σ). Market pricing reflects balanced baseline multi-year forward expectations.";
         } else {
@@ -715,18 +734,75 @@
         });
     }
 
-    document.querySelectorAll("input").forEach(el => el.addEventListener("input", renderDesk));
+    const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    function formatAsOf(iso) {
+        const parts = String(iso).split("-");
+        if (parts.length !== 3) return iso;
+        return MONTHS[Number(parts[1]) - 1] + " " + Number(parts[2]) + ", " + parts[0];
+    }
+
+    function series(data, key) {
+        const value = data[key];
+        if (value && typeof value === "object") return value;
+        if (typeof value === "number") return { value: value, as_of: null, source: "Older file, with no per-series date." };
+        return null;
+    }
+
+    function writeAsOf(id, item, extra) {
+        const node = $(id);
+        if (!node) return;
+        const bits = [];
+        if (item && item.as_of) bits.push("As of " + formatAsOf(item.as_of));
+        else bits.push("No date on file");
+        if (item && item.source) bits.push(item.source);
+        if (extra) bits.push(extra);
+        node.textContent = bits.join(" · ");
+    }
+
+    function writeWeights() {
+        const parts = [
+            ["CAPE", PARAMS.cape.weight],
+            ["BUFFETT", PARAMS.buffett.weight],
+            ["NCBCEPNW", PARAMS.ncb.weight],
+            ["PE", PARAMS.pe.weight],
+            ["MSINDEX", PARAMS.ms.weight]
+        ];
+        $("weightLine").textContent = "WEIGHTS: " + parts.map(function (part) {
+            return part[0] + " (" + Math.round(part[1] * 100) + "%)";
+        }).join(" · ");
+    }
+
+    document.querySelectorAll("input").forEach(el => el.addEventListener("input", function () {
+        const note = document.getElementById("asof_" + el.id.replace("in_", ""));
+        if (note) note.textContent = "Edited in this session. Not a sourced reading.";
+        renderDesk();
+    }));
     document.addEventListener("DOMContentLoaded", async () => {
+    writeWeights();
     try {
         const res = await fetch("./data.json");
         if (res.ok) {
-            const liveData = await res.json();
-            if (liveData.cape) $("in_cape").value = liveData.cape;
-            if (liveData.buffett) $("in_buffett").value = liveData.buffett;
-            if (liveData.ncb) $("in_ncb").value = liveData.ncb;
-            if (liveData.pe) $("in_pe").value = liveData.pe;
-            if (liveData.ms) $("in_ms").value = liveData.ms;
-            if (liveData.date) $("in_date").value = liveData.date;
+            const file = await res.json();
+            const cape = series(file, "cape");
+            const buffett = series(file, "buffett");
+            const ncb = series(file, "ncb");
+            const pe = series(file, "pe");
+            const ms = series(file, "ms");
+            const raw = series(file, "ms_raw");
+            if (cape && cape.value != null) $("in_cape").value = cape.value;
+            if (buffett && buffett.value != null) $("in_buffett").value = buffett.value;
+            if (ncb && ncb.value != null) $("in_ncb").value = ncb.value;
+            if (pe && pe.value != null) $("in_pe").value = pe.value;
+            if (ms && ms.value != null) $("in_ms").value = ms.value;
+            writeAsOf("asof_cape", cape);
+            writeAsOf("asof_buffett", buffett);
+            writeAsOf("asof_ncb", ncb);
+            writeAsOf("asof_pe", pe);
+            const rawNote = raw && raw.value != null
+                ? "Raw msindex.net index " + Number(raw.value).toFixed(2) + (raw.as_of ? " on " + formatAsOf(raw.as_of) : "") + ". The 0-100 box is a separate typed state."
+                : "";
+            writeAsOf("asof_ms", ms, rawNote);
         }
     } catch (err) {
         console.log("Loaded default baseline fallback values.");
