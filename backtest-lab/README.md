@@ -58,6 +58,7 @@ Open the page from the site at `/backtest-lab/`, or locally with a static server
 | `biggest` | The largest approximated market cap at the prior year-end close |
 | `top5-biggest` | The five largest, equal weight |
 | `tqqq` | Two books: `tqqq-buy-hold` and `tqqq-two-bullet` |
+| `qqq-condor` | Four books: hold, stop at 2× credit, stop at 3% of VAR, and that stop with week filters |
 
 You can rerun one TQQQ book with `run tqqq-buy-hold` or `run tqqq-two-bullet`.
 
@@ -101,6 +102,12 @@ The TQQQ books do not pick stocks. Survivorship bias of the index does not apply
 - The high-water mark is seeded from TQQQ's history before the start date and is not reset when a cycle ends.
 
 The memo's pre-2010 table uses a simulated 3× Nasdaq-100. v0 does not. It trades listed TQQQ only (inception 2010).
+
+`qqq-condor` is the tracked weekly QQQ iron condor. The put is the further of the 0.03-delta strike and the calculator's 2.90-sigma floor. The call is the 0.03 delta. Wings are 10 points, Monday open to Friday. Prices are Black–Scholes on Yahoo's QQQ bars and `^VXN` (scaled `^VIX` when `^VXN` is missing), with a bid/ask haircut on the entry credit. The close mark starts at that credit and moves with the model, so the spread is not booked as an opening loss. The 3% book exits when the loss, net of that week's credit, reaches 3% of Monday net worth. Contracts use the desk budget, 18.75% of net worth. It reports the modelled price of the breached vertical next to the $0.65 tracking figure. The page states that VAR definition as an assumption to confirm.
+
+```bash
+python3 -m backtest_lab run qqq-condor --start 1999 --end today
+```
 
 ## How to add a strategy
 

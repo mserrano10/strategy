@@ -3,8 +3,8 @@
   "label": "Forward test, live since Oct 15, 2026",
   "inception": "2026-10-15",
   "initial_capital": 10000.0,
-  "entry_session": null,
-  "spy_entry_price": null,
+  "entry_session": "2026-10-15",
+  "spy_entry_price": 771.7899780273438,
   "entry_rule": "For the stock books, entry is the adjusted close on the first completed US cash session on or after 2026-10-15. A same-day bar is not that close until 21:00 UTC, which is after both the 20:00 UTC (EDT) and 21:00 UTC (EST) cash closes. The entry price is written once and is not revised if Yahoo later restates the historical print. Later marks divide that session's adjusted close by the frozen entry. The two-bullet book does not use those ratios. It carries the engine state from the Oct 14, 2026 close and applies the live rules on each forward session. Its chart is rebased so that session equals the starting capital.",
   "ambiguities": [
     "The forward test starts at the Oct 15, 2026 close. A same-day Yahoo bar before 21:00 UTC is an intraday print and is not the entry. Until that close exists, entry prices stay blank and the books have no return.",
@@ -28,7 +28,7 @@
           "weight": 1.0,
           "prior_year_return": 3.74672483663642,
           "market_cap": 2894778748.728943,
-          "entry_price": null,
+          "entry_price": 86.8499984741211,
           "price_field": "adjusted_close"
         }
       ]
@@ -46,7 +46,7 @@
           "weight": 1.0,
           "prior_year_return": 2.836785502175131,
           "market_cap": 59053388106.76053,
-          "entry_price": null,
+          "entry_price": 356.45001220703125,
           "price_field": "adjusted_close"
         }
       ]
@@ -64,7 +64,7 @@
           "weight": 1.0,
           "prior_year_return": 3.3905897526731055,
           "market_cap": 26137671288.41034,
-          "entry_price": null,
+          "entry_price": 869.5399780273438,
           "price_field": "adjusted_close"
         }
       ]
@@ -82,7 +82,7 @@
           "weight": 1.0,
           "prior_year_return": 6.619556661659088,
           "market_cap": 4615095273.813927,
-          "entry_price": null,
+          "entry_price": 60.29999923706055,
           "price_field": "adjusted_close"
         }
       ]
@@ -100,7 +100,7 @@
           "weight": 0.2,
           "prior_year_return": 3.74672483663642,
           "market_cap": 2894778748.728943,
-          "entry_price": null,
+          "entry_price": 86.8499984741211,
           "price_field": "adjusted_close"
         },
         {
@@ -109,7 +109,7 @@
           "weight": 0.2,
           "prior_year_return": 3.3905897526731055,
           "market_cap": 26137671288.41034,
-          "entry_price": null,
+          "entry_price": 869.5399780273438,
           "price_field": "adjusted_close"
         },
         {
@@ -118,7 +118,7 @@
           "weight": 0.2,
           "prior_year_return": 2.9122018447265288,
           "market_cap": 20550419357.59529,
-          "entry_price": null,
+          "entry_price": 236.3000030517578,
           "price_field": "adjusted_close"
         },
         {
@@ -127,7 +127,7 @@
           "weight": 0.2,
           "prior_year_return": 2.836785502175131,
           "market_cap": 59053388106.76053,
-          "entry_price": null,
+          "entry_price": 356.45001220703125,
           "price_field": "adjusted_close"
         },
         {
@@ -136,7 +136,7 @@
           "weight": 0.2,
           "prior_year_return": 2.4023927843844546,
           "market_cap": 321231602303.74805,
-          "entry_price": null,
+          "entry_price": 931.239990234375,
           "price_field": "adjusted_close"
         }
       ]
@@ -154,7 +154,7 @@
           "weight": 0.2,
           "prior_year_return": 2.836785502175131,
           "market_cap": 59053388106.76053,
-          "entry_price": null,
+          "entry_price": 356.45001220703125,
           "price_field": "adjusted_close"
         },
         {
@@ -163,7 +163,7 @@
           "weight": 0.2,
           "prior_year_return": 2.4023927843844546,
           "market_cap": 321231602303.74805,
-          "entry_price": null,
+          "entry_price": 931.239990234375,
           "price_field": "adjusted_close"
         },
         {
@@ -172,7 +172,7 @@
           "weight": 0.2,
           "prior_year_return": 2.2526241952752595,
           "market_cap": 59999788142.545166,
-          "entry_price": null,
+          "entry_price": 690.8099975585938,
           "price_field": "adjusted_close"
         },
         {
@@ -181,7 +181,7 @@
           "weight": 0.2,
           "prior_year_return": 2.035426826864848,
           "market_cap": 101698259711.84668,
-          "entry_price": null,
+          "entry_price": 103.98999786376953,
           "price_field": "adjusted_close"
         },
         {
@@ -190,7 +190,7 @@
           "weight": 0.2,
           "prior_year_return": 1.7281806922137415,
           "market_cap": 109680203464.99873,
-          "entry_price": null,
+          "entry_price": 115.79000091552734,
           "price_field": "adjusted_close"
         }
       ]
@@ -208,7 +208,7 @@
           "weight": 0.2,
           "prior_year_return": 3.3905897526731055,
           "market_cap": 26137671288.41034,
-          "entry_price": null,
+          "entry_price": 869.5399780273438,
           "price_field": "adjusted_close"
         },
         {
@@ -217,7 +217,7 @@
           "weight": 0.2,
           "prior_year_return": 2.9175594932546356,
           "market_cap": 12859193835.171299,
-          "entry_price": null,
+          "entry_price": 15.5600004196167,
           "price_field": "adjusted_close"
         },
         {
@@ -226,7 +226,7 @@
           "weight": 0.2,
           "prior_year_return": 2.9122018447265288,
           "market_cap": 20550419357.59529,
-          "entry_price": null,
+          "entry_price": 236.3000030517578,
           "price_field": "adjusted_close"
         },
         {
@@ -235,7 +235,7 @@
           "weight": 0.2,
           "prior_year_return": 2.8817541367574533,
           "market_cap": 43056871475.681305,
-          "entry_price": null,
+          "entry_price": 91.56999969482422,
           "price_field": "adjusted_close"
         },
         {
@@ -244,7 +244,7 @@
           "weight": 0.2,
           "prior_year_return": 2.8462323453707365,
           "market_cap": 12401465970.4529,
-          "entry_price": null,
+          "entry_price": 30.389999389648438,
           "price_field": "adjusted_close"
         }
       ]
@@ -262,7 +262,7 @@
           "weight": 0.2,
           "prior_year_return": 6.619556661659088,
           "market_cap": 4615095273.813927,
-          "entry_price": null,
+          "entry_price": 60.29999923706055,
           "price_field": "adjusted_close"
         },
         {
@@ -271,7 +271,7 @@
           "weight": 0.2,
           "prior_year_return": 5.264889187282986,
           "market_cap": 2259667078.7570143,
-          "entry_price": null,
+          "entry_price": 10.100000381469727,
           "price_field": "adjusted_close"
         },
         {
@@ -280,7 +280,7 @@
           "weight": 0.2,
           "prior_year_return": 4.508928616094042,
           "market_cap": 3299933385.2246895,
-          "entry_price": null,
+          "entry_price": 2.6700000762939453,
           "price_field": "adjusted_close"
         },
         {
@@ -289,7 +289,7 @@
           "weight": 0.2,
           "prior_year_return": 3.881187994939861,
           "market_cap": 6185468082.743528,
-          "entry_price": null,
+          "entry_price": 14.539999961853027,
           "price_field": "adjusted_close"
         },
         {
@@ -298,7 +298,7 @@
           "weight": 0.2,
           "prior_year_return": 3.7949576755607524,
           "market_cap": 3336488323.8128357,
-          "entry_price": null,
+          "entry_price": 135.4600067138672,
           "price_field": "adjusted_close"
         }
       ]
@@ -316,7 +316,7 @@
           "weight": 1.0,
           "prior_year_return": 0.38916540459304416,
           "market_cap": 4540715500000.0,
-          "entry_price": null,
+          "entry_price": 217.22999572753906,
           "price_field": "adjusted_close"
         }
       ],
@@ -335,7 +335,7 @@
           "weight": 0.2,
           "prior_year_return": 0.38916540459304416,
           "market_cap": 4540715500000.0,
-          "entry_price": null,
+          "entry_price": 217.22999572753906,
           "price_field": "adjusted_close"
         },
         {
@@ -344,7 +344,7 @@
           "weight": 0.2,
           "prior_year_return": 0.09052613334426618,
           "market_cap": 4034508208011.4746,
-          "entry_price": null,
+          "entry_price": 342.0,
           "price_field": "adjusted_close"
         },
         {
@@ -353,7 +353,7 @@
           "weight": 0.2,
           "prior_year_return": 0.6599359066612884,
           "market_cap": 3791094278022.0,
-          "entry_price": null,
+          "entry_price": 349.2200012207031,
           "price_field": "adjusted_close"
         },
         {
@@ -362,7 +362,7 @@
           "weight": 0.2,
           "prior_year_return": 0.15584237329363515,
           "market_cap": 3594827887917.222,
-          "entry_price": null,
+          "entry_price": 539.4400024414062,
           "price_field": "adjusted_close"
         },
         {
@@ -371,7 +371,7 @@
           "weight": 0.2,
           "prior_year_return": 0.05209903808910643,
           "market_cap": 2467515737956.5005,
-          "entry_price": null,
+          "entry_price": 254.75999450683594,
           "price_field": "adjusted_close"
         }
       ],
@@ -425,7 +425,7 @@
           "name": "SPDR S&P 500 ETF Trust",
           "sleeve": "core",
           "weight": 0.6705914561951912,
-          "entry_price": null,
+          "entry_price": 771.7899780273438,
           "price_field": "adjusted_close"
         },
         {
@@ -449,7 +449,7 @@
           "name": "Bullet 1 dry powder (Treasury-bill proxy)",
           "sleeve": "bullet-1",
           "weight": 0.25715927169526315,
-          "entry_price": null,
+          "entry_price": 91.54000091552734,
           "price_field": "adjusted_close"
         },
         {
@@ -457,7 +457,7 @@
           "name": "Bullet 2 dry powder (Treasury-bill proxy)",
           "sleeve": "bullet-2",
           "weight": 0.0722492721095456,
-          "entry_price": null,
+          "entry_price": 91.54000091552734,
           "price_field": "adjusted_close"
         }
       ]

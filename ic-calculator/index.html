@@ -5,55 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>QQQ Weekly Iron Condor Pre-Trade Desk — Atlas Wealth</title>
 
-    <!-- Embedded Geometric Atlas SVG Favicon (Monochrome) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><line x1='4' y1='32' x2='36' y2='32' stroke='%230F172A' stroke-width='3' stroke-linecap='round'/><path d='M20 6L32 32H8L20 6Z' stroke='%230F172A' stroke-width='3' stroke-linejoin='round' fill='none'/><circle cx='20' cy='22' r='3' fill='%230F172A'/></svg>">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-            background-color: #FAF9F6; 
-            color: #334155; 
-            padding: 60px 24px; 
-            line-height: 1.6;
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #FAF9F6;
+            color: #334155;
+            padding: 40px 24px 56px;
+            line-height: 1.5;
             font-size: 10.5pt;
         }
 
-        /* 1000px Workspace Desk Frame */
-        .container { 
-            max-width: 1000px; 
-            margin: 0 auto; 
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             border-radius: 12px;
-            padding: 56px 64px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            padding: 40px 48px 36px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
         }
 
-        /* Brand Header */
         .brand-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .brand-logo, .brand-logo:visited, .brand-logo:hover, .brand-logo:active {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
             text-decoration: none !important;
             color: #0F172A;
         }
 
-        .brand-mark { width: 36px; height: 36px; }
+        .brand-mark { width: 32px; height: 32px; flex: none; }
 
         .brand-name {
-            font-size: 14pt;
-            letter-spacing: 3.5px;
+            font-size: 13pt;
+            letter-spacing: 3px;
             text-transform: uppercase;
             color: #0F172A;
         }
@@ -61,7 +58,6 @@
         .brand-name-atlas { font-weight: 800; }
         .brand-name-wealth { font-weight: 300; opacity: 0.65; }
 
-        /* Custom Trimmed Slash for 'WEA\TH' */
         .brand-slash {
             font-weight: 700;
             color: #0F172A;
@@ -75,20 +71,22 @@
             font-size: 8pt;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             color: #0F172A;
             background: #FAF9F6;
             border: 1px solid #CBD5E1;
             padding: 4px 10px;
             border-radius: 4px;
+            white-space: nowrap;
         }
 
-        /* Nav Strip */
         .nav-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
             padding-bottom: 12px;
             border-bottom: 1px dashed #E2E8F0;
         }
@@ -98,7 +96,6 @@
             text-decoration: none;
             font-size: 9pt;
             font-weight: 600;
-            transition: opacity 0.2s ease;
         }
         .back-link:hover { opacity: 0.6; }
 
@@ -110,240 +107,579 @@
             cursor: pointer;
         }
 
-        /* Header Anchor */
         .header {
-            border-bottom: 2px solid #0F172A;
-            padding-bottom: 16px;
-            margin-bottom: 28px;
+            padding-bottom: 4px;
+            margin-bottom: 18px;
         }
 
-        h1.doc-title { 
-            font-size: 22pt; 
+        h1.doc-title {
+            font-size: 20pt;
             font-weight: 800;
-            margin: 0 0 6px 0;
+            margin: 0 0 4px 0;
             color: #0F172A;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.4px;
+            line-height: 1.15;
         }
 
         .sub-desc {
             color: #64748B;
             font-size: 9pt;
-            line-height: 1.5;
+            line-height: 1.45;
         }
 
-        /* Headings */
         h2 {
-            font-size: 11.5pt;
+            font-size: 10.5pt;
             font-weight: 800;
             color: #0F172A;
             border-bottom: 1px solid #E2E8F0;
             padding-bottom: 6px;
-            margin-top: 36px;
-            margin-bottom: 16px;
+            margin-top: 28px;
+            margin-bottom: 14px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.08em;
+        }
+
+        h2.split {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        h2.split .inline-field {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 1px;
+            text-transform: none;
+            letter-spacing: 0;
+            font-size: 8pt;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        h2.split .inline-field span {
+            display: inline;
+            min-height: 0;
+            margin: 0;
+            color: #94A3B8;
+            font-weight: 500;
+        }
+
+        h2.split .inline-field input {
+            width: 76px;
+            padding: 5px 8px;
+            font-size: 9pt;
         }
 
         .panel {
             background: #FAF9F6;
             border: 1px solid #E2E8F0;
             border-radius: 8px;
-            padding: 22px;
+            padding: 16px 18px;
+            min-width: 0;
         }
 
-        .grid { display: grid; gap: 16px; }
-        .g4 { grid-template-columns: repeat(4, 1fr); }
-        .g3 { grid-template-columns: repeat(3, 1fr); }
-        .g2 { grid-template-columns: repeat(2, 1fr); }
+        .panel.plain {
+            background: #FFFFFF;
+        }
 
-        @media(max-width: 860px) { .g4, .g3, .g2 { grid-template-columns: 1fr 1fr; } }
-        @media(max-width: 560px) { .g4, .g3, .g2 { grid-template-columns: 1fr; } }
+        .grid { display: grid; gap: 12px 14px; min-width: 0; }
+        .g5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid > div { min-width: 0; }
 
         label {
             display: block;
             font-size: 8pt;
-            font-weight: 800;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.04em;
             color: #0F172A;
             margin-bottom: 6px;
+            line-height: 1.3;
         }
 
         label span {
+            display: block;
             text-transform: none;
             letter-spacing: 0;
             color: #64748B;
             font-size: 7.5pt;
             font-weight: 400;
+            margin-top: 1px;
+            min-height: 1.15em;
         }
 
         input {
             width: 100%;
+            min-width: 0;
             background: #FFFFFF;
             border: 1px solid #CBD5E1;
             color: #0F172A;
-            padding: 8px 12px;
+            padding: 8px 10px;
             border-radius: 6px;
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             font-size: 9.5pt;
-            font-weight: 700;
-            transition: all 0.2s ease;
+            font-weight: 600;
         }
 
         input:focus {
             outline: none;
             border-color: #0F172A;
-            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.1);
+            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.12);
         }
 
-        /* Verdict Box */
-        .verdict {
-            border-radius: 8px;
-            padding: 20px 24px;
-            margin: 24px 0;
-            border: 1px solid;
-            display: flex;
-            gap: 24px;
-            align-items: flex-start;
+        .explain {
+            color: #475569;
+            font-size: 8.5pt;
+            line-height: 1.45;
+            margin-top: 12px;
         }
 
-        .verdict .big {
-            font-size: 22pt;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            white-space: nowrap;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        .checks-label {
+            font-size: 8pt;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748B;
+            margin-bottom: 10px;
         }
 
-        .v-go { background: #F0FDF4; border-color: #BBF7D0; } .v-go .big { color: #166534; }
-        .v-no { background: #FEF2F2; border-color: #FCA5A5; } .v-no .big { color: #991B1B; }
-        .v-wait { background: #FFFBEB; border-color: #FDE68A; } .v-wait .big { color: #92400E; }
-
-        .gates { display: grid; gap: 8px; margin-top: 12px; }
-        .gate {
+        .status {
             display: grid;
-            grid-template-columns: 140px 80px 1fr;
-            gap: 12px;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: 8px 12px;
             align-items: center;
-            padding: 8px 12px;
+            margin-top: 14px;
+            padding: 8px 10px 8px 12px;
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
-            border-radius: 6px;
-            font-size: 8.5pt;
+            border-left: 3px solid var(--accent, #64748B);
+            border-radius: 8px;
+            --accent: #64748B;
         }
+        .status.go { --accent: #15803D; }
+        .status.wait { --accent: #B45309; }
+        .status.no { --accent: #B91C1C; }
 
-        .gate b {
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: #0F172A;
+            color: #F8FAFC;
+            border-radius: 999px;
+            padding: 4px 11px 4px 8px;
             font-size: 8pt;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #0F172A;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+        .status-pill i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex: none;
+        }
+        .reason {
+            color: #334155;
+            font-size: 9.5pt;
+            line-height: 1.4;
+            min-width: 0;
         }
 
-        .tag {
+        .tip { position: relative; display: inline-flex; }
+        .tip-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 1px solid #E2E8F0;
+            background: #FFFFFF;
+            color: #64748B;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+        }
+        .tip-btn:hover { color: #0F172A; border-color: #94A3B8; }
+        .tip-btn:focus-visible, summary:focus-visible, .back-link:focus-visible {
+            outline: 2px solid #0F172A;
+            outline-offset: 2px;
+        }
+        .tip-pop {
+            display: none;
+            position: absolute;
+            z-index: 20;
+            top: calc(100% + 8px);
+            right: 0;
+            width: min(340px, calc(100vw - 48px));
+            background: #0F172A;
+            color: #E2E8F0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 8pt;
+            line-height: 1.45;
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.22);
+        }
+        .tip.open .tip-pop { display: block; }
+        .tip-pop ul { list-style: none; }
+        .tip-pop li {
+            display: grid;
+            grid-template-columns: 78px 44px minmax(0, 1fr);
+            gap: 6px;
+            padding: 3px 0;
+            align-items: baseline;
+        }
+        .tip-pop .st-pass { color: #86EFAC; font-weight: 700; }
+        .tip-pop .st-fail { color: #FCA5A5; font-weight: 700; }
+        .tip-pop .st-soft { color: #FCD34D; font-weight: 700; }
+        .tip-pop .tnote { margin-top: 8px; color: #CBD5E1; }
+        .trow {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.14);
+        }
+        .trow:last-child { border-bottom: 0; }
+        .trow span:last-child {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-weight: 600;
+            color: #FFFFFF;
+            text-align: right;
+        }
+
+        .matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+        .matrix h3 {
+            font-size: 8pt;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #64748B;
+            margin-bottom: 8px;
+        }
+        .mhead, .mrow {
+            display: grid;
+            grid-template-columns: 52px minmax(0, 1fr) 68px 72px;
+            gap: 8px;
+            align-items: baseline;
+        }
+        .mhead {
+            font-size: 7.5pt;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #94A3B8;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .mhead span:not(:first-child),
+        .mrow span:not(:first-child) { text-align: right; }
+        .mrow {
+            padding: 7px 0;
+            border-bottom: 1px solid #F1F5F9;
+            font-variant-numeric: tabular-nums;
+        }
+        .mrow .delta { color: #475569; font-size: 9pt; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+        .mrow .raw { color: #64748B; font-size: 9pt; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+        .mrow .rnd {
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             font-weight: 700;
+            font-size: 15pt;
+            letter-spacing: -0.03em;
+            color: #0F172A;
+            line-height: 1.1;
+        }
+        .mrow .dist { color: #475569; font-size: 8.5pt; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+        .mrow.primary {
+            background: #F8FAFC;
+            border-radius: 6px;
+            border-bottom-color: transparent;
+        }
+        .desk-line {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #E2E8F0;
+            font-size: 9pt;
+            color: #334155;
+            line-height: 1.45;
+        }
+        .desk-line b {
+            color: #0F172A;
+            font-variant-numeric: tabular-nums;
+            font-weight: 700;
+        }
+        .cap {
+            color: #64748B;
             font-size: 8pt;
-            text-align: center;
-            padding: 2px 6px;
-            border-radius: 4px;
+            margin-bottom: 12px;
         }
 
-        .pass { color: #166534; background: #F0FDF4; border: 1px solid #BBF7D0; }
-        .fail { color: #991B1B; background: #FEF2F2; border: 1px solid #FCA5A5; }
-        .soft { color: #92400E; background: #FFFBEB; border: 1px solid #FDE68A; }
+        .block-label {
+            font-size: 8pt;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748B;
+            margin: 0 0 8px;
+        }
+        .block-label + .block-label,
+        .call-block { margin-top: 16px; }
 
-        /* Tables */
         table {
             width: 100%;
             border-collapse: collapse;
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-            font-size: 8.5pt;
+            font-size: 8pt;
+            font-variant-numeric: tabular-nums;
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             border-radius: 6px;
             overflow: hidden;
         }
-
         th {
             text-align: right;
-            padding: 10px 12px;
+            padding: 8px 10px;
             border-bottom: 2px solid #0F172A;
             color: #0F172A;
             font-weight: 700;
             font-size: 7.5pt;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.04em;
             white-space: nowrap;
             background: #FAF9F6;
         }
-
         th:first-child, td:first-child { text-align: left; }
-        td { text-align: right; padding: 8px 12px; border-bottom: 1px solid #E2E8F0; white-space: nowrap; color: #334155; }
-        tr.hit { background: #F0FDF4; font-weight: 700; }
+        td {
+            text-align: right;
+            padding: 7px 10px;
+            border-bottom: 1px solid #E2E8F0;
+            white-space: nowrap;
+            color: #334155;
+        }
+        tr.hit td { background: #F8FAFC; }
+        tr.hit td:first-child { box-shadow: inset 2px 0 0 #0F172A; }
+        .table-scroll { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+
+        .note { color: #64748B; font-size: 8pt; line-height: 1.45; margin-top: 8px; }
+        .rule {
+            margin-top: 8px;
+            padding-left: 10px;
+            border-left: 2px solid #CBD5E1;
+            color: #475569;
+            font-size: 8.5pt;
+            line-height: 1.45;
+        }
+        .warnbox {
+            background: #FFFBEB;
+            border: 1px solid #FDE68A;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 8.5pt;
+            color: #92400E;
+            margin-top: 10px;
+        }
+
+        .regime-line {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #E2E8F0;
+            color: #475569;
+            font-size: 9pt;
+            line-height: 1.45;
+        }
+        .regime-line p { flex: 1; min-width: 0; padding-top: 4px; }
+
+        details.fold { margin-top: 22px; }
+        details.fold > summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10.5pt;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 8px 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        details.fold > summary::-webkit-details-marker { display: none; }
+        details.fold > summary::before {
+            content: "";
+            width: 0;
+            height: 0;
+            border-left: 5px solid #0F172A;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+            flex: none;
+        }
+        details.fold[open] > summary::before { transform: rotate(90deg); }
+        details.fold > summary .opt {
+            font-weight: 500;
+            color: #64748B;
+            letter-spacing: 0;
+            text-transform: none;
+            font-size: 9pt;
+        }
+        details.fold > summary .hint-inline {
+            margin-left: auto;
+            font-weight: 500;
+            letter-spacing: 0;
+            text-transform: none;
+            font-size: 8.5pt;
+            color: #64748B;
+            font-variant-numeric: tabular-nums;
+        }
+        details.fold .panel { margin-top: 12px; }
+
+        details.costs { margin-top: 12px; }
+        details.costs > summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 8.5pt;
+            font-weight: 600;
+            color: #475569;
+            letter-spacing: 0;
+            text-transform: none;
+            padding: 4px 0;
+            border-bottom: 0;
+        }
+        details.costs > summary::-webkit-details-marker { display: none; }
+        details.costs > summary::before {
+            content: "";
+            width: 0;
+            height: 0;
+            border-left: 4px solid #64748B;
+            border-top: 3.5px solid transparent;
+            border-bottom: 3.5px solid transparent;
+            flex: none;
+        }
+        details.costs[open] > summary::before { transform: rotate(90deg); }
+        details.costs .grid { margin-top: 10px; }
+
+        .eject-line {
+            display: grid;
+            grid-template-columns: 76px max-content minmax(0, 1fr);
+            gap: 6px 16px;
+            align-items: baseline;
+            padding: 9px 0;
+            border-bottom: 1px solid #E2E8F0;
+            font-size: 9pt;
+        }
+        .eject-line:first-child { margin-top: 4px; }
+        .eject-line .side {
+            font-size: 8pt;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #64748B;
+        }
+        .eject-line .px {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-weight: 700;
+            font-size: 13pt;
+            letter-spacing: -0.03em;
+            color: #0F172A;
+            font-variant-numeric: tabular-nums;
+        }
+        .eject-line .px.range { font-size: 12pt; }
+        .eject-line .px.over { color: #B45309; }
+        .eject-line .px.quiet { color: #94A3B8; font-weight: 600; }
+        .eject-line .cmp { color: #475569; min-width: 0; }
+
+        .formula {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 8pt;
+            line-height: 1.55;
+            color: #0F172A;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-top: 12px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
 
         .kv {
             display: flex;
             justify-content: space-between;
-            gap: 14px;
-            padding: 8px 0;
+            gap: 12px;
+            padding: 7px 0;
             border-bottom: 1px solid #E2E8F0;
             font-size: 8.5pt;
         }
-
         .kv:last-child { border-bottom: 0; }
-        .kv span:last-child { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 700; color: #0F172A; }
-        .kv.na span:last-child { color: #64748B; font-weight: 600; }
-
-        .note { color: #64748B; font-size: 8pt; line-height: 1.5; margin-top: 12px; }
-        .warnbox { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px; padding: 10px 14px; font-size: 8.5pt; color: #92400E; margin-top: 12px; }
-        .nobox { background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 6px; padding: 10px 14px; font-size: 8.5pt; color: #991B1B; margin-top: 12px; }
-        .foot { margin-top: 48px; padding-top: 20px; border-top: 1px solid #E2E8F0; color: #94A3B8; font-size: 8pt; text-align: center; }
-        
-        .pill {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 7.5pt;
+        .kv span:last-child {
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             font-weight: 700;
-            border: 1px solid #CBD5E1;
-            background: #FAF9F6;
             color: #0F172A;
-            text-transform: uppercase;
+            text-align: right;
         }
-        
-        .pill-danger {
-            border-color: #FCA5A5;
-            background: #FEF2F2;
-            color: #991B1B;
+        .kv.na span:last-child { color: #64748B; font-weight: 600; }
+
+        .foot {
+            margin-top: 28px;
+            padding-top: 14px;
+            border-top: 1px solid #E2E8F0;
+            color: #94A3B8;
+            font-size: 8pt;
+            text-align: center;
+        }
+
+        @media (max-width: 860px) {
+            .g5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .g5 > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+            .g4, .g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .matrix { grid-template-columns: 1fr; gap: 18px; }
         }
 
         @media (max-width: 768px) {
-            body { padding: 24px 12px; }
-            .container { padding: 32px 20px; }
-            h1.doc-title { font-size: 18pt; }
-            .brand-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-            .verdict {
-                flex-direction: column;
-                gap: 12px;
-                max-width: 100%;
-            }
-            .verdict > div {
-                width: 100%;
-                min-width: 0;
-            }
-            .verdict .big { white-space: normal; }
-            .gate {
-                grid-template-columns: minmax(0, 1fr) auto;
-                gap: 2px 10px;
-                padding: 8px 10px;
-                min-width: 0;
-            }
-            .gate span:last-child { grid-column: 1 / -1; }
-            .gate .tag { justify-self: end; white-space: nowrap; }
+            body { padding: 16px 10px 28px; }
+            .container { padding: 22px 16px 20px; }
+            h1.doc-title { font-size: 17pt; }
+            .brand-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .status { grid-template-columns: auto 1fr; }
+            .status .tip { grid-column: 2; grid-row: 1; justify-self: end; }
+            .reason { grid-column: 1 / -1; grid-row: 2; }
+            .tip-pop { position: static; width: auto; margin-top: 8px; }
+            .tip.open { display: block; width: 100%; }
+            .status .tip.open { display: contents; }
+            .status .tip.open .tip-btn { grid-column: 2; grid-row: 1; justify-self: end; align-self: center; }
+            .status .tip.open .tip-pop { grid-column: 1 / -1; grid-row: 3; margin-top: 2px; }
+            .regime-line { flex-wrap: wrap; }
+            .regime-line .tip.open { display: contents; }
+            .regime-line .tip.open .tip-pop { flex: 1 0 100%; }
+            .tip-btn { width: 32px; height: 32px; }
+            .mrow .rnd { font-size: 14pt; }
+            .eject-line { grid-template-columns: 76px minmax(0, 1fr); }
+            .eject-line .cmp { grid-column: 2; }
+            .g2 { grid-template-columns: 1fr; }
+            details.fold > summary { flex-wrap: wrap; }
+        }
+
+        @media (max-width: 420px) {
+            .g5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
     </style>
 </head>
@@ -351,10 +687,9 @@
 
 <div class="container">
 
-    <!-- Top Brand Header -->
     <div class="brand-header">
         <a href="https://strategy.atlaswealth.cc" class="brand-logo">
-            <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <line x1="4" y1="32" x2="36" y2="32" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/>
                 <path d="M20 6L32 32H8L20 6Z" stroke="#0F172A" stroke-width="2.5" stroke-linejoin="round"/>
                 <circle cx="20" cy="22" r="2.5" fill="#0F172A"/>
@@ -366,78 +701,85 @@
         <div class="desk-badge">Pre-Trade Engine</div>
     </div>
 
-    <!-- Navigation Strip -->
     <div class="nav-header">
         <a href="https://strategy.atlaswealth.cc" class="back-link">← Return to Strategy Portal</a>
         <button type="button" id="reset-inputs" class="back-link">Reset inputs</button>
     </div>
 
-    <!-- Title Anchor -->
     <div class="header">
-        <h1 class="doc-title">QQQ Weekly Short Vertical & Iron Condor Calculator</h1>
-        <div class="sub-desc">
-            Sigma-defined strike selection engine calibrated to the VXN scale. Traces to the 1,331-week study (26.6 years, 6,425 VXN readings, 93 statement-verified fills). Rules stated in sigma, never in delta.
-        </div>
+        <h1 class="doc-title">QQQ Weekly Iron Condor</h1>
+        <p class="sub-desc">Strikes for the weekly book, then the signal to sell it.</p>
     </div>
 
-    <h2>1 · Trade Inputs</h2>
     <div class="panel">
-        <div class="grid g4">
-            <div><label>QQQ spot <span>at/after open</span></label><input id="spot" type="number" step="0.01" value="715.17"></div>
-            <div><label>VXN <span>live, ~15min in</span></label><input id="vxn" type="number" step="0.01" value="19.92"></div>
-            <div><label>Header IV % <span>expiry header row</span></label><input id="hiv" type="number" step="0.01" value="19.45"></div>
-            <div><label>Days to expiry <span>Mon→Fri</span></label><input id="dte" type="number" step="1" value="4"></div>
-            <div><label>Spread width <span>points</span></label><input id="wid" type="number" step="1" value="10"></div>
-            <div><label>Prior Friday close</label><input id="pfc" type="number" step="0.01" value="716.43"></div>
-            <div><label>Prior week's Mon open</label><input id="pmo" type="number" step="0.01" value="709.66"></div>
-            <div><label>Entry date <span>earnings window</span></label><input id="dt" type="date" value="2026-08-31"></div>
+        <div class="checks-label">Inputs</div>
+        <div class="grid g5">
+            <div><label>Spot <span>QQQ</span></label><input id="spot" type="number" inputmode="decimal" step="0.01" value="500"></div>
+            <div><label>VXN <span>live</span></label><input id="vxn" type="number" inputmode="decimal" step="0.01" value="18.50"></div>
+            <div><label>Header IV <span>expiry header</span></label><input id="hiv" type="number" inputmode="decimal" step="0.01" value="18.10"></div>
+            <div><label>DTE <span>calendar days</span></label><input id="dte" type="number" inputmode="numeric" step="1" value="4"></div>
+            <div><label>Rate <span>risk-free %</span></label><input id="bs_r" type="number" inputmode="decimal" step="0.5" value="4.0"></div>
         </div>
+        <p class="explain">VXN drives the thin-credit signal, because the historical analysis is on VXN. Header IV drives the Black–Scholes strikes.</p>
     </div>
 
-    <div id="verdict"></div>
-
-    <h2>2 · Volatility & Regime Diagnostics</h2>
-    <div class="grid g2">
-        <div class="panel"><div id="regime"></div></div>
-        <div class="panel"><div id="frontend"></div></div>
+    <h2>Delta targets</h2>
+    <div class="panel plain">
+        <p class="cap" id="bs-cap"></p>
+        <div id="bs-matrix"></div>
+        <p class="desk-line" id="desk-line"></p>
     </div>
 
-    <h2>3 · Put Side Parameters <span class="pill">Core Edge · 17 of 17 Fills Cleared</span></h2>
-    <div class="panel">
-        <div style="overflow-x:auto"><table id="puts"></table></div>
-        <div class="note" id="putnote"></div>
+    <h2 class="split"><span>Strikes by sigma</span><label class="inline-field">Width <span>points</span><input id="wid" type="number" inputmode="decimal" step="1" value="10"></label></h2>
+    <div class="panel plain">
+        <div class="block-label">Put</div>
+        <div class="table-scroll"><table id="puts"></table></div>
+        <p class="note" id="putnote"></p>
+        <div class="block-label call-block">Call</div>
+        <div class="table-scroll"><table id="calls"></table></div>
+        <p class="note" id="callnote"></p>
     </div>
 
-    <h2>4 · Call Side Parameters <span class="pill pill-danger">Sellable Threshold Warning</span></h2>
-    <div class="panel">
-        <div style="overflow-x:auto"><table id="calls"></table></div>
-        <div class="note" id="callnote"></div>
-    </div>
-
-    <h2>5 · Position Sizing & Risk Controls</h2>
-    <div class="panel">
-        <div class="grid g4" style="margin-bottom:16px">
-            <div><label>Account NAV ($)</label><input id="nav" type="number" step="1000" value="200000"></div>
-            <div><label>Base VaR % of NAV</label><input id="base" type="number" step="0.5" value="12.5"></div>
-            <div><label>Edge multiple cap</label><input id="cap" type="number" step="0.5" value="1.5"></div>
-            <div><label>Typical week ratio</label><input id="norm" type="number" step="0.1" value="3.2"></div>
-            <div><label>Observed credit <span>fillable $/share</span></label><input id="cred" type="number" step="0.01" value="0.02"></div>
-            <div><label>Target Sigma (z)</label><input id="credz" type="number" step="0.05" value="2.90"></div>
-            <div><label>Safety margin</label><input id="marg" type="number" step="0.5" value="1.5"></div>
+    <div class="panel" style="margin-top:22px">
+        <div class="checks">
+            <div class="checks-label">Signal checks</div>
+            <div class="grid g3">
+                <div><label>Fillable credit <span>$/share</span></label><input id="cred" type="number" inputmode="decimal" step="0.01" value="0.09"></div>
+                <div><label>Target sigma <span>z</span></label><input id="credz" type="number" inputmode="decimal" step="0.05" value="2.90"></div>
+                <div><label>Safety margin <span>× break-even</span></label><input id="marg" type="number" inputmode="decimal" step="0.5" value="1.5"></div>
+                <div><label>Prior Friday <span>close</span></label><input id="pfc" type="number" inputmode="decimal" step="0.01" value="501"></div>
+                <div><label>Prior Monday <span>VXN</span></label><input id="pvxn" type="number" inputmode="decimal" step="0.01" value="18.40"></div>
+                <div><label>Entry date <span>earnings window</span></label><input id="dt" type="date" value="2026-10-16"></div>
+            </div>
         </div>
-        <div class="grid g2"><div id="sizeout"></div><div id="stopout"></div></div>
+        <div id="verdict" aria-live="polite"></div>
+        <div class="regime-line" id="regime"></div>
     </div>
 
-    <h2>6 · Black-Scholes Delta Target Matrix <span class="pill">Header IV Engine</span></h2>
+    <details class="fold" id="size-fold">
+        <summary>Sizing <span class="opt">(optional)</span><span class="hint-inline" id="sizehint"></span></summary>
+        <div class="panel">
+            <div class="grid g4" style="margin-bottom:14px">
+                <div><label>Account NAV <span>$</span></label><input id="nav" type="number" inputmode="decimal" step="1000" value="200000"></div>
+                <div><label>Base VaR <span>% of NAV</span></label><input id="base" type="number" inputmode="decimal" step="0.5" value="12.5"></div>
+                <div><label>Edge cap <span>multiple</span></label><input id="cap" type="number" inputmode="decimal" step="0.5" value="1.5"></div>
+                <div><label>Typical week <span>ratio</span></label><input id="norm" type="number" inputmode="decimal" step="0.1" value="3.2"></div>
+            </div>
+            <div class="grid g2">
+                <div id="sizeout"></div>
+                <div id="stopout"></div>
+            </div>
+        </div>
+    </details>
+
+    <h2>Exit</h2>
+    <p class="explain" style="margin-top:0;margin-bottom:12px">A resting stop when QQQ touches the short put strike. Hold to Friday, and close any spread within 1% of the short strike before Friday’s close. Pause after 2 stops in any rolling 12 months.</p>
     <div class="panel">
-        <div class="grid g2" style="margin-bottom:16px">
-            <div><label>Risk-Free Rate (r) %</label><input id="bs_r" type="number" step="0.5" value="4.0"></div>
-            <div><label>Applied Implied Vol (σ)</label><input id="bs_sig_disp" type="text" readonly disabled style="background:#FAF9F6; color:#0F172A; font-weight:700;"></div>
+        <div class="grid g2">
+            <div><label>Contracts <span>max 50</span></label><input id="contracts" type="number" inputmode="numeric" step="1" min="1" max="50" value="40"></div>
+            <div><label>Stops, 12 months <span>pause at 2</span></label><input id="stops12" type="number" inputmode="numeric" step="1" min="0" value="0"></div>
         </div>
-        <div style="overflow-x:auto"><table id="bs_table"></table></div>
-        <div class="note">
-            Calculates exact strikes for specific OTM Delta targets (0.030, 0.025, 0.020) using the Black-Scholes pricing model with Brent's bisection root-finding method, calibrated directly to the Expiration Header IV.
-        </div>
+        <div id="exitout"></div>
     </div>
 
     <div class="foot" id="foot"></div>
@@ -451,11 +793,11 @@ const K = {
     putAll: { b: -1.7698954, a: -0.4248998, r2: 0.99966 },
     callAll: { b: -2.6552800, a: 0.5966900, r2: 0.99185 },
     bands: [
-        { hi: 16.6, name: "BOTTOM 20%", range: "VXN < 16.6", b: -1.552, a: -1.0799, note: "Calmest weeks. Both full-width losses in the 1,331-week dataset occurred here; distance does not fully protect when absolute sigma is narrow." },
-        { hi: 19.8, name: "20-40%", range: "16.6 - 19.8", b: -2.213, a: 0.0753, note: "Cheapest band to sell in; steep slope means extra distance actively protects. 1 settle breach in 283 weeks at 2.90 sigma." },
-        { hi: 23.8, name: "40-60%", range: "19.8 - 23.8", b: -1.461, a: -0.4826, note: "HIGH RISK BAND. Flattest slope means loss decays slowly with distance. 6 settle breaches in 253 weeks." },
-        { hi: 30.7, name: "60-80%", range: "23.8 - 30.7", b: -1.464, a: -0.7660, note: "3 breaches in 265 weeks. Contains significant volume of trade-permitted weeks." },
-        { hi: 1e9, name: "TOP 20%", range: "30.7 +", b: -2.463, a: 0.3660, note: "Safest structural environment: zero settle breaches in 292 weeks at 2.90 sigma." }
+        { hi: 16.6, name: "Bottom 20%", range: "VXN < 16.6", b: -1.552, a: -1.0799, note: "Calmest weeks. Both full-width losses in the 1,331-week dataset occurred here; distance does not fully protect when absolute sigma is narrow." },
+        { hi: 19.8, name: "20–40%", range: "16.6–19.8", b: -2.213, a: 0.0753, note: "Cheapest band to sell in. Extra distance helps. 1 settle breach in 283 weeks at 2.90 sigma." },
+        { hi: 23.8, name: "40–60%", range: "19.8–23.8", b: -1.461, a: -0.4826, note: "Flattest slope. Loss decays slowly with distance. 6 settle breaches in 253 weeks." },
+        { hi: 30.7, name: "60–80%", range: "23.8–30.7", b: -1.464, a: -0.7660, note: "3 breaches in 265 weeks." },
+        { hi: 1e9, name: "Top 20%", range: "30.7+", b: -2.463, a: 0.3660, note: "Zero settle breaches in 292 weeks at 2.90 sigma." }
     ],
     zL: [1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 2.9, 3.2, 3.5],
     putTouch: [380, 274, 195, 125, 80, 51, 36, 19, 17, 11, 7],
@@ -464,15 +806,19 @@ const K = {
     callSettle: [224, 136, 88, 48, 19, 12, 4, 2, 2, 1, 0],
     weeks: 1331, wkPerYr: 52,
     earnWin: [[1,20,2,10],[4,20,5,10],[7,20,8,10],[10,20,11,10]],
-    gapBlock: -0.02, priorBlock: -0.03
+    putGap: -0.01, vxnJump: 2, vxnJumpZ: 3.25, maxContracts: 50
 };
 
 const $ = id => document.getElementById(id);
 const V = id => parseFloat($(id).value);
 const pct = (x, d) => (x * 100).toFixed(d === undefined ? 3 : d) + "%";
 const be = (f, z) => Math.exp(f.a + f.b * z);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, ch => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+}[ch]));
 
-// --- Black-Scholes Math Functions ---
+const INFO_ICON = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 7.2V11" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/><circle cx="8" cy="5.1" r="0.7" fill="currentColor"/></svg>';
+
 function normCDF(x) {
     const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
     const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
@@ -504,13 +850,44 @@ function solveRoot(f, a, b, tol = 1e-5, maxIter = 100) {
 
 function findPutStrikeBS(targetDeltaPut, S, T, r, sigma) {
     const targetCallDelta = 1 - targetDeltaPut;
-    const f = K => calculateCallDelta(S, K, T, r, sigma) - targetCallDelta;
+    const f = Kstrike => calculateCallDelta(S, Kstrike, T, r, sigma) - targetCallDelta;
     return solveRoot(f, S * 0.01, S);
 }
 
 function findCallStrikeBS(targetDeltaCall, S, T, r, sigma) {
-    const f = K => calculateCallDelta(S, K, T, r, sigma) - targetDeltaCall;
+    const f = Kstrike => calculateCallDelta(S, Kstrike, T, r, sigma) - targetDeltaCall;
     return solveRoot(f, S, S * 4.0);
+}
+
+function bsPut(S, Kstrike, T, r, sigma) {
+    if (!(S > 0) || !(Kstrike > 0) || !(T > 0) || !(sigma > 0)) return NaN;
+    const vol = sigma * Math.sqrt(T);
+    const d1 = (Math.log(S / Kstrike) + (r + 0.5 * sigma * sigma) * T) / vol;
+    const d2 = d1 - vol;
+    return Kstrike * Math.exp(-r * T) * normCDF(-d2) - S * normCDF(-d1);
+}
+
+function contractCount() {
+    const el = $("contracts");
+    let n = Math.round(parseFloat(el.value));
+    if (!isFinite(n) || n < 1) return 0;
+    if (n > K.maxContracts) {
+        n = K.maxContracts;
+        el.value = String(K.maxContracts);
+    }
+    return n;
+}
+
+function signedPct(x, d) {
+    const body = Math.abs(x * 100).toFixed(d) + "%";
+    if (x < 0) return "−" + body;
+    if (x > 0) return "+" + body;
+    return body;
+}
+
+function money0(x) {
+    const sign = x < 0 ? "−" : "";
+    return sign + "$" + Math.abs(Math.round(x)).toLocaleString("en-US");
 }
 
 function bandFor(v) {
@@ -549,7 +926,31 @@ function inEarnWindow(d) {
     return false;
 }
 
+function stClass(v) {
+    if (v === "PASS" || v === "CLEAR") return "st-pass";
+    if (v === "FAIL") return "st-fail";
+    return "st-soft";
+}
+
+function tipButton(id, label) {
+    return '<span class="tip" id="' + id + '"><button type="button" class="tip-btn" aria-expanded="false" aria-label="' + esc(label) + '">'
+        + INFO_ICON + '</button><span class="tip-pop" role="tooltip">';
+}
+
+function matrixSide(title, rows) {
+    let html = '<div><h3>' + esc(title) + '</h3><div class="mhead"><span>Delta</span><span>Strike</span><span>Rounded</span><span>From spot</span></div>';
+    rows.forEach((row, i) => {
+        const strike = isFinite(row.k) ? row.k.toFixed(2) : "—";
+        const rounded = isFinite(row.k) ? String(Math.round(row.k)) : "—";
+        const dist = isFinite(row.k) ? pct(row.k / row.s - 1, 2) : "—";
+        html += '<div class="mrow' + (i === 0 ? ' primary' : '') + '"><span class="delta">' + row.delta + '</span><span class="raw">'
+            + strike + '</span><span class="rnd">' + rounded + '</span><span class="dist">' + dist + '</span></div>';
+    });
+    return html + '</div>';
+}
+
 function render() {
+    const openTips = new Set([...document.querySelectorAll(".tip.open")].map(t => t.id));
     const S = V("spot"), vxn = V("vxn"), hiv = V("hiv"), dte = V("dte"), W = V("wid");
     const sig = (vxn / 100) * K.volMult * Math.sqrt(dte / 365);
     const pts = S * sig;
@@ -561,156 +962,215 @@ function render() {
 
     const g1 = ratio >= 0.95 ? "PASS" : ratio >= 0.85 ? "SOFT" : "FAIL";
     const g2 = ach >= K.zFloor ? "PASS" : "FAIL";
+    const zq = V("credz");
     const gap = $("pfc").value ? S / V("pfc") - 1 : null;
-    const pw = ($("pfc").value && $("pmo").value) ? V("pfc") / V("pmo") - 1 : null;
-    const g7a = gap === null ? "-" : (gap <= K.gapBlock ? "FAIL" : "PASS");
-    const g7b = pw === null ? "-" : (pw <= K.priorBlock ? "FAIL" : "PASS");
+    const vxnRise = $("pvxn").value !== "" && isFinite(V("pvxn")) ? vxn - V("pvxn") : null;
+    const gGap = gap === null ? "-" : (gap <= K.putGap ? "FAIL" : "PASS");
+    const gVxn = vxnRise === null ? "-" : (vxnRise > K.vxnJump ? (zq + 1e-9 >= K.vxnJumpZ ? "PASS" : "FAIL") : "PASS");
+    const stopN = (() => {
+        const n = Math.round(parseFloat($("stops12").value));
+        return isFinite(n) && n > 0 ? n : 0;
+    })();
+    const gPause = stopN >= 2 ? "FAIL" : "PASS";
     const dObj = $("dt").value ? new Date($("dt").value + "T12:00:00") : null;
     const earn = inEarnWindow(dObj);
 
-    const zq = V("credz");
     const beA = be(K.putAll, zq), beB = be(band, zq);
     const req = beA * marg;
     const credFrac = V("cred") / W;
     const g3 = isFinite(credFrac) && credFrac > 0 ? (credFrac >= req ? "PASS" : "FAIL") : "-";
     const gFloor = zq < K.zFloor ? "FAIL" : "PASS";
-    const hotBand = band.range === "19.8 - 23.8";
-    const bandWarn = hotBand ? beB * K.bandWarnMult : beB;
+    const hotBand = band.range === "19.8–23.8";
+    const jumped = vxnRise !== null && vxnRise > K.vxnJump;
 
-    let cls, big, msg;
-    if (gFloor === "FAIL") {
-        cls = "v-no"; big = "NO TRADE";
-        msg = "Entered distance is <b>" + zq.toFixed(2) + " sigma</b>, inside the <b>" + K.zFloor.toFixed(2) + " sigma</b> floor. Do not sell inside " + K.zFloor.toFixed(2) + " sigma.";
+    let tone, big, msg;
+    if (gPause === "FAIL") {
+        tone = "no"; big = "PAUSE";
+        msg = stopN + " stops in the last 12 months. Pause new entries. Calls are off by rule.";
+    } else if (gGap === "FAIL") {
+        tone = "no"; big = "PUTS BLOCKED";
+        msg = "Monday gap is " + signedPct(gap, 2) + ". Puts are blocked on a gap-down of 1% or more. Calls are off by rule.";
+    } else if (gVxn === "FAIL") {
+        tone = "wait"; big = "MOVE OR SKIP";
+        msg = "VXN is up " + vxnRise.toFixed(2) + " points from the prior Monday. Move the put to 3.25 sigma or skip the week. Calls are off by rule.";
+    } else if (gFloor === "FAIL") {
+        tone = "no"; big = "NO TRADE";
+        msg = "Entered distance is " + zq.toFixed(2) + " sigma, inside the " + K.zFloor.toFixed(2) + " floor. Calls are off by rule.";
     } else if (g1 === "FAIL") {
-        cls = "v-no"; big = "STAND DOWN";
-        msg = "Front end has collapsed at a ratio of <b>" + ratio.toFixed(3) + "</b>. Market pricing is calmer than VXN implies; credit at distance will be insufficient.";
-    } else if (g7a === "FAIL" || g7b === "FAIL") {
-        cls = "v-wait"; big = "PUT ONLY";
-        msg = "Put side is live. <b>Call side blocked</b> due to structural momentum/gap parameters.";
+        tone = "no"; big = "STAND DOWN";
+        msg = "Header IV / VXN is " + ratio.toFixed(3) + ". The front end is too far under VXN. Calls are off by rule.";
     } else if (g3 === "FAIL") {
-        cls = "v-no"; big = "PRICE FAIL";
-        msg = "Fillable credit of <b>" + pct(credFrac, 3) + "</b> falls short of the required <b>" + pct(req, 3) + "</b> of width at " + zq.toFixed(2) + " sigma. Mid is not accepted.";
+        tone = "no"; big = "PRICE FAIL";
+        msg = "Fillable credit is " + pct(credFrac, 3) + " of width, short of the " + pct(req, 3) + " required at " + zq.toFixed(2) + " sigma. Calls are off by rule.";
     } else if (g3 === "-") {
-        cls = "v-wait"; big = "AWAITING QUOTE";
-        msg = "Enter fillable credit, not mid, to verify the price gate. Required at " + zq.toFixed(2) + " sigma is <b>" + pct(req, 3) + "</b> of width.";
+        tone = "wait"; big = "AWAITING QUOTE";
+        msg = "Enter a fillable credit. At " + zq.toFixed(2) + " sigma the book needs " + pct(req, 3) + " of width. Calls are off by rule.";
     } else {
-        cls = "v-go"; big = "TRADE";
-        msg = "Fillable credit of <b>" + pct(credFrac, 3) + "</b> meets the <b>" + pct(req, 3) + "</b> requirement at " + zq.toFixed(2) + " sigma.";
+        tone = "go"; big = "PUT";
+        msg = "Put side is open at " + zq.toFixed(2) + " sigma" + (jumped ? " after the VXN rise" : "") + ". Calls are off by rule.";
     }
 
-    const tg = (v) => v === "PASS" ? "pass" : v === "FAIL" ? "fail" : "soft";
-    const g2Tag = g2 === "FAIL" ? "NOTE" : g2;
-    const g2Cls = g2 === "FAIL" ? "soft" : tg(g2);
-    const g2Note = g2 === "FAIL"
-        ? '<div class="warnbox"><b>Gate 2 is advisory.</b> The strike reachable at 0.9% of width sits at <b>' + ach.toFixed(2) + ' sigma</b>, inside the 2.90 floor. VXN is <b>' + vxn.toFixed(2) + '</b> and needs <b>' + thr.toFixed(2) + '</b> or above. This does not block the trade.</div>'
-        : "";
-    const bandNote = '<div class="warnbox"><b>VXN band break-even is advisory.</b> '
-        + band.name + ' (' + band.range + ') is <b>' + pct(beB, 3) + '</b> of width'
-        + (hotBand ? '. In this band, 1.25× that is <b>' + pct(bandWarn, 3) + '</b> of width' : '')
-        + '. It does not change the required credit.</div>';
+    const g2Label = g2 === "FAIL" ? "NOTE" : "PASS";
+    const vxnGate = vxnRise === null ? "Need prior Monday" : (vxnRise >= 0 ? "+" : "−") + Math.abs(vxnRise).toFixed(2) + " vs +2";
+    const gates = [
+        ["Floor", gFloor, zq.toFixed(2) + " vs " + K.zFloor.toFixed(2)],
+        ["Front end", g1, "IV / VXN " + ratio.toFixed(3)],
+        ["Distance", g2Label, ach.toFixed(2) + "σ vs 2.90"],
+        ["Price", g3 === "-" ? "SOFT" : g3, isFinite(credFrac) ? pct(credFrac, 3) + " vs " + pct(req, 3) : "No credit"],
+        ["Monday", gGap === "-" ? "SOFT" : gGap, gap === null ? "Need Friday close" : signedPct(gap, 2) + " vs −1%"],
+        ["VXN week", gVxn === "-" ? "SOFT" : gVxn, vxnGate],
+        ["Stops", gPause, stopN + " in 12 months"],
+        ["Earnings", earn ? "NOTE" : "CLEAR", earn ? "Inside the window" : "Outside the window"]
+    ];
+    let gateList = gates.map(g => '<li><span>' + esc(g[0]) + '</span><span class="' + stClass(g[1]) + '">' + esc(g[1] === "HALVE" ? "Halve" : g[1] === "CLEAR" ? "Clear" : g[1] === "NOTE" ? "Note" : g[1] === "SOFT" ? "Soft" : g[1].charAt(0) + g[1].slice(1).toLowerCase()) + '</span><span>' + esc(g[2]) + '</span></li>').join("");
+    let gateNotes = "";
+    if (g2 === "FAIL") {
+        gateNotes += '<p class="tnote">Distance is advisory. The 0.9% width strike is at ' + ach.toFixed(2) + ' sigma. VXN needs ' + thr.toFixed(2) + ' or above. It does not block the trade.</p>';
+    }
+    if (hotBand) {
+        gateNotes += '<p class="tnote">In the ' + esc(band.name) + ' band, 1.25× the band break-even is ' + pct(beB * K.bandWarnMult, 3) + ' of width. It does not change the required credit.</p>';
+    }
 
-    $("verdict").innerHTML = '<div class="verdict ' + cls + '"><div class="big">' + big + '</div><div style="flex:1">'
-        + '<div style="margin-bottom:12px">' + msg + '</div><div class="gates">'
-        + '<div class="gate"><b>Floor · Entered z</b><span class="tag ' + tg(gFloor) + '">' + gFloor + '</span><span>Entered ' + zq.toFixed(2) + ' sigma vs ' + K.zFloor.toFixed(2) + ' hard floor</span></div>'
-        + '<div class="gate"><b>Gate 1 · Front End</b><span class="tag ' + tg(g1) + '">' + g1 + '</span><span>Header IV / VXN = ' + ratio.toFixed(3) + ' (≥0.95 normal, 0.85-0.95 soft)</span></div>'
-        + '<div class="gate"><b>Gate 2 · Distance</b><span class="tag ' + g2Cls + '">' + g2Tag + '</span><span>Achievable ' + ach.toFixed(2) + ' sigma vs 2.90 floor (VXN ≥ ' + thr.toFixed(2) + '). Advisory.</span></div>'
-        + '<div class="gate"><b>Gate 3 · Price</b><span class="tag ' + tg(g3) + '">' + g3 + '</span><span>Fillable credit vs ' + pct(req, 3) + ' of width at ' + zq.toFixed(2) + ' sigma</span></div>'
-        + '<div class="gate"><b>R7 · Monday Gap</b><span class="tag ' + tg(g7a) + '">' + g7a + '</span><span>' + (gap === null ? "Enter prior Friday close" : (pct(gap, 2) + ' vs -2.00% block')) + '</span></div>'
-        + '<div class="gate"><b>R7 · Prior Week</b><span class="tag ' + tg(g7b) + '">' + g7b + '</span><span>' + (pw === null ? "Enter prior week's open" : (pct(pw, 2) + ' vs -3.00% block')) + '</span></div>'
-        + '<div class="gate"><b>R8 · Earnings</b><span class="tag ' + (earn ? "soft" : "pass") + '">' + (earn ? "HALVE" : "CLEAR") + '</span><span>' + (earn ? "Inside reporting window — halve call side size." : "Outside reporting window.") + '</span></div>'
-        + '</div>' + g2Note + bandNote + '</div></div>';
+    $("verdict").innerHTML = '<div class="status ' + tone + '"><span class="status-pill"><i></i>' + esc(big) + '</span><span class="reason">'
+        + esc(msg) + '</span>' + tipButton("tip-status", "Show the gates") + '<ul>' + gateList + '</ul>' + gateNotes + '</span></span></div>';
 
-    $("regime").innerHTML = '<div class="kv"><span>Sigma over ' + dte + 'd</span><span>' + pct(sig, 3) + '</span></div>'
-        + '<div class="kv"><span>One sigma in points</span><span>' + pts.toFixed(2) + '</span></div>'
-        + '<div class="kv"><span>VXN quintile</span><span>' + band.name + ' (' + band.range + ')</span></div>'
-        + '<div class="kv"><span>Break-even @2.90σ (Band)</span><span>' + pct(be(band, 2.9), 3) + '</span></div>'
-        + '<div class="kv"><span>Break-even @2.90σ (All)</span><span>' + pct(be(K.putAll, 2.9), 3) + '</span></div>'
-        + '<div class="note">' + band.note + '</div>';
+    const sigmaBS = hiv / 100;
+    const TBS = dte / 365;
+    const rBS = (parseFloat($("bs_r").value) || 4.0) / 100;
+    const deltas = [0.03, 0.025, 0.02];
+    const puts = deltas.map(d => findPutStrikeBS(d, S, TBS, rBS, sigmaBS));
+    const calls = deltas.map(d => findCallStrikeBS(d, S, TBS, rBS, sigmaBS));
+    const labels = ["0.030", "0.025", "0.020"];
 
-    const fdesc = ratio >= 0.95
-        ? "NORMAL — Front end aligned with VXN. Standard credit structure."
-        : ratio >= 0.85
-        ? "SOFT — Front end slightly below VXN. Expect thinner credit."
-        : "COLLAPSED — Market pricing calmer than VXN. Credit will be constrained.";
+    $("bs-cap").textContent = "Header IV " + hiv.toFixed(2) + "% · " + dte + " days · r " + (rBS * 100).toFixed(1) + "%. q = 0.";
+    $("bs-matrix").innerHTML = '<div class="matrix">'
+        + matrixSide("Put", labels.map((label, i) => ({ delta: label, k: puts[i], s: S })))
+        + matrixSide("Call", labels.map((label, i) => ({ delta: label, k: calls[i], s: S })))
+        + '</div>';
 
-    $("frontend").innerHTML = '<div class="kv"><span>Header IV</span><span>' + hiv.toFixed(2) + '%</span></div>'
-        + '<div class="kv"><span>VXN</span><span>' + vxn.toFixed(2) + '</span></div>'
-        + '<div class="kv"><span>Ratio</span><span class="' + (ratio >= 0.95 ? 'pass' : ratio >= 0.85 ? 'soft' : 'fail') + '">' + ratio.toFixed(3) + '</span></div>'
-        + '<div class="note"><b>' + fdesc + '</b></div>';
+    const zUse = Math.max(zq, K.zFloor);
+    const sigPut = S * Math.exp(0.5 * sig * sig - zUse * sig);
+    const put030 = puts[0];
+    let tradedPut = NaN;
+    if (isFinite(put030) && isFinite(sigPut) && isFinite(W)) {
+        tradedPut = Math.min(Math.round(put030), Math.round(sigPut));
+        $("desk-line").innerHTML = "Desk put <b>" + tradedPut + "</b> is the further of <b>" + Math.round(put030)
+            + "</b> at 0.030 and <b>" + Math.round(sigPut) + "</b> at " + zUse.toFixed(2) + "σ. Calls are off by rule. Wings are " + W + " points.";
+    } else {
+        $("desk-line").textContent = "Enter spot, Header IV, VXN, and DTE to place the desk strikes.";
+    }
 
-    const zs = [2.25, 2.50, 2.75, 2.90, 3.20, 3.50, 4.00];
-    let ph = '<tr><th>z</th><th>Short K</th><th>Long K</th><th>% below spot</th><th>BE all-weeks</th><th>BE this band</th><th>Required x' + marg + '</th><th>Touch 1-in</th><th>Settle 1-in</th></tr>';
+    const fword = ratio >= 0.95 ? "aligned with VXN" : ratio >= 0.85 ? "a little under VXN" : "well under VXN";
+    const regimeText = dte + "-day sigma is " + pct(sig, 2) + " (" + pts.toFixed(2) + " pts). VXN " + vxn.toFixed(2)
+        + " is the " + band.name.toLowerCase() + " band. Header IV / VXN is " + (isFinite(ratio) ? ratio.toFixed(3) : "—") + ", " + fword + ".";
+    const regimeDetail = [
+        ["Sigma", pct(sig, 3)],
+        ["One sigma", pts.toFixed(2) + " pts"],
+        ["VXN band", band.name + " (" + band.range + ")"],
+        ["Band break-even", pct(be(band, 2.9), 3)],
+        ["All-weeks break-even", pct(be(K.putAll, 2.9), 3)],
+        ["Header IV", hiv.toFixed(2) + "%"],
+        ["VXN", vxn.toFixed(2)],
+        ["Ratio", isFinite(ratio) ? ratio.toFixed(3) : "—"]
+    ].map(row => '<div class="trow"><span>' + esc(row[0]) + '</span><span>' + esc(row[1]) + '</span></div>').join("");
+    $("regime").innerHTML = '<p>' + esc(regimeText) + '</p>' + tipButton("tip-regime", "Show regime detail")
+        + regimeDetail + '<p class="tnote">' + esc(band.note) + ' The band break-even is advisory.</p></span></span>';
+
+    const zs = [2.25, 2.50, 2.75, 2.90, 3.20, 3.25, 3.50, 4.00];
+    let ph = '<tr><th>z</th><th>Short</th><th>Long</th><th>From spot</th><th>BE all</th><th>BE band</th><th>Required ×' + marg + '</th><th>Touch</th><th>Settle</th></tr>';
     for (const z of zs) {
         const Ks = S * Math.exp(0.5 * sig * sig - z * sig), Kl = Ks - W;
-        const bA = be(K.putAll, z), bB = be(band, z), rq = bA * marg;
-        ph += '<tr class="' + (Math.abs(z - 2.90) < 0.001 ? 'hit' : '') + '"><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
-            + '<td>' + pct(Ks / S - 1, 2) + '</td><td>' + pct(bA, 3) + '</td><td>' + pct(bB, 3) + '</td><td><b>' + pct(rq, 3) + '</b></td>'
+        const bA = be(K.putAll, z), bBand = be(band, z), rq = bA * marg;
+        const hit = Math.abs(z - K.zFloor) < 0.001 || Math.abs(z - zq) < 0.001;
+        ph += '<tr class="' + (hit ? 'hit' : '') + '"><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
+            + '<td>' + pct(Ks / S - 1, 2) + '</td><td>' + pct(bA, 3) + '</td><td>' + pct(bBand, 3) + '</td><td>' + pct(rq, 3) + '</td>'
             + '<td>' + fmtYears(everyN(interp(K.zL, K.putTouch, z))) + '</td><td>' + fmtYears(everyN(interp(K.zL, K.putSettle, z))) + '</td></tr>';
     }
     $("puts").innerHTML = ph;
-    $("putnote").innerHTML = "Strikes rounded to whole points. Required = all-weeks break-even × " + marg + ". Fillable credit, not mid. The band column is advisory.";
+    $("putnote").textContent = "Short strikes round to the nearest point. Required credit is the all-weeks break-even times the margin. The band column is advisory.";
 
-    let ch = '<tr><th>z</th><th>Short K</th><th>Long K</th><th>% above spot</th><th>BE all-weeks</th><th>Touch 1-in</th><th>Settle 1-in</th></tr>';
+    let ch = '<tr><th>z</th><th>Short</th><th>Long</th><th>From spot</th><th>BE all</th><th>Touch</th><th>Settle</th></tr>';
     for (const z of [2.25, 2.50, 2.75, 2.90, 3.20, 3.50]) {
         const Ks = S * Math.exp(0.5 * sig * sig + z * sig), Kl = Ks + W;
-        ch += '<tr class="' + ((z >= 2.5 && z <= 3.0) ? 'hit' : '') + '"><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
+        ch += '<tr><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
             + '<td>' + pct(Ks / S - 1, 2) + '</td><td>' + pct(be(K.callAll, z), 3) + '</td>'
             + '<td>' + fmtYears(everyN(interp(K.zL, K.callTouch, z))) + '</td><td>' + fmtYears(everyN(interp(K.zL, K.callSettle, z))) + '</td></tr>';
     }
     $("calls").innerHTML = ch;
-    $("callnote").innerHTML = '<div class="nobox"><b>IF THERE IS NO BID AT 2.50 SIGMA, SELL NO CALL SIDE AT ALL.</b> Never move strikes inward to find a bid.</div>';
+    $("callnote").textContent = "Calls are off by rule.";
 
-    const nav = V("nav"), baseP = V("base") / 100, cap = V("cap"), norm = V("norm");
+    const cap = V("cap"), norm = V("norm");
     const rat = credFrac > 0 && beA > 0 ? credFrac / beA : 0;
     const mult = Math.min(cap, Math.max(0, rat / norm));
-    const risk = nav * baseP * mult;
-    const peak = baseP * cap;
-    const perC = (W - V("cred")) * 100;
-    const cons = perC > 0 ? Math.floor(risk / perC) : 0;
+    const nBook = contractCount();
+    const credit = V("cred");
+    const wingRisk = isFinite(W) && isFinite(credit) && nBook > 0 ? Math.max(0, W - credit) * 100 * nBook : NaN;
+    const creditDollars = isFinite(credit) && nBook > 0 ? credit * 100 * nBook : NaN;
 
-    const tradable = big === "TRADE" || big === "PUT ONLY";
-    $("sizeout").innerHTML = '<div class="kv"><span>Credit / break-even</span><span>' + (rat ? rat.toFixed(2) + "x" : "-") + '</span></div>'
-        + '<div class="kv"><span>Edge multiple (cap ' + cap + 'x)</span><span>' + mult.toFixed(2) + 'x</span></div>'
-        + '<div class="kv"><span>Risk capital deploy</span><span>$' + Math.round(risk).toLocaleString() + '</span></div>'
-        + '<div class="kv"><span>As % of NAV</span><span>' + pct(risk / nav, 1) + '</span></div>'
-        + '<div class="kv' + (tradable ? '' : ' na') + '"><span>Contracts ($' + perC.toFixed(0) + ' risk)</span><span>' + (tradable ? cons : 'n/a') + '</span></div>';
+    $("sizeout").innerHTML = '<div class="kv"><span>Contracts</span><span>' + (nBook > 0 ? nBook : "—") + '</span></div>'
+        + '<div class="kv"><span>Cap</span><span>' + K.maxContracts + '</span></div>'
+        + '<div class="kv"><span>Full-wing risk</span><span>' + (isFinite(wingRisk) ? "$" + Math.round(wingRisk).toLocaleString("en-US") : "—") + '</span></div>'
+        + '<div class="kv"><span>Credit at entry</span><span>' + (isFinite(creditDollars) ? "$" + Math.round(creditDollars).toLocaleString("en-US") : "—") + '</span></div>';
 
-    const stopSh = 0.03 * (W - V("cred")), stopD = risk * 0.03;
-    $("stopout").innerHTML = '<div class="kv"><span>Stop (3% VaR)</span><span>$' + Math.round(stopD).toLocaleString() + '</span></div>'
-        + '<div class="kv"><span>Per share value</span><span>$' + stopSh.toFixed(3) + '</span></div>'
-        + '<div class="warnbox"><b>Stop is mandatory on capped leverage weeks.</b> Set stop order upon entry.</div>';
+    $("stopout").innerHTML = '<div class="kv"><span>Credit / break-even</span><span>' + (rat ? rat.toFixed(2) + "×" : "—") + '</span></div>'
+        + '<div class="kv"><span>Edge multiple</span><span>' + (isFinite(mult) ? mult.toFixed(2) + "×" : "—") + '</span></div>'
+        + '<p class="note">The book is the contract count, capped at ' + K.maxContracts + '. The exit is a touch of the short put.</p>';
 
-    // --- Black-Scholes Delta Matrix Calculation (Strictly uses Header IV) ---
-    const sigmaBS = hiv / 100;
-    const TBS = dte / 365;
-    const rBS = (parseFloat($("bs_r").value) || 4.0) / 100;
+    $("sizehint").textContent = nBook > 0 ? nBook + " contracts" : "";
 
-    $("bs_sig_disp").value = sigmaBS.toFixed(4) + " (from " + hiv.toFixed(2) + "% Header IV)";
+    renderExit(tradedPut, W, credit, nBook, hiv / 100, dte / 365, rBS);
+    $("foot").textContent = "1,331-week study · Black–Scholes strikes from Header IV · signal from VXN";
 
-    const put03 = findPutStrikeBS(0.03, S, TBS, rBS, sigmaBS);
-    const put025 = findPutStrikeBS(0.025, S, TBS, rBS, sigmaBS);
-    const put02 = findPutStrikeBS(0.02, S, TBS, rBS, sigmaBS);
-
-    const call03 = findCallStrikeBS(0.03, S, TBS, rBS, sigmaBS);
-    const call025 = findCallStrikeBS(0.025, S, TBS, rBS, sigmaBS);
-    const call02 = findCallStrikeBS(0.02, S, TBS, rBS, sigmaBS);
-
-    let bsh = '<thead><tr><th>Option Side</th><th>Target Delta</th><th>Calculated Strike (K)</th><th>Rounded Strike</th><th>% OTM Distance</th></tr></thead><tbody>';
-    bsh += '<tr><td>Put</td><td>0.030 Put Delta</td><td>' + (isNaN(put03) ? '-' : put03.toFixed(2)) + '</td><td>' + (isNaN(put03) ? '-' : Math.round(put03)) + '</td><td>' + (isNaN(put03) ? '-' : pct(put03 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Put</td><td>0.025 Put Delta</td><td>' + (isNaN(put025) ? '-' : put025.toFixed(2)) + '</td><td>' + (isNaN(put025) ? '-' : Math.round(put025)) + '</td><td>' + (isNaN(put025) ? '-' : pct(put025 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Put</td><td>0.020 Put Delta</td><td>' + (isNaN(put02) ? '-' : put02.toFixed(2)) + '</td><td>' + (isNaN(put02) ? '-' : Math.round(put02)) + '</td><td>' + (isNaN(put02) ? '-' : pct(put02 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Call</td><td>0.030 Call Delta</td><td>' + (isNaN(call03) ? '-' : call03.toFixed(2)) + '</td><td>' + (isNaN(call03) ? '-' : Math.round(call03)) + '</td><td>' + (isNaN(call03) ? '-' : pct(call03 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Call</td><td>0.025 Call Delta</td><td>' + (isNaN(call025) ? '-' : call025.toFixed(2)) + '</td><td>' + (isNaN(call025) ? '-' : Math.round(call025)) + '</td><td>' + (isNaN(call025) ? '-' : pct(call025 / S - 1, 2)) + '</td></tr>';
-    bsh += '<tr><td>Call</td><td>0.020 Call Delta</td><td>' + (isNaN(call02) ? '-' : call02.toFixed(2)) + '</td><td>' + (isNaN(call02) ? '-' : Math.round(call02)) + '</td><td>' + (isNaN(call02) ? '-' : pct(call02 / S - 1, 2)) + '</td></tr>';
-    bsh += '</tbody>';
-
-    $("bs_table").innerHTML = bsh;
-
-    $("foot").innerHTML = "Desk v1.0 · Calibrated to 1,331-week QQQ study · Integrated Black-Scholes Engine · Confidential Policy & Quantitative Framework.";
+    openTips.forEach(id => {
+        const tip = document.getElementById(id);
+        if (!tip) return;
+        tip.classList.add("open");
+        const btn = tip.querySelector(".tip-btn");
+        if (btn) btn.setAttribute("aria-expanded", "true");
+    });
 }
 
-const STORE_KEY = "atlas.ic-calculator.v1";
-const INPUT_IDS = ["spot", "vxn", "hiv", "dte", "wid", "pfc", "pmo", "dt", "nav", "base", "cap", "norm", "cred", "credz", "marg", "bs_r"];
+function renderExit(shortK, wing, credit, n, sigma, T, r) {
+    const out = $("exitout");
+    const stops = Math.round(parseFloat($("stops12").value));
+    const stopN = isFinite(stops) && stops > 0 ? stops : 0;
+    if (!(shortK > 0) || !(wing > 0) || !(n > 0) || !(sigma > 0) || !(T > 0)) {
+        out.innerHTML = '<p class="note">Enter spot, Header IV, days left, width, and a contract count to price the stop.</p>';
+        return;
+    }
+    const longK = shortK - wing;
+    const shortPx = bsPut(shortK, shortK, T, r, sigma);
+    const longPx = bsPut(shortK, longK, T, r, sigma);
+    const vertical = shortPx - longPx;
+    if (!isFinite(vertical) || vertical <= 0) {
+        out.innerHTML = '<p class="note">The model mark needs a positive Header IV and days left.</p>';
+        return;
+    }
+    const model = vertical * 100 * n;
+    const maxLoss = Math.max(0, wing - (isFinite(credit) ? credit : 0)) * 100 * n;
+    const bandLo = shortK * 0.99;
+    const bandHi = shortK * 1.01;
+    const pausePx = stopN >= 2 ? "Paused" : String(stopN);
+    const pauseCmp = stopN >= 2
+        ? stopN + " stops in the last 12 months. New entries wait."
+        : "After 2 stops in any rolling 12 months";
+    const pauseCls = stopN >= 2 ? " over" : "";
+
+    function line(side, px, cmp, pxClass) {
+        return '<div class="eject-line"><span class="side">' + esc(side) + '</span><span class="px' + pxClass + '">'
+            + esc(px) + '</span><span class="cmp">' + esc(cmp) + '</span></div>';
+    }
+
+    out.innerHTML = line("Stop", money0(model) + "–" + money0(model * 1.3),
+            "Touch " + shortK + " · 1.0–1.3× a $" + vertical.toFixed(2) + " model", " range")
+        + line("Friday", "Hold", "Close inside " + bandLo.toFixed(2) + "–" + bandHi.toFixed(2) + " before the close", "")
+        + line("Pause", pausePx, pauseCmp, pauseCls)
+        + line("Max loss", money0(maxLoss), "Full " + wing + "-point wing · " + n + " contracts", "")
+        + '<p class="note">The model uses Header IV, the days left, and spot on the short strike. Credit, wing, and the short put come from the sections above.</p>';
+}
+
+const STORE_KEY = "atlas.ic-calculator.v3";
+const INPUT_IDS = ["spot", "vxn", "hiv", "dte", "wid", "pfc", "pvxn", "dt", "nav", "base", "cap", "norm", "cred", "credz", "marg", "bs_r", "contracts", "stops12"];
 
 function localToday() {
     const d = new Date();
@@ -757,9 +1217,36 @@ function resetInputs() {
     render();
 }
 
+function closeTips(except) {
+    document.querySelectorAll(".tip.open").forEach(tip => {
+        if (except && tip === except) return;
+        tip.classList.remove("open");
+        const btn = tip.querySelector(".tip-btn");
+        if (btn) btn.setAttribute("aria-expanded", "false");
+    });
+}
+
+document.addEventListener("click", (event) => {
+    const btn = event.target.closest(".tip-btn");
+    if (btn) {
+        const tip = btn.closest(".tip");
+        const willOpen = !tip.classList.contains("open");
+        closeTips(tip);
+        tip.classList.toggle("open", willOpen);
+        btn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+        event.preventDefault();
+        return;
+    }
+    if (!event.target.closest(".tip")) closeTips(null);
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeTips(null);
+});
+
 loadInputs();
 document.querySelectorAll("input").forEach(el => {
-    const onEdit = () => { saveInputs(); render(); };
+    const onEdit = () => { render(); saveInputs(); };
     el.addEventListener("input", onEdit);
     el.addEventListener("change", onEdit);
 });

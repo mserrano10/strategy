@@ -1,7 +1,7 @@
 {
   "title": "Backtest Lab",
   "version": "0.1.0",
-  "banner": "These results use the free Yahoo Finance source. Books on today's listings are SURVIVORSHIP-BIASED: they are not the companies that existed at each year-end. Point-in-time books walk Wikipedia's selected S&P 500 changes backward; that table is thin before about 2011, and names that cannot be priced are logged. The size-floor books use today's NASDAQ/NYSE common stocks, so delisted names are missing. Sharadar (SEP / SF1 / TICKERS) is the exact replacement. Every equity chart includes SPY total return, rebased to the same starting capital, as a reference. SPY is not a strategy.",
+  "banner": "These results use the free Yahoo Finance source. Books on today's listings are SURVIVORSHIP-BIASED: they are not the companies that existed at each year-end. Point-in-time books are withheld until a Sharadar membership tape replaces the Wikipedia walk. The size-floor books use today's NASDAQ/NYSE common stocks, so delisted names are missing. Sharadar (SEP / SF1 / TICKERS) is the exact replacement. Every equity chart includes SPY total return, rebased to the same starting capital, as a reference. SPY is not a strategy.",
   "reports": [
     {
       "id": "best-returner",
@@ -142,8 +142,48 @@
       "png": "tqqq-two-bullet.png",
       "free_source": true,
       "survivorship_bias_free": true
+    },
+    {
+      "id": "qqq-condor-hold",
+      "name": "QQQ Condor \u2014 hold",
+      "group": "QQQ Condor",
+      "file": "qqq-condor-hold.json",
+      "csv": "qqq-condor-hold.csv",
+      "png": "qqq-condor-hold.png",
+      "free_source": true,
+      "survivorship_bias_free": true
+    },
+    {
+      "id": "qqq-condor-stop-2x",
+      "name": "QQQ Condor \u2014 2\u00d7 credit",
+      "group": "QQQ Condor",
+      "file": "qqq-condor-stop-2x.json",
+      "csv": "qqq-condor-stop-2x.csv",
+      "png": "qqq-condor-stop-2x.png",
+      "free_source": true,
+      "survivorship_bias_free": true
+    },
+    {
+      "id": "qqq-condor-stop-3pct",
+      "name": "QQQ Condor \u2014 3% of VAR",
+      "group": "QQQ Condor",
+      "file": "qqq-condor-stop-3pct.json",
+      "csv": "qqq-condor-stop-3pct.csv",
+      "png": "qqq-condor-stop-3pct.png",
+      "free_source": true,
+      "survivorship_bias_free": true
+    },
+    {
+      "id": "qqq-condor-filtered",
+      "name": "QQQ Condor \u2014 3% of VAR, filtered",
+      "group": "QQQ Condor",
+      "file": "qqq-condor-filtered.json",
+      "csv": "qqq-condor-filtered.csv",
+      "png": "qqq-condor-filtered.png",
+      "free_source": true,
+      "survivorship_bias_free": true
     }
   ],
-  "generated_at": "2026-10-15T14:49:46+00:00",
+  "generated_at": "2026-10-16T13:07:26+00:00",
   "event_study": "event-study.json"
 }
