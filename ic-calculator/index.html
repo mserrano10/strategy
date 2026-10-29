@@ -649,6 +649,7 @@
 
         @media (max-width: 860px) {
             .g5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .g5 > :last-child:nth-child(odd) { grid-column: 1 / -1; }
             .g4, .g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .matrix { grid-template-columns: 1fr; gap: 18px; }
         }
@@ -663,7 +664,12 @@
             .reason { grid-column: 1 / -1; grid-row: 2; }
             .tip-pop { position: static; width: auto; margin-top: 8px; }
             .tip.open { display: block; width: 100%; }
-            .status .tip.open { grid-column: 1 / -1; grid-row: 3; }
+            .status .tip.open { display: contents; }
+            .status .tip.open .tip-btn { grid-column: 2; grid-row: 1; justify-self: end; align-self: center; }
+            .status .tip.open .tip-pop { grid-column: 1 / -1; grid-row: 3; margin-top: 2px; }
+            .regime-line { flex-wrap: wrap; }
+            .regime-line .tip.open { display: contents; }
+            .regime-line .tip.open .tip-pop { flex: 1 0 100%; }
             .tip-btn { width: 32px; height: 32px; }
             .mrow .rnd { font-size: 14pt; }
             .eject-line { grid-template-columns: 76px minmax(0, 1fr); }
