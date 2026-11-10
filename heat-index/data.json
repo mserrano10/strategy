@@ -1,12 +1,12 @@
 {
   "cape": {
-    "value": 38.91,
-    "as_of": "2026-11-09",
+    "value": 39.85,
+    "as_of": "2026-11-10",
     "source": "multpl.com/shiller-pe"
   },
   "pe": {
-    "value": 25.14,
-    "as_of": "2026-11-09",
+    "value": 25.75,
+    "as_of": "2026-11-10",
     "source": "multpl.com/s-p-500-pe-ratio"
   },
   "buffett": {
