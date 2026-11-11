@@ -1092,14 +1092,15 @@ function render() {
     $("putnote").textContent = "Short strikes round to the nearest point. Required credit is the all-weeks break-even times the margin. The band column is advisory.";
 
     let ch = '<tr><th>z</th><th>Short</th><th>Long</th><th>From spot</th><th>BE all</th><th>Touch</th><th>Settle</th></tr>';
-    for (const z of [2.25, 2.50, 2.75, 2.90, 3.20, 3.50]) {
+    const callZs = [1.50, 1.75, 2.00, 2.25, 2.50, 2.75, 2.90, 3.20, 3.50];
+    for (const z of callZs) {
         const Ks = S * Math.exp(0.5 * sig * sig + z * sig), Kl = Ks + W;
         ch += '<tr><td>' + z.toFixed(2) + '</td><td>' + Math.round(Ks) + '</td><td>' + Math.round(Kl) + '</td>'
             + '<td>' + pct(Ks / S - 1, 2) + '</td><td>' + pct(be(K.callAll, z), 3) + '</td>'
             + '<td>' + fmtYears(everyN(interp(K.zL, K.callTouch, z))) + '</td><td>' + fmtYears(everyN(interp(K.zL, K.callSettle, z))) + '</td></tr>';
     }
     $("calls").innerHTML = ch;
-    $("callnote").textContent = "Calls are off by rule.";
+    $("callnote").textContent = "Calls are off by rule. Rows from 1.50σ are shown so a traditional condor can be compared with the same strike math.";
 
     const cap = V("cap"), norm = V("norm");
     const rat = credFrac > 0 && beA > 0 ? credFrac / beA : 0;
