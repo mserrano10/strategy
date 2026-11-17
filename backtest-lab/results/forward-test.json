@@ -3,9 +3,9 @@
   "inception": "2026-10-15",
   "initial_capital": 10000.0,
   "status": "live",
-  "as_of": "2026-11-13",
+  "as_of": "2026-11-16",
   "entry_session": "2026-10-15",
-  "status_detail": "Marked through 2026-11-13. Entry session 2026-10-15. Each book and SPY start at $10,000.",
+  "status_detail": "Marked through 2026-11-16. Entry session 2026-10-15. Each book and SPY start at $10,000.",
   "entry_rule": "For the stock books, entry is the adjusted close on the first completed US cash session on or after 2026-10-15. A same-day bar is not that close until 21:00 UTC, which is after both the 20:00 UTC (EDT) and 21:00 UTC (EST) cash closes. The entry price is written once and is not revised if Yahoo later restates the historical print. Later marks divide that session's adjusted close by the frozen entry. The two-bullet book does not use those ratios. It carries the engine state from the Oct 14, 2026 close and applies the live rules on each forward session. Its chart is rebased so that session equals the starting capital.",
   "ambiguities": [
     "The forward test starts at the Oct 15, 2026 close. A same-day Yahoo bar before 21:00 UTC is an intraday print and is not the entry. Until that close exists, entry prices stay blank and the books have no return.",
@@ -110,18 +110,22 @@
       {
         "date": "2026-11-13",
         "equity": 9774.29114906777
+      },
+      {
+        "date": "2026-11-16",
+        "equity": 9587.452976498946
       }
     ],
     "metrics": {
-      "total_return": -0.022570885093222914,
-      "cagr": -0.24988871082008746,
+      "total_return": -0.04125470235010542,
+      "cagr": -0.38175627603625184,
       "max_drawdown": -0.05185686719893978,
-      "volatility": 0.2182255413673616,
-      "sharpe": -1.1494680799651786,
-      "final_equity": 9774.29114906777,
-      "trading_days": 22,
+      "volatility": 0.22162020588432874,
+      "sharpe": -2.0683944606738565,
+      "final_equity": 9587.452976498946,
+      "trading_days": 23,
       "start": "2026-10-15",
-      "end": "2026-11-13"
+      "end": "2026-11-16"
     }
   },
   "books": [
@@ -230,18 +234,22 @@
         {
           "date": "2026-11-13",
           "equity": 11514.104980646285
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 11453.0803648019
         }
       ],
       "metrics": {
-        "total_return": 0.15141049806462847,
-        "cagr": 4.904506720055728,
+        "total_return": 0.14530803648018997,
+        "cagr": 3.704818861884517,
         "max_drawdown": -0.1179125366351631,
-        "volatility": 0.6723087946215417,
-        "sharpe": 2.8486116968415205,
-        "final_equity": 11514.104980646285,
-        "trading_days": 22,
+        "volatility": 0.6575571706858726,
+        "sharpe": 2.687805260742598,
+        "final_equity": 11453.0803648019,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -349,18 +357,22 @@
         {
           "date": "2026-11-13",
           "equity": 8294.290469115389
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 7881.329304391021
         }
       ],
       "metrics": {
-        "total_return": -0.17057095308846115,
-        "cagr": -0.9051497375283817,
+        "total_return": -0.21186706956089796,
+        "cagr": -0.9339641255622261,
         "max_drawdown": -0.33459464748395507,
-        "volatility": 1.0585825741659975,
-        "sharpe": -1.5886872841260289,
-        "final_equity": 8294.290469115389,
-        "trading_days": 22,
+        "volatility": 1.0433255302528694,
+        "sharpe": -2.085273467622025,
+        "final_equity": 7881.329304391021,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -467,19 +479,23 @@
         },
         {
           "date": "2026-11-13",
-          "equity": 7183.68378911291
+          "equity": 6861.329095767303
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 6279.1822549512535
         }
       ],
       "metrics": {
-        "total_return": -0.281631621088709,
-        "cagr": -0.9844862122957655,
+        "total_return": -0.3720817745048747,
+        "cagr": -0.9950653855744654,
         "max_drawdown": -0.445695087743054,
-        "volatility": 1.3205003718700365,
-        "sharpe": -2.3181700881180447,
-        "final_equity": 7183.68378911291,
-        "trading_days": 22,
+        "volatility": 1.3143997916120091,
+        "sharpe": -3.3535153447487502,
+        "final_equity": 6279.1822549512535,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -586,19 +602,23 @@
         },
         {
           "date": "2026-11-13",
-          "equity": 10641.790875762774
+          "equity": 10674.959131180229
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 10044.776195883884
         }
       ],
       "metrics": {
-        "total_return": 0.06417908757627733,
-        "cagr": 1.1889999108624134,
-        "max_drawdown": -0.08810578848439587,
-        "volatility": 0.6099912079095243,
-        "sharpe": 1.5180225254059667,
-        "final_equity": 10641.790875762774,
-        "trading_days": 22,
+        "total_return": 0.004477619588388437,
+        "cagr": 0.052316315796473,
+        "max_drawdown": -0.13926392879434435,
+        "volatility": 0.6320311689696243,
+        "sharpe": 0.38508698078445047,
+        "final_equity": 10044.776195883884,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -741,19 +761,23 @@
         },
         {
           "date": "2026-11-13",
-          "equity": 8779.07058409777
+          "equity": 8630.469412214557
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 8167.404532284749
         }
       ],
       "metrics": {
-        "total_return": -0.12209294159022299,
-        "cagr": -0.8060257320932505,
+        "total_return": -0.18325954677152512,
+        "cagr": -0.9007976310261673,
         "max_drawdown": -0.28157396706348004,
-        "volatility": 0.9362178717277505,
-        "sharpe": -1.2035219988241856,
-        "final_equity": 8779.07058409777,
-        "trading_days": 22,
+        "volatility": 0.931108109762394,
+        "sharpe": -2.0213631589009844,
+        "final_equity": 8167.404532284749,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -896,19 +920,23 @@
         },
         {
           "date": "2026-11-13",
-          "equity": 8378.695112729667
+          "equity": 8311.573313797782
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 7856.4157147643755
         }
       ],
       "metrics": {
-        "total_return": -0.16213048872703328,
-        "cagr": -0.8922493632938607,
+        "total_return": -0.21435842852356246,
+        "cagr": -0.9363079263680066,
         "max_drawdown": -0.22310113822530941,
-        "volatility": 0.6820057032242662,
-        "sharpe": -2.7664812595939705,
-        "final_equity": 8378.695112729667,
-        "trading_days": 22,
+        "volatility": 0.686465364891345,
+        "sharpe": -3.6683534146919183,
+        "final_equity": 7856.4157147643755,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -1051,19 +1079,23 @@
         },
         {
           "date": "2026-11-13",
-          "equity": 7996.318976231111
+          "equity": 7761.505267839027
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 7248.3836056291675
         }
       ],
       "metrics": {
-        "total_return": -0.20036810237688885,
-        "cagr": -0.9401701825017628,
-        "max_drawdown": -0.24316383706938205,
-        "volatility": 0.8101487419579304,
-        "sharpe": -2.902979289990676,
-        "final_equity": 7996.318976231111,
-        "trading_days": 22,
+        "total_return": -0.27516163943708327,
+        "cagr": -0.9746029091388119,
+        "max_drawdown": -0.27516163943708327,
+        "volatility": 0.8177305243498062,
+        "sharpe": -4.079638461181225,
+        "final_equity": 7248.3836056291675,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -1206,19 +1238,23 @@
         },
         {
           "date": "2026-11-13",
-          "equity": 9065.735234236368
+          "equity": 9103.697505487675
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 8512.128619250028
         }
       ],
       "metrics": {
-        "total_return": -0.09342647657636316,
-        "cagr": -0.7092641925459373,
-        "max_drawdown": -0.1899844883853522,
-        "volatility": 0.7607905684042613,
-        "sharpe": -1.1779196804613645,
-        "final_equity": 9065.735234236368,
-        "trading_days": 22,
+        "total_return": -0.14878713807499722,
+        "cagr": -0.8409801342743088,
+        "max_drawdown": -0.19561602342341933,
+        "volatility": 0.7715552378682319,
+        "sharpe": -2.011237113299459,
+        "final_equity": 8512.128619250028,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -1327,18 +1363,22 @@
         {
           "date": "2026-11-13",
           "equity": 7496.662952006425
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 7187.773441080723
         }
       ],
       "metrics": {
-        "total_return": -0.25033370479935746,
-        "cagr": -0.9734549313949081,
-        "max_drawdown": -0.2663422750464597,
-        "volatility": 0.5144379814339198,
-        "sharpe": -6.423665635237978,
-        "final_equity": 7496.662952006425,
-        "trading_days": 22,
+        "total_return": -0.28122265589192763,
+        "cagr": -0.976924066075576,
+        "max_drawdown": -0.29657161539410193,
+        "volatility": 0.5109623668139601,
+        "sharpe": -7.097074598253473,
+        "final_equity": 7187.773441080723,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -1483,18 +1523,22 @@
         {
           "date": "2026-11-13",
           "equity": 9312.403875279666
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 9069.420072898569
         }
       ],
       "metrics": {
-        "total_return": -0.06875961247203344,
-        "cagr": -0.5923018491956933,
-        "max_drawdown": -0.07677073509690269,
-        "volatility": 0.26920153243682393,
-        "sharpe": -3.0414858500467132,
-        "final_equity": 9312.403875279666,
-        "trading_days": 22,
+        "total_return": -0.09305799271014314,
+        "cagr": -0.6720482408024324,
+        "max_drawdown": -0.09416701842565678,
+        "volatility": 0.27385352910844096,
+        "sharpe": -3.945296326969676,
+        "final_equity": 9069.420072898569,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     },
     {
@@ -1533,7 +1577,7 @@
         }
       },
       "rule_state": {
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-16",
         "high_water_mark": 87.22000122070312,
         "locked_high_water_mark": null,
         "cycle": false,
@@ -1544,7 +1588,7 @@
           "ticker": "SPY",
           "name": "SPDR S&P 500 ETF Trust",
           "sleeve": "core",
-          "weight": 0.66613689308055,
+          "weight": 0.6617819444165738,
           "entry_price": null,
           "price_field": "adjusted_close"
         },
@@ -1568,7 +1612,7 @@
           "ticker": "BIL",
           "name": "Bullet 1 dry powder (Treasury-bill proxy)",
           "sleeve": "bullet-1",
-          "weight": 0.2606368141811087,
+          "weight": 0.26403659068284385,
           "entry_price": null,
           "price_field": "adjusted_close"
         },
@@ -1576,7 +1620,7 @@
           "ticker": "BIL",
           "name": "Bullet 2 dry powder (Treasury-bill proxy)",
           "sleeve": "bullet-2",
-          "weight": 0.07322629273834133,
+          "weight": 0.0741814649005824,
           "entry_price": null,
           "price_field": "adjusted_close"
         }
@@ -1669,19 +1713,23 @@
         {
           "date": "2026-11-13",
           "equity": 9859.040590824643
+        },
+        {
+          "date": "2026-11-16",
+          "equity": 9734.221030554769
         }
       ],
       "events": [],
       "metrics": {
-        "total_return": -0.014095940917535743,
-        "cagr": -0.1637261082845135,
+        "total_return": -0.02657789694452317,
+        "cagr": -0.26469214763012794,
         "max_drawdown": -0.034360637190090415,
-        "volatility": 0.1457310189687648,
-        "sharpe": -1.0985956006730753,
-        "final_equity": 9859.040590824643,
-        "trading_days": 22,
+        "volatility": 0.14792762167776044,
+        "sharpe": -2.013427386424136,
+        "final_equity": 9734.221030554769,
+        "trading_days": 23,
         "start": "2026-10-15",
-        "end": "2026-11-13"
+        "end": "2026-11-16"
       }
     }
   ]
