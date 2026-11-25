@@ -1,32 +1,113 @@
 {
   "cape": {
-    "value": 36.44,
-    "as_of": "2026-11-23",
-    "source": "multpl.com/shiller-pe"
+    "value": 36.26,
+    "as_of": "2026-11-24",
+    "source": "multpl.com reading of 2026-11-23 scaled by the S&P 500 move",
+    "cadence": "daily",
+    "method": "spx_scaled",
+    "anchor_value": 36.44,
+    "anchor_as_of": "2026-11-23",
+    "spx_anchor": 7237.17,
+    "spx_anchor_date": "2026-11-23",
+    "spx_latest": 7201.09,
+    "stale": false
   },
   "pe": {
-    "value": 23.55,
-    "as_of": "2026-11-23",
-    "source": "multpl.com/s-p-500-pe-ratio"
+    "value": 23.43,
+    "as_of": "2026-11-24",
+    "source": "multpl.com reading of 2026-11-23 scaled by the S&P 500 move",
+    "cadence": "daily",
+    "method": "spx_scaled",
+    "anchor_value": 23.55,
+    "anchor_as_of": "2026-11-23",
+    "spx_anchor": 7237.17,
+    "spx_anchor_date": "2026-11-23",
+    "spx_latest": 7201.09,
+    "stale": false
   },
   "buffett": {
     "value": 244.0,
     "as_of": "2026-06-30",
-    "source": "currentmarketvaluation.com"
+    "source": "currentmarketvaluation.com",
+    "cadence": "quarterly",
+    "feeds_score": false,
+    "method": "official",
+    "market_cap_trillions": 78.1,
+    "gdp_trillions": 32.06,
+    "next_update": "2026-11-15",
+    "next_update_kind": "overdue",
+    "stale": true,
+    "next_update_detail": "CMV's public schedule said 2026-11-15. That date has passed and the page still shows the older print."
+  },
+  "buffett_estimate": {
+    "value": 225.4,
+    "as_of": "2026-11-24",
+    "source": "CMV total market value scaled by the Wilshire 5000, divided by the latest GDP",
+    "cadence": "daily",
+    "feeds_score": true,
+    "method": "wilshire_scaled",
+    "market_cap_trillions_base": 78.1,
+    "market_cap_trillions": 74.4963,
+    "official_as_of": "2026-06-30",
+    "wilshire_base": 75293.09,
+    "wilshire_base_date": "2026-06-30",
+    "wilshire_latest": 71818.93,
+    "wilshire_source": "Yahoo Finance ^W5000, Wilshire 5000 Total Market Index",
+    "dollars_per_point_billions": 1.0373,
+    "gdp_billions": 33056.203,
+    "gdp_as_of": "2026-09-30",
+    "gdp_quarter": "2026Q3",
+    "gdp_published": "2026-11-25",
+    "gdp_source": "BEA NIPA table 1.1.5 (the series FRED publishes as GDP)",
+    "stale": false,
+    "score_reason": "This is the official market-cap-to-GDP ratio brought forward. The numerator is Current Market Valuation's total market value on its official date, scaled by the Wilshire 5000 Total Market Index, which matched that market value at about $1 billion per point. The denominator is the latest GDP. The official percentage is a separate, older print and is not averaged in."
   },
   "ncb": {
-    "value": 224.9,
-    "as_of": null,
-    "source": "Typed figure. Not rechecked against FRED on 29 Oct 2026."
+    "value": 242.3,
+    "as_of": "2026-06-30",
+    "source": "Z.1 FL103164106.Q (FRED series NCBCEPNW)",
+    "cadence": "quarterly",
+    "quarter": "2026Q2",
+    "method": "fred_ncbcepnw",
+    "next_update": "2026-12-10",
+    "next_update_kind": "release",
+    "stale": false
   },
   "ms": {
-    "value": 78,
-    "as_of": null,
-    "source": "Typed 0-100 state. This is not the raw msindex.net index."
+    "value": 2.2108,
+    "as_of": "2026-11-23",
+    "source": "msindex.net",
+    "cadence": "daily",
+    "method": "msindex",
+    "mean": 1.34367178,
+    "sd": 0.56970131,
+    "baseline": {
+      "start": "1950-01-01",
+      "end": "2026-01-01",
+      "n": 76,
+      "mean": 1.34367178,
+      "sd": 0.56970131,
+      "rule": "Sample standard deviation of msindex.net observations dated 1 January, from 1950 through the latest 1 January. The intra-year mark-to-market point is the current reading and is not part of the norm."
+    },
+    "stale": false
   },
   "ms_raw": {
-    "value": 2.21,
+    "value": 2.2108,
     "as_of": "2026-11-23",
-    "source": "msindex.net"
+    "source": "msindex.net",
+    "cadence": "daily",
+    "stale": false
+  },
+  "status": {
+    "generated_at": "2026-11-25T09:53:44-05:00",
+    "ok": true,
+    "issues": [],
+    "notes": [
+      "cape used the S&P scale because multpl did not respond.",
+      "pe used the S&P scale because multpl did not respond.",
+      "Official Buffett print is overdue against CMV's own public schedule.",
+      "NCB used the Z.1 file because FRED did not respond.",
+      "GDP came from BEA because FRED did not respond."
+    ]
   }
 }

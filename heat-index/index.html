@@ -256,12 +256,14 @@
         .asof {
             margin-top: 6px;
             font-size: 8pt;
-            line-height: 1.4;
-            color: #475569;
+            line-height: 1.35;
+            color: #64748B;
             font-weight: 500;
             text-transform: none;
             letter-spacing: 0;
         }
+
+        .asof + .asof { margin-top: 1px; }
 
         label {
             display: block;
@@ -444,7 +446,7 @@
     <div class="header">
         <h1 class="doc-title">Macro valuation worksheet</h1>
         <div class="sub-desc">
-            Personal research worksheet. It combines CAPE, the Buffett indicator, Tobin's Q (NCBCEPNW), trailing P/E, and a short-term breadth state. Each figure keeps its own date.
+            Personal research worksheet. It combines CAPE, the Buffett indicator, Tobin's Q (NCBCEPNW), trailing P/E, and the Mises Stationarity Index. Each figure keeps its own date.
         </div>
     </div>
 
@@ -467,35 +469,37 @@
     </div>
 
     <h2>1 · Indicator readings</h2>
-    <p class="sub-desc" style="margin-top:0;">A figure is current only when its date is shown. Boxes with no date were typed into the file and were not refreshed.</p>
+    <p class="sub-desc" style="margin-top:0;">The line under each figure is when it was last updated, and when it is due to update next.</p>
     <div class="panel">
         <div class="grid g3">
             <div>
-                <label>Shiller CAPE <span>multpl.com/shiller-pe</span></label>
-                <input id="in_cape" type="number" step="0.1" value="41.04">
-                <p class="asof" id="asof_cape">As of 29 Oct 2026 · multpl.com/shiller-pe</p>
+                <label>Shiller CAPE <span id="src_cape">multpl.com/shiller-pe</span></label>
+                <input id="in_cape" type="number" step="0.01" value="36.26">
+                <p class="asof" id="asof_cape">Updated 23 Nov · next 26 Nov</p>
             </div>
             <div>
-                <label>Buffett Indicator % <span>currentmarketvaluation</span></label>
-                <input id="in_buffett" type="number" step="0.1" value="244.0">
-                <p class="asof" id="asof_buffett">As of 30 Jun 2026 · currentmarketvaluation.com</p>
+                <label>Buffett Indicator % <span id="buffettMethod">estimate · in the score</span></label>
+                <input id="in_buffett" type="number" step="0.1" value="225.4">
+                <p class="asof" id="asof_buffett">Updated 24 Nov · next 26 Nov</p>
+                <p class="asof" id="asof_buffett_official">Official 244% · updated 30 Jun · next overdue</p>
             </div>
             <div>
                 <label>NCBCEPNW % <span>FRED series</span></label>
-                <input id="in_ncb" type="number" step="0.1" value="224.9">
-                <p class="asof" id="asof_ncb">No date on file. Not rechecked against FRED on 29 Oct 2026.</p>
+                <input id="in_ncb" type="number" step="0.1" value="242.3">
+                <p class="asof" id="asof_ncb">Updated 30 Jun · next 10 Dec</p>
             </div>
             <div>
-                <label>S&amp;P 500 Trailing P/E <span>multpl.com</span></label>
-                <input id="in_pe" type="number" step="0.1" value="26.44">
-                <p class="asof" id="asof_pe">As of 29 Oct 2026 · multpl.com/s-p-500-pe-ratio</p>
+                <label>S&amp;P 500 Trailing P/E <span id="src_pe">multpl.com</span></label>
+                <input id="in_pe" type="number" step="0.01" value="23.43">
+                <p class="asof" id="asof_pe">Updated 23 Nov · next 26 Nov</p>
             </div>
             <div>
-                <label>MSIndex state (0-100) <span>typed scale</span></label>
-                <input id="in_ms" type="number" step="1" value="78">
-                <p class="asof" id="asof_ms">No date on file. This 0-100 state is not the raw msindex.net index. That index was 2.37 on 28 Oct 2026.</p>
+                <label>MS Index <span>msindex.net</span></label>
+                <input id="in_ms" type="number" step="0.01" value="2.21">
+                <p class="asof" id="asof_ms">Updated 23 Nov · next 26 Nov</p>
             </div>
         </div>
+        <p class="note">The Buffett box is a timely estimate, and it is the one in the score: the official market value, scaled by the Wilshire 5000 since that date, divided by the latest GDP. The official percentage is the line under the box and is not mixed into the score. The MS Index uses the same heat formula as the other series, with the post-1950 annual mean and standard deviation from msindex.net.</p>
     </div>
 
     <h2>2 · Valuation Matrix & Historic Norms</h2>
@@ -518,7 +522,7 @@
             </table>
         </div>
         <div class="note">
-            *Deviation z-scores calculated against post-1950 macroeconomic distributions. Scores above 80 represent severe multi-decade valuation inflation.
+            Heat is 50 + 20 × z, clamped between 0 and 100, against post-1950 norms. A score above 80 is a severe reading. The Buffett row is the timely estimate.
         </div>
     </div>
 
@@ -533,8 +537,8 @@
     <div class="desk-links">
         <a href="https://msindex.net/" target="_blank" rel="noopener" class="desk-card">
             <div>
-                <div class="desk-card-title">1. Market Structure Index</div>
-                <div class="desk-card-sub">msindex.net · Short/Medium-term Breadth</div>
+                <div class="desk-card-title">1. Mises Stationarity Index</div>
+                <div class="desk-card-sub">msindex.net · Equity value relative to its history</div>
             </div>
             <span style="font-weight:700;">↗</span>
         </a>
@@ -595,7 +599,9 @@
         buffett: { mean: 120.0, sd: 45.0, weight: 0.25, name: "Buffett Indicator (%)" },
         ncb: { mean: 100.0, sd: 42.0, weight: 0.25, name: "FRED NCBCEPNW (%)" },
         pe: { mean: 16.8, sd: 5.5, weight: 0.15, name: "Trailing P/E" },
-        ms: { mean: 50.0, sd: 20.0, weight: 0.10, name: "MSIndex Structure" }
+        // Post-1950 annual msindex.net observations, 1 Jan 1950–1 Jan 2026, n=76.
+        // The scraper rewrites these from max.json; these are the fallback.
+        ms: { mean: 1.34367178, sd: 0.56970131, weight: 0.10, name: "MS Index" }
     };
 
     const $ = id => document.getElementById(id);
@@ -665,11 +671,11 @@
 
         // Table Population
         const rows = [
-            { name: "Shiller CAPE", val: capeV.toFixed(1) + "x", mean: PARAMS.cape.mean + "x", z: c_cape.z, score: c_cape.score },
-            { name: "Buffett Indicator", val: buffettV.toFixed(1) + "%", mean: PARAMS.buffett.mean + "%", z: c_buffett.z, score: c_buffett.score },
-            { name: "FRED NCBCEPNW", val: ncbV.toFixed(1) + "%", mean: PARAMS.ncb.mean + "%", z: c_ncb.z, score: c_ncb.score },
-            { name: "Trailing P/E Ratio", val: peV.toFixed(1) + "x", mean: PARAMS.pe.mean + "x", z: c_pe.z, score: c_pe.score },
-            { name: "MSIndex Structure", val: msV.toFixed(0) + " / 100", mean: "50", z: c_ms.z, score: c_ms.score }
+            { name: "Shiller CAPE", val: capeV.toFixed(2) + "x", mean: fmtLevel(PARAMS.cape.mean) + "x", z: c_cape.z, score: c_cape.score },
+            { name: "Buffett Indicator", val: buffettV.toFixed(1) + "%", mean: fmtLevel(PARAMS.buffett.mean) + "%", z: c_buffett.z, score: c_buffett.score },
+            { name: "FRED NCBCEPNW", val: ncbV.toFixed(1) + "%", mean: fmtLevel(PARAMS.ncb.mean) + "%", z: c_ncb.z, score: c_ncb.score },
+            { name: "Trailing P/E Ratio", val: peV.toFixed(2) + "x", mean: fmtLevel(PARAMS.pe.mean) + "x", z: c_pe.z, score: c_pe.score },
+            { name: "MS Index", val: msV.toFixed(2), mean: fmtLevel(PARAMS.ms.mean), z: c_ms.z, score: c_ms.score }
         ];
 
         let tbodyHTML = "";
@@ -702,7 +708,7 @@
         chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Shiller CAPE', 'Buffett Indicator', 'NCBCEPNW', 'Trailing P/E', 'MSIndex'],
+                labels: ['Shiller CAPE', 'Buffett Indicator', 'NCBCEPNW', 'Trailing P/E', 'MS Index'],
                 datasets: [{
                     label: 'Heat Score (0-100)',
                     data: scores.map(s => Math.round(s)),
@@ -736,10 +742,41 @@
 
     const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    function formatAsOf(iso) {
+    function fmtLevel(x) {
+        const n = Number(x);
+        if (Math.abs(n) >= 50) return String(Math.round(n));
+        if (Math.abs(n) >= 10) return String(Math.round(n * 10) / 10);
+        return n.toFixed(2);
+    }
+
+    function nextDailyISO() {
+        const now = new Date();
+        const next = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
+        return next.toISOString().slice(0, 10);
+    }
+
+    function shortDate(iso) {
+        if (!iso) return "—";
         const parts = String(iso).split("-");
         if (parts.length !== 3) return iso;
-        return MONTHS[Number(parts[1]) - 1] + " " + Number(parts[2]) + ", " + parts[0];
+        const text = Number(parts[2]) + " " + MONTHS[Number(parts[1]) - 1];
+        return Number(parts[0]) === new Date().getUTCFullYear() ? text : text + " " + parts[0];
+    }
+
+    function caption(item) {
+        const updated = "Updated " + shortDate(item && item.as_of);
+        let next = "—";
+        if (item && item.cadence === "daily") next = shortDate(nextDailyISO());
+        else if (item && item.next_update_kind === "overdue") next = "overdue";
+        else if (item && item.next_update) {
+            next = (item.next_update_kind === "estimate" ? "est. " : "") + shortDate(item.next_update);
+        }
+        return updated + " · next " + next;
+    }
+
+    function pctText(value) {
+        const n = Number(value);
+        return (Math.abs(n - Math.round(n)) < 0.05 ? n.toFixed(0) : n.toFixed(1)) + "%";
     }
 
     function series(data, key) {
@@ -749,15 +786,10 @@
         return null;
     }
 
-    function writeAsOf(id, item, extra) {
+    function writeCaption(id, item) {
         const node = $(id);
         if (!node) return;
-        const bits = [];
-        if (item && item.as_of) bits.push("As of " + formatAsOf(item.as_of));
-        else bits.push("No date on file");
-        if (item && item.source) bits.push(item.source);
-        if (extra) bits.push(extra);
-        node.textContent = bits.join(" · ");
+        node.textContent = caption(item);
     }
 
     function writeWeights() {
@@ -785,24 +817,41 @@
         if (res.ok) {
             const file = await res.json();
             const cape = series(file, "cape");
-            const buffett = series(file, "buffett");
+            const official = series(file, "buffett");
+            const estimate = series(file, "buffett_estimate");
             const ncb = series(file, "ncb");
             const pe = series(file, "pe");
             const ms = series(file, "ms");
-            const raw = series(file, "ms_raw");
+            const useEstimate = estimate && estimate.value != null && estimate.feeds_score !== false && estimate.method === "wilshire_scaled";
+            if (ms && ms.mean != null && ms.sd != null) {
+                PARAMS.ms.mean = Number(ms.mean);
+                PARAMS.ms.sd = Number(ms.sd);
+            }
             if (cape && cape.value != null) $("in_cape").value = cape.value;
-            if (buffett && buffett.value != null) $("in_buffett").value = buffett.value;
             if (ncb && ncb.value != null) $("in_ncb").value = ncb.value;
             if (pe && pe.value != null) $("in_pe").value = pe.value;
             if (ms && ms.value != null) $("in_ms").value = ms.value;
-            writeAsOf("asof_cape", cape);
-            writeAsOf("asof_buffett", buffett);
-            writeAsOf("asof_ncb", ncb);
-            writeAsOf("asof_pe", pe);
-            const rawNote = raw && raw.value != null
-                ? "Raw msindex.net index " + Number(raw.value).toFixed(2) + (raw.as_of ? " on " + formatAsOf(raw.as_of) : "") + ". The 0-100 box is a separate typed state."
-                : "";
-            writeAsOf("asof_ms", ms, rawNote);
+            const scoredBuffett = useEstimate ? estimate : official;
+            if (scoredBuffett && scoredBuffett.value != null) $("in_buffett").value = scoredBuffett.value;
+            if (cape && cape.method === "spx_scaled" && $("src_cape")) $("src_cape").textContent = "multpl, scaled by S&P";
+            if (pe && pe.method === "spx_scaled" && $("src_pe")) $("src_pe").textContent = "multpl, scaled by S&P";
+            writeCaption("asof_cape", cape);
+            writeCaption("asof_ncb", ncb);
+            writeCaption("asof_pe", pe);
+            writeCaption("asof_ms", ms);
+            writeCaption("asof_buffett", scoredBuffett);
+            const method = $("buffettMethod");
+            const other = useEstimate ? official : estimate;
+            if (method) method.textContent = useEstimate ? "estimate · in the score" : "official · in the score";
+            const otherNode = $("asof_buffett_official");
+            if (otherNode) {
+                if (other && other.value != null) {
+                    const prefix = useEstimate ? "Official " : "Estimate ";
+                    otherNode.textContent = prefix + pctText(other.value) + " · " + caption(other).replace("Updated ", "updated ");
+                } else {
+                    otherNode.textContent = "";
+                }
+            }
         }
     } catch (err) {
         console.log("Loaded default baseline fallback values.");

@@ -20,6 +20,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Test scraper helpers
+        run: python -m unittest test_scraper.py
+
       - name: Run Scraper
         run: python scraper.py
 
@@ -30,3 +33,6 @@ jobs:
           git add heat-index/data.json || git add data.json
           git diff-index --quiet HEAD || git commit -m "auto: daily macro data refresh"
           git push
+
+      - name: Fail if a scored source is stale or was not refreshed
+        run: python scraper.py --check
